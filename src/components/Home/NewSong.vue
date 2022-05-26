@@ -115,7 +115,7 @@ watchEffect(() => {
 	</ListModules>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tabs-name {
 	display: flex;
 	font-size: 30px;
@@ -136,5 +136,9 @@ watchEffect(() => {
 
 .tabs-cell-title {
 	margin-left: 20px;
+}
+
+::v-deep .van-cell {
+	background-color: var(--background-color-2);
 }
 </style>

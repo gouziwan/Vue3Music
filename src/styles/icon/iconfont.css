@@ -1,9 +1,9 @@
 @font-face {
   font-family: "dog";
   /* Project id 3235656 */
-  src: url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.woff2?t=1652787044903') format('woff2'),
-    url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.woff?t=1652787044903') format('woff'),
-    url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.ttf?t=1652787044903') format('truetype');
+  src: url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.woff2?t=1653554528242') format('woff2'),
+    url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.woff?t=1653554528242') format('woff'),
+    url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.ttf?t=1653554528242') format('truetype');
 }
 .dog {
   font-family: "dog" !important;
@@ -118,7 +118,7 @@
   content: "\e602";
 }
 
-.dogwode-shixin_y_huaban:before {
+.dog-dogwode-shixin_y_huaban:before {
   content: "\e7ae";
 }
 
@@ -141,4 +141,8 @@
 
 .dog-dogliebiao:before {
   content: "\eaf8";
+}
+
+.dog-dogshanchu:before {
+  content: "\e601";
 }

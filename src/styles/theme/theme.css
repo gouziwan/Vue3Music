@@ -3,9 +3,11 @@
     --tabbar-active-color:rgb(212,0,0);
     /* 主要的背景颜色 */
     --background-main-color: rgb(14,14,14);
-    --background-color-1:rgb(25,25,25);
+    --background-color-1:rgb(25, 25, 25);
     --background-color-2: rgb(40, 40, 40);
     --background-color-3:rgb(20, 20, 20);
+    --background-color-light:rgb(49, 49, 49);
+
     /*主要的字体颜色*/
     --font-main-color:#fff; 
     --font-main-color-1: rgb(212, 212, 212);
@@ -26,4 +28,5 @@
     --van-cell-background-color:var(--background-color-1);
     --van-cell-horizontal-padding:15px;
     --van-cell-text-color:var(--font-main-color);
+    --van-popup-background-color:var(--background-main-color)
 }

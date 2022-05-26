@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import TabbarBottomVue from "./components/TabbarBottom.vue";
-
-const data = {
-	hello: "1",
-	key: 2
-};
+import Login from "./components/Login.vue";
 </script>
 
 <template>
@@ -18,5 +14,8 @@ const data = {
 		<div class="page-button">
 			<TabbarBottomVue />
 		</div>
+
+		<!-- 登录 -->
+		<Login />
 	</div>
 </template>

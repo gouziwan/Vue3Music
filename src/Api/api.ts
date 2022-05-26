@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-export const url = "http://10.62.48.202:5000";
+const ip = "10.62.60.33";
+
+export const url = `http://${ip}:5000`;
 
 const _request = axios.create({
 	baseURL: url
