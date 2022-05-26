@@ -6,6 +6,7 @@ import PlayList from "../view/PlayList.vue";
 import Text from "../view/Text.vue";
 
 import HomeHread from "../components/Home/HomeHread.vue";
+import UserHread from "../components/User/UserHread.vue";
 
 export interface RoutesType {
 	path: string;
@@ -16,38 +17,29 @@ export interface RoutesType {
 	name: string;
 }
 
+// 路由
 const routes: RoutesType[] = [
 	{
+		// 路径
 		path: "/",
+		// 组件
 		components: {
 			default: Home,
 			hread: HomeHread
 		},
 		name: "Home"
-	}
-];
-
-/**
- * 
- * 
- * ,
-	{
-		path: "/playList",
-		component: PlayList,
-		name: "PlayList"
 	},
 	{
 		path: "/user",
-		component: User,
+		components: {
+			default: User,
+			hread: UserHread
+		},
 		name: "User"
-	},
-	{
-		path: "/test",
-		component: Text,
-		name: "Text"
 	}
- */
+];
 
+// 创建路由
 const router = createRouter({
 	history: createWebHistory(),
 	routes

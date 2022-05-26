@@ -4,7 +4,6 @@ export function getAcquire(src: string, str: string = "300y300") {
 }
 
 // 获取数组中的随机元素
-
 export function getArrRoundValue(arr: any[], nums: number) {
 	if (nums > arr.length) return arr;
 
