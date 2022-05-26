@@ -1,0 +1,144 @@
+@font-face {
+  font-family: "dog";
+  /* Project id 3235656 */
+  src: url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.woff2?t=1652787044903') format('woff2'),
+    url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.woff?t=1652787044903') format('woff'),
+    url('//at.alicdn.com/t/font_3235656_v7i4hesx8el.ttf?t=1652787044903') format('truetype');
+}
+.dog {
+  font-family: "dog" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.dog-dogwode3:before {
+  content: "\e93d";
+}
+
+.dog-dogwode4:before {
+  content: "\e683";
+}
+
+.dog-dogyinle2:before {
+  content: "\e676";
+}
+
+.dog-dogicon-test:before {
+  content: "\e674";
+}
+
+.dog-dogshouye:before {
+  content: "\e613";
+}
+
+.dog-dogshouye1:before {
+  content: "\e6a6";
+}
+
+.dogshoucang1:before {
+  content: "\e62a";
+}
+
+.dogkongliebiao1:before {
+  content: "\e711";
+}
+
+.dogshanchu-yichu-04:before {
+  content: "\e835";
+}
+
+.dogshoucang:before {
+  content: "\e609";
+}
+
+.dogpinglun:before {
+  content: "\e608";
+}
+
+.doggengduo:before {
+  content: "\e612";
+}
+
+.dogjiazai:before {
+  content: "\e9f0";
+}
+
+.dog24gf-play:before {
+  content: "\ea82";
+}
+
+.dogdelete:before {
+  content: "\e60c";
+}
+
+.dogkongzhuangtai:before {
+  content: "\e721";
+}
+
+.dogadd:before {
+  content: "\e61e";
+}
+
+.doggou:before {
+  content: "\e6e5";
+}
+
+.dogsousuo1:before {
+  content: "\e63d";
+}
+
+.dogbofang:before {
+  content: "\e6ad";
+}
+
+.dogbofang1:before {
+  content: "\e606";
+}
+
+.dogbofangliebiao:before {
+  content: "\e605";
+}
+
+.doggedan:before {
+  content: "\e603";
+}
+
+.dogjiantou1:before {
+  content: "\e621";
+}
+
+.dog-doggerenzhongxin:before {
+  content: "\e653";
+}
+
+.dog-dogwode2:before {
+  content: "\e602";
+}
+
+.dogwode-shixin_y_huaban:before {
+  content: "\e7ae";
+}
+
+.dogjiantou:before {
+  content: "\e629";
+}
+
+.dogrili1:before {
+  content: "\e630";
+}
+
+
+.dogpaihangbang2:before {
+  content: "\e600";
+}
+
+.dogmeirituijian1:before {
+  content: "\e607";
+}
+
+.dog-dogliebiao:before {
+  content: "\eaf8";
+}

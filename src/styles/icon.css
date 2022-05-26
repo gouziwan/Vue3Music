@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'dog';
+    /* Project id 3235656 */
+    src: url('//at.alicdn.com/t/font_3235656_awz18m4qk2.woff2?t=1649575478564') format('woff2'),
+        url('//at.alicdn.com/t/font_3235656_awz18m4qk2.woff?t=1649575478564') format('woff'),
+        url('//at.alicdn.com/t/font_3235656_awz18m4qk2.ttf?t=1649575478564') format('truetype');
+}
