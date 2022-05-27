@@ -19,6 +19,10 @@ export function getArrRoundValue(arr: any[], nums: number) {
 	return res;
 }
 
+export function isString(value: any) {
+	return typeof value === "string";
+}
+
 export function subArr(arr: any, len: number, total: number) {
 	return arr.slice((len - 1) * total, len * total);
 }

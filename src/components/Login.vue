@@ -10,7 +10,7 @@ const state = useStore();
 
 const innerHeight = window.innerHeight;
 
-const userName = ref("15077783094");
+const userName = ref("15000083094");
 
 const password = ref("12345");
 
@@ -20,10 +20,17 @@ const passwordReg = /.{5,18}/;
 
 const isTextLogin = ref(false);
 
-const onClickLogin = () => {
-	const storage = useLocalStorage();
+const storage = useLocalStorage();
 
-	console.log((storage.test.key = 456));
+const onClickLogin = () => {
+	// localStorage.setItem(
+	// 	"keys",
+	// 	JSON.stringify({
+	// 		data: {
+	// 			value: []
+	// 		}
+	// 	})
+	// );
 	// 节流防止用户多次点击
 	// throttle(() => {
 	// 	userLogin(userName.value, password.value, res => {
@@ -95,6 +102,11 @@ const onClickClearPopup = () => state.reviseShowLogin(false);
 						label-align="right"
 						:border="false"
 					/>
+
+					<div class="测试视图的更新" style="color: red">
+						{{ storage.keys }}
+					</div>
+
 					<div style="margin: 20px 2rem">
 						<Button round block plain type="primary" :disabled="!isDisable" native-type="submit">
 							登录
