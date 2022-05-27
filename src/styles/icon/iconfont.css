@@ -1,16 +1,22 @@
 @font-face {
   font-family: "dog";
   /* Project id 3235656 */
-  src: url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.woff2?t=1653554528242') format('woff2'),
-    url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.woff?t=1653554528242') format('woff'),
-    url('//at.alicdn.com/t/font_3235656_2hf38dtwsdy.ttf?t=1653554528242') format('truetype');
+  src: url('//at.alicdn.com/t/font_3235656_4ropri054ml.woff2?t=1653613445969') format('woff2'),
+    url('//at.alicdn.com/t/font_3235656_4ropri054ml.woff?t=1653613445969') format('woff'),
+    url('//at.alicdn.com/t/font_3235656_4ropri054ml.ttf?t=1653613445969') format('truetype');
 }
+
+
 .dog {
   font-family: "dog" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.dog-dogtubiao:before {
+  content: "\e604";
 }
 
 

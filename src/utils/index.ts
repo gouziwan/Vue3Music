@@ -22,3 +22,19 @@ export function getArrRoundValue(arr: any[], nums: number) {
 export function subArr(arr: any, len: number, total: number) {
 	return arr.slice((len - 1) * total, len * total);
 }
+
+// 节流函数
+const throttle = (function () {
+	let isexce = true;
+	let id = null as any;
+	return function (callback: Function, tiem: number = 1000, ...arg: any) {
+		if (isexce == true) {
+			isexce = false;
+			callback && callback(...arg);
+			id = setTimeout(() => (isexce = true), tiem);
+		}
+		return id;
+	};
+})();
+
+export { throttle };

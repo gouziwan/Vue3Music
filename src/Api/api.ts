@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const ip = "10.62.60.33";
+const ip = "10.62.76.131";
 
 export const url = `http://${ip}:5000`;
 

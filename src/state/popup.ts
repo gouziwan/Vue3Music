@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useStore = defineStore("popup", {
 	state: () => {
 		return {
-			isShowLogin: false
+			isShowLogin: true
 		};
 	},
 	actions: {
