@@ -44,7 +44,6 @@ function createProxy(tagter: any) {
 		},
 		set(tagter, key, value) {
 			tagter[key] = value;
-
 			return false;
 		}
 	});
