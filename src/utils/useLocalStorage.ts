@@ -69,13 +69,15 @@ function createProxy(tagter: any): any {
 
 			Reflect.set(tag, key, value);
 
-			let val = source[currentkey];
+			let keys = currentkey === null ? key : currentkey;
+
+			let val = source[keys];
 
 			if (val != null || val != undefined) {
 				if (isObject(val)) {
 					val = JSON.stringify(val);
 				}
-				window.localStorage.setItem(currentkey, val);
+				window.localStorage.setItem(keys, val);
 			}
 
 			return true;

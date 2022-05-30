@@ -27,15 +27,22 @@ export function subArr(arr: any, len: number, total: number) {
 	return arr.slice((len - 1) * total, len * total);
 }
 
+export function isObject(value: any) {
+	return value instanceof Object;
+}
+
 // 节流函数
 const throttle = (function () {
 	let isexce = true;
 	let id = null as any;
+	let hanpp = (val: boolean) => (isexce = val);
 	return function (callback: Function, tiem: number = 1000, ...arg: any) {
 		if (isexce == true) {
 			isexce = false;
-			callback && callback(...arg);
-			id = setTimeout(() => (isexce = true), tiem);
+			if (tiem !== 0) {
+				id = setTimeout(() => hanpp(true), tiem);
+			}
+			callback && callback(hanpp, ...arg);
 		}
 		return id;
 	};

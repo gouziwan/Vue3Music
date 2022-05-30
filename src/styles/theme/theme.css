@@ -1,36 +1,36 @@
-:root{
-    /* 激活的颜色 */
-    --tabbar-active-color:rgb(212,0,0);
-    /* 主要的背景颜色 */
-    --background-main-color: rgb(14,14,14);
-    --background-color-1:rgb(25, 25, 25);
-    --background-color-2: rgb(40, 40, 40);
-    --background-color-3:rgb(20, 20, 20);
-    --background-color-light:rgb(49, 49, 49);
+:root {
+	/* 激活的颜色 */
+	--tabbar-active-color: rgb(212, 0, 0);
+	/* 主要的背景颜色 */
+	--background-main-color: rgb(14, 14, 14);
+	--background-color-1: rgb(25, 25, 25);
+	--background-color-2: rgb(40, 40, 40);
+	--background-color-3: rgb(20, 20, 20);
+	--background-color-light: rgb(49, 49, 49);
 
-    /*主要的字体颜色*/
-    --font-main-color:#fff; 
-    --font-main-color-1: rgb(212, 212, 212);
-    --font-main-color-2: rgb(79, 79, 79);
-    --font-main-color-3:rgb(100,100,100);
-    --border-color-1:rgb(115, 115, 115);
-    /* vant nav-bar-background-color */
-    --van-nav-bar-background-color:var(--background-main-color);
-    --van-search-background-color:transparent;
-    --van-search-content-background-color:var(--background-color-2);
-    --van-field-input-text-color:var(--font-main-color-2);
-    --van-nav-bar-icon-color:var(--font-main-color-2);
-    --van-tabbar-background-color:var(--background-main-color);
-    --van-tabbar-item-active-background-color:var(--background-main-color);
-    --van-tabbar-item-text-color:var(--font-main-color-1);
-    --van-tabbar-item-active-color:var(--tabbar-active-color);
-    --van-button-mini-padding: 0 15px;
-    --van-button-default-border-color:var(--border-color-1);
-    --van-cell-background-color:var(--background-color-1);
-    --van-cell-horizontal-padding:15px;
-    --van-cell-text-color:var(--font-main-color);
-    --van-popup-background-color:var(--background-main-color);
-    --van-field-label-color:var(--font-main-color);
-    --van-field-input-text-color:var(--font-main-color);
-    --van-field-placeholder-text-color:var(--font-main-color-3)
+	/*主要的字体颜色*/
+	--font-main-color: #fff;
+	--font-main-color-1: rgb(212, 212, 212);
+	--font-main-color-2: rgb(79, 79, 79);
+	--font-main-color-3: rgb(100, 100, 100);
+	--border-color-1: rgb(115, 115, 115);
+	/* vant nav-bar-background-color */
+	--van-nav-bar-background-color: var(--background-main-color) !important;
+	--van-search-background-color: transparent !important;
+	--van-search-content-background-color: var(--background-color-2) !important;
+	--van-field-input-text-color: var(--font-main-color-2) !important;
+	--van-nav-bar-icon-color: var(--font-main-color-2) !important;
+	--van-tabbar-background-color: var(--background-main-color) !important;
+	--van-tabbar-item-active-background-color: var(--background-main-color) !important;
+	--van-tabbar-item-text-color: var(--font-main-color-1) !important;
+	--van-tabbar-item-active-color: var(--tabbar-active-color) !important;
+	--van-button-mini-padding: 0 15px !important;
+	--van-button-default-border-color: var(--border-color-1) !important;
+	--van-cell-background-color: var(--background-color-1) !important;
+	--van-cell-horizontal-padding: 15px !important;
+	--van-cell-text-color: var(--font-main-color) !important;
+	--van-popup-background-color: var(--background-main-color) !important;
+	--van-field-label-color: var(--font-main-color) !important;
+	--van-field-input-text-color: var(--font-main-color) !important;
+	--van-field-placeholder-text-color: var(--font-main-color-3) !important;
 }

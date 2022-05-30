@@ -8,20 +8,23 @@ const state = useStore();
 const value = usePupop();
 
 const onClickShowLogin = () => {
-	value.reviseShowLogin(true);
+	// 如果为ture 就取消
+	if (!state.isLogin) {
+		value.reviseShowLogin(true);
+	}
 };
 </script>
 <template>
 	<div class="user-avatar">
 		<div class="user-avatar-content" @click="onClickShowLogin">
 			<div class="user-avtar-img">
-				<div class="user-avatar-default">
+				<div class="user-avatar-default" v-if="!state.isLogin">
 					<Icon name="dogwode-shixin_y_huaban" class-prefix="dog"></Icon>
 				</div>
 				<!-- 头像显示 -->
-				<!-- <Image></Image> -->
+				<Image v-else :src="state.userAvtar" width="1.7rem" height="1.7rem" round></Image>
 			</div>
-			<div class="user-name">立即登录<Icon name="arrow" /></div>
+			<div class="user-name">{{ state.userName }}<Icon name="arrow" v-if="!state.isLogin" /></div>
 		</div>
 	</div>
 </template>

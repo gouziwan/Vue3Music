@@ -1,12 +1,27 @@
 import axios, { AxiosRequestConfig } from "axios";
-
-const ip = "10.52.4.228";
+import { Toast } from "vant";
+const ip = "10.62.54.105";
 
 export const url = `http://${ip}:5000`;
 
 const _request = axios.create({
 	baseURL: url
 });
+
+_request.interceptors.response.use(
+	response => response,
+	error => {
+		let messages = `请求出错`;
+		if (error.response.status == "404") {
+			Toast.fail(messages);
+		}
+
+		return {
+			code: error.response.status,
+			messages: messages
+		};
+	}
+);
 
 export const request = async function (
 	config: AxiosRequestConfig | string,

@@ -1,39 +1,28 @@
-import { DefineComponent } from "vue";
-import { createRouter, createWebHistory } from "vue-router";
-import User from "../view/User.vue";
-import Home from "../view/Home.vue";
-import PlayList from "../view/PlayList.vue";
-import Text from "../view/Text.vue";
-
-import HomeHread from "../components/Home/HomeHread.vue";
-import UserHread from "../components/User/UserHread.vue";
-
-export interface RoutesType {
-	path: string;
-	components: {
-		default: DefineComponent<{}, {}, any>;
-		hread: DefineComponent<{}, {}, any>;
-	};
-	name: string;
-}
+import { createRouter, createWebHistory, RouteRecordRaw, useRoute } from "vue-router";
 
 // 路由
-const routes: RoutesType[] = [
+const routes: RouteRecordRaw[] = [
 	{
 		// 路径
 		path: "/",
 		// 组件
 		components: {
-			default: Home,
-			hread: HomeHread
+			default: () => import("../view/Home.vue"),
+			hread: () => import("../components/Home/HomeHread.vue")
+		},
+		meta: {
+			keep: true
 		},
 		name: "Home"
 	},
 	{
 		path: "/user",
 		components: {
-			default: User,
-			hread: UserHread
+			default: () => import("../view/User.vue"),
+			hread: () => import("../components/User/UserHread.vue")
+		},
+		meta: {
+			keep: false
 		},
 		name: "User"
 	}
@@ -42,7 +31,16 @@ const routes: RoutesType[] = [
 // 创建路由
 const router = createRouter({
 	history: createWebHistory(),
-	routes
+	routes,
+	scrollBehavior: (to, from) => {
+		if (from.meta.keep) {
+			from.meta.top = document.querySelector<HTMLDivElement>(".page-centent")!.offsetTop;
+		}
+	}
 });
+
+export const toRouterScroll = () => {
+	const route = useRoute();
+};
 
 export default router;

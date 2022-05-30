@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import styleImport, { VantResolve } from "vite-plugin-style-import";
+import vueSetupExtend from "vite-plugin-vue-setup-extend";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,7 +9,8 @@ export default defineConfig({
 		vue(),
 		styleImport({
 			resolves: [VantResolve()]
-		})
+		}),
+		vueSetupExtend()
 	],
 	server: {
 		host: "0.0.0.0"
