@@ -54,7 +54,7 @@ const onClickShowLogin = () => {
 		margin-left: 20px;
 	}
 
-	padding: 20px;
+	padding: var(--padding-size-medium);
 	box-sizing: border-box;
 	position: relative;
 

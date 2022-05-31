@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Toast } from "vant";
-const ip = "10.62.54.105";
+const ip = "10.62.49.156";
 
 export const url = `http://${ip}:5000`;
 
@@ -15,7 +15,6 @@ _request.interceptors.response.use(
 		if (error.response.status == "404") {
 			Toast.fail(messages);
 		}
-
 		return {
 			code: error.response.status,
 			messages: messages

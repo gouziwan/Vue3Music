@@ -7,11 +7,14 @@ import RankingList from "../components/Home/RankingList.vue";
 import Video from "../components/Home/Video.vue";
 import HotTopic from "../components/Home/HotTopic.vue";
 import { onActivated } from "vue";
-import { toRouterScroll } from "../routers/index";
+import { toRouterScroll, upRouterScroll } from "../routers/index";
+import { onBeforeRouteLeave } from "vue-router";
 
 onActivated(() => {
-	console.log(`组件激活`);
+	toRouterScroll();
 });
+//这个是组件离开的时候调用的
+onBeforeRouteLeave(upRouterScroll);
 </script>
 
 <template>

@@ -1,12 +1,10 @@
 @font-face {
   font-family: "dog";
   /* Project id 3235656 */
-  src: url('//at.alicdn.com/t/font_3235656_4ropri054ml.woff2?t=1653613445969') format('woff2'),
-    url('//at.alicdn.com/t/font_3235656_4ropri054ml.woff?t=1653613445969') format('woff'),
-    url('//at.alicdn.com/t/font_3235656_4ropri054ml.ttf?t=1653613445969') format('truetype');
+  src: url('//at.alicdn.com/t/font_3235656_twfuzezul3.woff2?t=1653968665309') format('woff2'),
+    url('//at.alicdn.com/t/font_3235656_twfuzezul3.woff?t=1653968665309') format('woff'),
+    url('//at.alicdn.com/t/font_3235656_twfuzezul3.ttf?t=1653968665309') format('truetype');
 }
-
-
 .dog {
   font-family: "dog" !important;
   font-size: 16px;
@@ -15,6 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dog-dogmeiyougengduoxiaoxi:before {
+  content: "\e614";
+}
+
+.dog-dogiconzhengli:before {
+  content: "\e60d";
+}
+.dog-dogxingxing:before {
+  content: "\e75b";
+}
 .dog-dogtubiao:before {
   content: "\e604";
 }
@@ -44,7 +52,7 @@
   content: "\e6a6";
 }
 
-.dogshoucang1:before {
+.dog-dogshoucang1:before {
   content: "\e62a";
 }
 
@@ -56,7 +64,7 @@
   content: "\e835";
 }
 
-.dogshoucang:before {
+.dog-dogshoucang:before {
   content: "\e609";
 }
 
@@ -64,7 +72,7 @@
   content: "\e608";
 }
 
-.doggengduo:before {
+.dog-doggengduo:before {
   content: "\e612";
 }
 
@@ -84,7 +92,7 @@
   content: "\e721";
 }
 
-.dogadd:before {
+.dog-dogadd:before {
   content: "\e61e";
 }
 

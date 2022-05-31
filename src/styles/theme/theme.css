@@ -14,6 +14,17 @@
 	--font-main-color-2: rgb(79, 79, 79);
 	--font-main-color-3: rgb(100, 100, 100);
 	--border-color-1: rgb(115, 115, 115);
+
+
+	/* 边距 */
+	--padding-size-medium: 20px;
+	--padding-size-mini:15px;
+
+
+	--margin-size-top-mini:10px;
+	--margin-size-left-mini:10px;
+	--margin-size-medium: 20px;
+
 	/* vant nav-bar-background-color */
 	--van-nav-bar-background-color: var(--background-main-color) !important;
 	--van-search-background-color: transparent !important;
@@ -33,4 +44,6 @@
 	--van-field-label-color: var(--font-main-color) !important;
 	--van-field-input-text-color: var(--font-main-color) !important;
 	--van-field-placeholder-text-color: var(--font-main-color-3) !important;
+	--van-cell-background-color:transparent !important;
+
 }

@@ -1,3 +1,4 @@
+import { isObject } from "../utils/index";
 import { createRouter, createWebHistory, RouteRecordRaw, useRoute } from "vue-router";
 
 // 路由
@@ -11,7 +12,8 @@ const routes: RouteRecordRaw[] = [
 			hread: () => import("../components/Home/HomeHread.vue")
 		},
 		meta: {
-			keep: true
+			keep: true,
+			top: 0
 		},
 		name: "Home"
 	},
@@ -31,16 +33,25 @@ const routes: RouteRecordRaw[] = [
 // 创建路由
 const router = createRouter({
 	history: createWebHistory(),
-	routes,
-	scrollBehavior: (to, from) => {
-		if (from.meta.keep) {
-			from.meta.top = document.querySelector<HTMLDivElement>(".page-centent")!.offsetTop;
-		}
-	}
+	routes
 });
 
 export const toRouterScroll = () => {
 	const route = useRoute();
+	let r = routes.filter(el => el.name === route.name)[0];
+	// 如果他等0也没必要设置
+	if (isObject(r.meta) && r.meta!.top != undefined) {
+		const { top } = r.meta! as any;
+		Promise.resolve().then(() => (document.querySelector(".page-centent")!.scrollTop = top));
+	}
+};
+
+export const upRouterScroll = (to: any, from: any) => {
+	let name = from.name;
+	let r = routes.filter(el => el.name === name)[0];
+	if (isObject(r.meta)) {
+		r.meta!.top = document.querySelector<HTMLDivElement>(".page-centent")!.scrollTop;
+	}
 };
 
 export default router;
