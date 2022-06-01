@@ -31,6 +31,10 @@ export function isObject(value: any) {
 	return value instanceof Object;
 }
 
+export function isArray(value: any) {
+	return Array.isArray(value);
+}
+
 // 节流函数
 const throttle = (function () {
 	let isexce = true;

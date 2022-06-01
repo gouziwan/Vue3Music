@@ -13,3 +13,9 @@ export function userLogin(userName: any, password: any, callback?: RequestCallBa
 export function getUserLoginState(cookie: any, callback?: RequestCallBack) {
 	return request(`/login/status?cookie=${cookie}`, callback);
 }
+
+// 获取用户的歌单列表
+
+export function getUserSongList(uid: any, callback?: RequestCallBack, offset: number = 0) {
+	return request(`/user/playlist?uid=${uid}&offset=${offset}`, callback);
+}

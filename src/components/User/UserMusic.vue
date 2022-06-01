@@ -1,28 +1,61 @@
 <script lang="ts" setup>
-import { Cell, Icon, Tab, Tabs } from "vant";
+import { Cell, Icon, Tab, Tabs, Image } from "vant";
+import { watch } from "vue";
+import { useStore } from "../../state/user";
+import { getUserSongList } from "../../Api/user";
+import { isArray } from "../../utils/index";
+
+const store = useStore();
 
 const tabsArr = [
 	{
 		title: "创建歌单",
 		valueIcon: "dogadd",
 		rightIcon: "doggengduo",
-		defaultIcon: "dogmeiyougengduoxiaoxi"
+		defaultIcon: "dogmeiyougengduoxiaoxi",
+		// 这个是store 的 name 就是 key
+		key: "createPlaylist"
 	},
 	{
 		title: "收藏歌单",
 		valueIcon: "dogadd",
 		rightIcon: "doggengduo",
-		defaultIcon: "dogmeiyougengduoxiaoxi"
+		defaultIcon: "dogmeiyougengduoxiaoxi",
+		key: "collectSongs"
 	}
 ];
+
+watch(
+	() => store.isLogin,
+	() => {
+		if (store.isLogin) {
+			getUserSongList(store.userId, res => {
+				if (res.code === 200) {
+					store.reviseUserSongs(res.playlist);
+				}
+			});
+		}
+	},
+	{
+		immediate: true
+	}
+);
 </script>
 <template>
 	<div class="user-my-music">
 		<div class="user-like-music">
-			<Cell title="我喜欢的音乐" label="0首" center>
+			<Cell title="我喜欢的音乐" :label="store.getLikeSongsCount" center>
 				<template #icon>
-					<div class="user-like-icon">
+					<div class="user-like-icon" v-if="!store.getLikeSonsImag">
 						<Icon name="dogiconzhengli" class-prefix="dog" size="0.8rem"></Icon>
+					</div>
+					<div style="margin-right: var(--margin-size-left-mini)" v-else>
+						<Image
+							:src="store.getLikeSonsImag"
+							width="1.3rem"
+							height="1.3rem"
+							radius="0.2rem"
+						></Image>
 					</div>
 				</template>
 			</Cell>
@@ -51,7 +84,10 @@ const tabsArr = [
 							</Cell>
 						</div>
 						<div class="create-music-content">
-							<div class="create-music-default">
+							<div class="create-music-list" v-if="isArray(store[item.key])">
+								<Cell> </Cell>
+							</div>
+							<div class="create-music-default" v-else>
 								<Icon :name="item.defaultIcon" class-prefix="dog" size="1rem"></Icon>
 								<p>暂无{{ item.title }}</p>
 							</div>
