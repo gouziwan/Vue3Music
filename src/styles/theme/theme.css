@@ -7,7 +7,8 @@
 	--background-color-2: rgb(40, 40, 40);
 	--background-color-3: rgb(20, 20, 20);
 	--background-color-light: rgb(49, 49, 49);
-
+	--background-color-contrast:#fff;
+	
 	/*主要的字体颜色*/
 	--font-main-color: #fff;
 	--font-main-color-1: rgb(212, 212, 212);

@@ -1,11 +1,14 @@
 <script lang="ts" setup>
-import { Cell, Icon, Tab, Tabs, Image } from "vant";
+import { Cell, Icon, Tab, Tabs, Image, SwipeCell, Button, Toast } from "vant";
 import { watch } from "vue";
 import { useStore } from "../../state/user";
-import { getUserSongList } from "../../Api/user";
-import { isArray } from "../../utils/index";
+import { useStore as userPopup } from "../../state/popup";
+import { deleteUserSongs, getUserSongList } from "../../Api/user";
+import { isArray, getAcquire } from "../../utils/index";
 
 const store = useStore();
+
+const popup = userPopup();
 
 const tabsArr = [
 	{
@@ -14,16 +17,62 @@ const tabsArr = [
 		rightIcon: "doggengduo",
 		defaultIcon: "dogmeiyougengduoxiaoxi",
 		// 这个是store 的 name 就是 key
-		key: "createPlaylist"
+		key: "createPlaylist",
+		onAddClick
 	},
 	{
 		title: "收藏歌单",
-		valueIcon: "dogadd",
+		valueIcon: null,
 		rightIcon: "doggengduo",
 		defaultIcon: "dogmeiyougengduoxiaoxi",
 		key: "collectSongs"
 	}
 ];
+
+function onAddClick() {
+	if (!store.isLogin) {
+		popup.reviseShowLogin(true);
+		Toast.fail(`请先登录`);
+		return;
+	}
+
+	popup.reviseIsAddSongs(true);
+}
+
+const beforeClose = (position: any) => {
+	if (position.position === "right") {
+		return deClose(position.name);
+	} else {
+		return true;
+	}
+};
+
+const deClose = (id: any) =>
+	new Promise((resolve, reject) => {
+		Toast.loading({
+			message: `加载中`,
+			duration: 0
+		});
+
+		deleteUserSongs(id, res => {
+			console.log(res);
+			if (res.code == 200) {
+				store.removeCreatePlayList(id);
+				resolve(true);
+			} else {
+				reject();
+			}
+		});
+	}).then(
+		() => {
+			Toast.success(`删除成功`);
+			return true;
+		},
+		() => {
+			Toast.success(`请重试`);
+			return true;
+		}
+	);
 
 watch(
 	() => store.isLogin,
@@ -60,7 +109,6 @@ watch(
 				</template>
 			</Cell>
 		</div>
-
 		<div class="user-music-list">
 			<Tabs background="transparent" scrollspy title-active-color="var(--font-main-color)">
 				<Tab v-for="item in tabsArr" :title="item.title">
@@ -70,10 +118,9 @@ watch(
 								<template #title>
 									<div class="title">{{ item.title }}</div>
 								</template>
-
-								<template #value>
-									<div class="icon">
-										<Icon :name="item.valueIcon" class-prefix="dog" size="0.35rem" />
+								<template #value v-if="item.valueIcon !== null">
+									<div class="icon" @click="item.onAddClick">
+										<Icon :name="item.valueIcon!" class-prefix="dog" size="0.35rem" />
 									</div>
 								</template>
 								<template #right-icon>
@@ -85,7 +132,26 @@ watch(
 						</div>
 						<div class="create-music-content">
 							<div class="create-music-list" v-if="isArray(store[item.key])">
-								<Cell> </Cell>
+								<div class="create-music-item" v-for="value in store[item.key].slice(0, 5)">
+									<SwipeCell :before-close="beforeClose" :name="value.id">
+										<Cell :title="value.name" :label="value.trackCount + '首'">
+											<template #icon>
+												<div style="margin-right: var(--margin-size-left-mini)">
+													<Image
+														:src="getAcquire(value.coverImgUrl)"
+														width="1.3rem"
+														height="1.3rem"
+														radius="0.2rem"
+													></Image>
+												</div>
+											</template>
+										</Cell>
+
+										<template #right>
+											<Button square type="danger" text="删除" />
+										</template>
+									</SwipeCell>
+								</div>
 							</div>
 							<div class="create-music-default" v-else>
 								<Icon :name="item.defaultIcon" class-prefix="dog" size="1rem"></Icon>
@@ -148,14 +214,25 @@ watch(
 
 			.create-music-content {
 				min-height: 2rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+
+				.create-music-item {
+					margin-bottom: var(--margin-size-left-mini);
+
+					.van-cell::after {
+						border-bottom: none;
+					}
+				}
+
+				.create-music-item:nth-last-child(1) {
+					margin-bottom: 0;
+				}
+
 				.create-music-default {
 					display: flex;
 					align-items: center;
 					justify-content: center;
 					flex-direction: column;
+					min-height: 2rem;
 					p {
 						margin-top: var(--margin-size-left-mini);
 					}

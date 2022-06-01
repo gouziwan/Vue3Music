@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TabbarBottomVue from "./components/TabbarBottom.vue";
 import Login from "./components/Login.vue";
+import AddSongs from "./components/AddSongs.vue";
 import { useStore } from "./state/user";
 // 用户刷新登录的
 const state = useStore();
@@ -25,5 +26,7 @@ state.initLogin();
 		</div>
 		<!-- 登录 -->
 		<Login />
+		<!-- 添加歌曲的界面 -->
+		<AddSongs />
 	</div>
 </template>

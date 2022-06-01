@@ -49,12 +49,29 @@ export const useStore = defineStore("user", {
 			this.likeSongs === null ? (this.likeSongs = [res]) : this.likeSongs.push(res);
 		},
 
-		addcreatePlayList(res: any) {
-			this.createPlaylist === null ? (this.createPlaylist = [res]) : this.createPlaylist.push(res);
+		addcreatePlayList(res: any, position: "left" | "right" = "right") {
+			if (this.createPlaylist === null) {
+				this.createPlaylist = [res];
+			} else {
+				if (position === "right") {
+					this.createPlaylist.push(res);
+				} else {
+					this.createPlaylist.unshift(res);
+				}
+			}
 		},
 
 		addCollectSons(res: any) {
 			this.collectSongs === null ? (this.collectSongs = [res]) : this.collectSongs.push(res);
+		},
+
+		removeCreatePlayList(id: any) {
+			for (let i = 0; i < this.createPlaylist.length; i++) {
+				if (this.createPlaylist[i].id === id) {
+					this.createPlaylist.splice(i, 1);
+					return;
+				}
+			}
 		},
 
 		// 初始化登录
