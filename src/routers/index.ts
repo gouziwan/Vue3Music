@@ -12,7 +12,6 @@ const routes: RouteRecordRaw[] = [
 			hread: () => import("../components/Home/HomeHread.vue")
 		},
 		meta: {
-			keep: true,
 			top: 0
 		},
 		name: "Home"
@@ -24,9 +23,16 @@ const routes: RouteRecordRaw[] = [
 			hread: () => import("../components/User/UserHread.vue")
 		},
 		meta: {
-			keep: false
+			top: 0
 		},
 		name: "User"
+	},
+	{
+		path: "/search",
+		components: {
+			hread: () => import("../components/Search/SearchHread.vue")
+		},
+		name: "Search"
 	}
 ];
 
@@ -46,6 +52,7 @@ export const toRouterScroll = () => {
 	}
 };
 
+// 组件离开的时候缓存当前位置
 export const upRouterScroll = (to: any, from: any) => {
 	let name = from.name;
 	let r = routes.filter(el => el.name === name)[0];

@@ -34,6 +34,9 @@ export const useStore = defineStore("user", {
 			this.profile = state.profile;
 		},
 		reviseUserSongs(res: any[]) {
+			this.likeSongs = [];
+			this.createPlaylist = [];
+			this.collectSongs = [];
 			res.forEach(el => {
 				// 用户喜欢的歌单
 				if (el.name === `${this.userName}喜欢的音乐` && el.userId === this.userId) {
@@ -69,6 +72,14 @@ export const useStore = defineStore("user", {
 			for (let i = 0; i < this.createPlaylist.length; i++) {
 				if (this.createPlaylist[i].id === id) {
 					this.createPlaylist.splice(i, 1);
+					return;
+				}
+			}
+		},
+		removeCollectSongs(id: any) {
+			for (let i = 0; i < this.collectSongs.length; i++) {
+				if (this.collectSongs[i].id === id) {
+					this.collectSongs.splice(i, 1);
 					return;
 				}
 			}

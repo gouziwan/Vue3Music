@@ -1,14 +1,19 @@
 <script lang="ts" setup>
 import { Cell, Icon, Tab, Tabs, Image, SwipeCell, Button, Toast } from "vant";
-import { watch } from "vue";
+import { watch, onActivated, ref } from "vue";
 import { useStore } from "../../state/user";
 import { useStore as userPopup } from "../../state/popup";
 import { deleteUserSongs, getUserSongList } from "../../Api/user";
 import { isArray, getAcquire } from "../../utils/index";
+import Ellipsis from "../Ellipsis.vue";
+import { toRouterScroll, upRouterScroll } from "../../routers";
+import { onBeforeRouteLeave } from "vue-router";
 
 const store = useStore();
 
 const popup = userPopup();
+
+const offsetTop = ref(0);
 
 const tabsArr = [
 	{
@@ -18,16 +23,30 @@ const tabsArr = [
 		defaultIcon: "dogmeiyougengduoxiaoxi",
 		// 这个是store 的 name 就是 key
 		key: "createPlaylist",
-		onAddClick
+		onAddClick,
+		beforeClose: createBeforeClose("createPlaylist")
 	},
 	{
 		title: "收藏歌单",
 		valueIcon: null,
 		rightIcon: "doggengduo",
 		defaultIcon: "dogmeiyougengduoxiaoxi",
-		key: "collectSongs"
+		key: "collectSongs",
+		beforeClose: createBeforeClose("collectSongs")
 	}
 ];
+
+onActivated(() => {
+	if (offsetTop.value === 0) {
+		offsetTop.value =
+			document.querySelector<HTMLDivElement>(".page-head>.van-nav-bar")!.offsetHeight;
+	}
+
+	toRouterScroll();
+});
+
+// 缓存滚动条的位置
+onBeforeRouteLeave(upRouterScroll);
 
 function onAddClick() {
 	if (!store.isLogin) {
@@ -35,19 +54,20 @@ function onAddClick() {
 		Toast.fail(`请先登录`);
 		return;
 	}
-
 	popup.reviseIsAddSongs(true);
 }
 
-const beforeClose = (position: any) => {
-	if (position.position === "right") {
-		return deClose(position.name);
-	} else {
-		return true;
-	}
-};
+function createBeforeClose(key: string) {
+	return (position: any) => {
+		if (position.position === "right") {
+			return deClose(position.name, key);
+		} else {
+			return true;
+		}
+	};
+}
 
-const deClose = (id: any) =>
+const deClose = (id: any, key: string) =>
 	new Promise((resolve, reject) => {
 		Toast.loading({
 			message: `加载中`,
@@ -55,9 +75,8 @@ const deClose = (id: any) =>
 		});
 
 		deleteUserSongs(id, res => {
-			console.log(res);
 			if (res.code == 200) {
-				store.removeCreatePlayList(id);
+				key === "collectSongs" ? store.removeCollectSongs(id) : store.removeCreatePlayList(id);
 				resolve(true);
 			} else {
 				reject();
@@ -81,6 +100,7 @@ watch(
 			getUserSongList(store.userId, res => {
 				if (res.code === 200) {
 					store.reviseUserSongs(res.playlist);
+					console.log(res.playlist);
 				}
 			});
 		}
@@ -110,7 +130,13 @@ watch(
 			</Cell>
 		</div>
 		<div class="user-music-list">
-			<Tabs background="transparent" scrollspy title-active-color="var(--font-main-color)">
+			<Tabs
+				background="var(--background-color-2)"
+				scrollspy
+				title-active-color="var(--font-main-color)"
+				sticky
+				:offset-top="offsetTop"
+			>
 				<Tab v-for="item in tabsArr" :title="item.title">
 					<div class="user-create-music">
 						<div class="create-music-title">
@@ -132,9 +158,13 @@ watch(
 						</div>
 						<div class="create-music-content">
 							<div class="create-music-list" v-if="isArray(store[item.key])">
-								<div class="create-music-item" v-for="value in store[item.key].slice(0, 5)">
-									<SwipeCell :before-close="beforeClose" :name="value.id">
-										<Cell :title="value.name" :label="value.trackCount + '首'">
+								<div
+									class="create-music-item"
+									v-for="value in store[item.key].slice(0, 5)"
+									:key="value.id"
+								>
+									<SwipeCell :before-close="item.beforeClose" :name="value.id">
+										<Cell>
 											<template #icon>
 												<div style="margin-right: var(--margin-size-left-mini)">
 													<Image
@@ -144,6 +174,16 @@ watch(
 														radius="0.2rem"
 													></Image>
 												</div>
+											</template>
+											<template #title>
+												<Ellipsis clamp="1" epsis>
+													{{ value.name }}
+												</Ellipsis>
+											</template>
+											<template #label>
+												<Ellipsis clamp="1" epsis color="var(--font-main-color-3)">
+													{{ value.trackCount + "首" }}
+												</Ellipsis>
 											</template>
 										</Cell>
 
