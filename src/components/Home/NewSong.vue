@@ -2,7 +2,6 @@
 import ListModules from "./ListModule.vue";
 import { ref, reactive, watchEffect } from "vue";
 import { getAlbum, getNewCourier, getNewDisc } from "../../Api/Home";
-import { Swipe, SwipeItem, Cell, Image as VanImage } from "vant";
 import { getAcquire, subArr } from "../../utils/index";
 import Ellipsis from "../Ellipsis.vue";
 
@@ -87,16 +86,16 @@ watchEffect(() => {
 
 		<div class="tabs-content">
 			<div class="tabs-content-item" v-for="item in tabs" v-show="item.title === active">
-				<Swipe :show-indicators="false" v-if="item.value.length > 0" :loop="false">
-					<SwipeItem v-for="index in 3">
-						<Cell v-for="value in subArr(item.value, index, 3)" :border="false" center>
+				<van-swipe :show-indicators="false" v-if="item.value.length > 0" :loop="false">
+					<van-swipe-item v-for="index in 3">
+						<van-cell v-for="value in subArr(item.value, index, 3)" :border="false" center>
 							<template #icon>
-								<VanImage
+								<van-image
 									:src="getImageSrc(value, item.title)"
 									width="1.5rem"
 									radius="0.2rem"
 									height="1.5rem"
-								></VanImage>
+								></van-image>
 							</template>
 
 							<template #title>
@@ -107,9 +106,9 @@ watchEffect(() => {
 									</Ellipsis>
 								</div>
 							</template>
-						</Cell>
-					</SwipeItem>
-				</Swipe>
+						</van-cell>
+					</van-swipe-item>
+				</van-swipe>
 			</div>
 		</div>
 	</ListModules>

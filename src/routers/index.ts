@@ -30,7 +30,8 @@ const routes: RouteRecordRaw[] = [
 	{
 		path: "/search",
 		components: {
-			hread: () => import("../components/Search/SearchHread.vue")
+			hread: () => import("../components/Search/SearchHread.vue"),
+			default: () => import("../view/Search.vue")
 		},
 		name: "Search"
 	}
@@ -42,13 +43,14 @@ const router = createRouter({
 	routes
 });
 
-export const toRouterScroll = () => {
+// 这个是获取对应dom的top
+export const toRouterScroll = (dom = document.querySelector(".page-centent")!) => {
 	const route = useRoute();
 	let r = routes.filter(el => el.name === route.name)[0];
 	// 如果他等0也没必要设置
 	if (isObject(r.meta) && r.meta!.top != undefined) {
 		const { top } = r.meta! as any;
-		Promise.resolve().then(() => (document.querySelector(".page-centent")!.scrollTop = top));
+		Promise.resolve().then(() => (dom.scrollTop = top));
 	}
 };
 

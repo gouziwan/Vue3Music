@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { Button, Icon } from "vant";
-
 const { title, buttonTxt } = defineProps({
 	title: {
 		type: String,
@@ -27,9 +25,9 @@ const { title, buttonTxt } = defineProps({
 				<slot name="hread">
 					<h2>{{ title }}</h2>
 				</slot>
-				<Button round size="mini" plain v-if="isButton"
-					>{{ buttonTxt }} <Icon name="arrow" />
-				</Button>
+				<van-button round size="mini" plain v-if="isButton"
+					>{{ buttonTxt }} <van-icon name="arrow" />
+				</van-button>
 			</div>
 			<div class="item-modules">
 				<slot></slot>

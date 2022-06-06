@@ -1,5 +1,12 @@
-<script lang="ts" setup>
+<script lang="ts" setup name="user-hread">
 import { NavBar, Icon } from "vant";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+
+const onClickToSearch = () => {
+	router.push("Search");
+};
 </script>
 <template>
 	<NavBar :border="false">
@@ -7,7 +14,7 @@ import { NavBar, Icon } from "vant";
 			<Icon name="dogliebiao" class-prefix="dog" size="0.5rem"></Icon>
 		</template>
 		<template #right>
-			<Icon name="dogsousuo1" class-prefix="dog" size="0.36rem"></Icon>
+			<Icon name="dogsousuo1" class-prefix="dog" size="0.36rem" @click="onClickToSearch"></Icon>
 		</template>
 	</NavBar>
 </template>

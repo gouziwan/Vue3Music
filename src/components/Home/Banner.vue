@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Swipe, SwipeItem, Image as VantImage } from "vant";
 import { ref } from "vue";
 import { getBanner } from "../../Api/Home";
 
@@ -17,12 +16,12 @@ const clickSwipeTo = (index: number) => swipeInstance.value.swipeTo(index);
 <template>
 	<div class="home-banner">
 		<LoadingContentVue v-if="banners.length <= 0" color="var(--font-main-color-1)" />
-		<Swipe autoplay="3000" ref="swipeInstance" v-else>
-			<SwipeItem v-for="item in banners">
+		<van-swipe autoplay="3000" ref="swipeInstance" v-else>
+			<van-swipe-item v-for="item in banners">
 				<div class="home-banner-item">
-					<VantImage width="100%" height="4rem" :src="item.pic" fit="cover" radius="0.2rem" />
+					<van-image width="100%" height="4rem" :src="item.pic" fit="cover" radius="0.2rem" />
 				</div>
-			</SwipeItem>
+			</van-swipe-item>
 			<template #indicator="{ active, total }">
 				<div class="custom-indicator">
 					<div
@@ -33,7 +32,7 @@ const clickSwipeTo = (index: number) => swipeInstance.value.swipeTo(index);
 					></div>
 				</div>
 			</template>
-		</Swipe>
+		</van-swipe>
 	</div>
 </template>
 

@@ -9,6 +9,7 @@ import HotTopic from "../components/Home/HotTopic.vue";
 import { onActivated } from "vue";
 import { toRouterScroll, upRouterScroll } from "../routers/index";
 import { onBeforeRouteLeave } from "vue-router";
+import { NavBar, Icon, Search } from "vant";
 
 onActivated(() => {
 	toRouterScroll();
@@ -30,6 +31,15 @@ onBeforeRouteLeave(upRouterScroll);
 </template>
 
 <style lang="scss">
+::v-deep .van-nav-bar__title {
+	max-width: 80%;
+	width: 100%;
+}
+
+::v-deep .van-nav-bar::after {
+	content: none;
+}
+
 .home {
 	height: 10000px;
 }

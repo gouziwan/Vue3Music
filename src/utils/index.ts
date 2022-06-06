@@ -36,7 +36,7 @@ export function isArray(value: any) {
 }
 
 // 节流函数
-const throttle = (function () {
+export const throttle = (function () {
 	let isexce = true;
 	let id = null as any;
 	let hanpp = (val: boolean) => (isexce = val);
@@ -51,5 +51,3 @@ const throttle = (function () {
 		return id;
 	};
 })();
-
-export { throttle };

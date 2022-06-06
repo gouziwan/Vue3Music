@@ -6,13 +6,19 @@ import { useStore } from "./state/user";
 // 用户刷新登录的
 const state = useStore();
 const keepAlive = ["Home", "User"];
+const keepHread = ["home-hread", "user-hread", "search-hread"];
+
 state.initLogin();
 </script>
 
 <template>
 	<div class="page">
 		<div class="page-head">
-			<router-view name="hread" />
+			<router-view name="hread" v-slot="{ Component }">
+				<keep-alive max="20" :include="keepHread">
+					<component :is="Component"></component>
+				</keep-alive>
+			</router-view>
 		</div>
 		<div class="page-centent">
 			<router-view v-slot="{ Component }">

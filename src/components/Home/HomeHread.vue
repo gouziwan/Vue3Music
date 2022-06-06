@@ -1,20 +1,18 @@
-<script lang="ts" setup>
-import { Search, Icon } from "vant";
-</script>
+<script lang="ts" setup name="home-hread"></script>
 
 <template>
 	<div class="home-hread">
 		<van-nav-bar>
 			<template #title>
-				<Search shape="round" disabled />
+				<van-search shape="round" disabled />
 			</template>
 			<template #left>
-				<Icon
-					size="0.6rem"
+				<van-icon
+					size="0.5rem"
 					class-prefix="dog"
 					name="dogliebiao"
 					color="var(--font-main-color)"
-				></Icon>
+				></van-icon>
 			</template>
 		</van-nav-bar>
 	</div>

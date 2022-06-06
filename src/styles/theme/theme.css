@@ -20,8 +20,6 @@
 	/* 边距 */
 	--padding-size-medium: 20px;
 	--padding-size-mini:15px;
-
-
 	--margin-size-top-mini:10px;
 	--margin-size-left-mini:10px;
 	--margin-size-medium: 20px;
@@ -46,5 +44,6 @@
 	--van-field-input-text-color: var(--font-main-color) !important;
 	--van-field-placeholder-text-color: var(--font-main-color-3) !important;
 	--van-cell-background-color:transparent !important;
+	--van-cell-active-color:var(--background-color-2)
 
 }

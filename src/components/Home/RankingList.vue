@@ -30,7 +30,7 @@ const getAvatarTxt = (item: any) => {
 								radius="0.3rem"
 								width="1.5rem"
 								height="1.5rem"
-								:src="getAcquire(val.al.picUrl, '300y300')"
+								:src="getAcquire(val.al.picUrl, '100y100')"
 							/>
 						</div>
 						<h3 class="ellipsis-list">{{ index + 1 }}</h3>
