@@ -51,3 +51,31 @@ export const throttle = (function () {
 		return id;
 	};
 })();
+
+// 防止双击 屏幕放大
+
+export function banDoubleClick() {
+	window.onload = () => {
+		let old = Date.now();
+
+		document.addEventListener("touchend", (e: Event) => {
+			let current = Date.now();
+
+			if (current - old <= 300) {
+				e.preventDefault();
+				old = current;
+				return;
+			}
+		});
+	};
+}
+// 防抖
+export const antiShaking = (function () {
+	let id = 0 as any;
+	return function (_fn: Function, time: number = 500, ...arg: any[]) {
+		clearTimeout(id);
+		return (id = setTimeout(() => {
+			_fn && _fn(...arg);
+		}, time));
+	};
+})();

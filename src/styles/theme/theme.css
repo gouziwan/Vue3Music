@@ -15,6 +15,7 @@
 	--font-main-color-2: rgb(79, 79, 79);
 	--font-main-color-3: rgb(100, 100, 100);
 	--border-color-1: rgb(115, 115, 115);
+	--border-color-2: rgb(87, 87, 87);
 
 
 	/* 边距 */
@@ -44,6 +45,6 @@
 	--van-field-input-text-color: var(--font-main-color) !important;
 	--van-field-placeholder-text-color: var(--font-main-color-3) !important;
 	--van-cell-background-color:transparent !important;
-	--van-cell-active-color:var(--background-color-2)
-
+	--van-cell-active-color:var(--background-color-2);
+	--van-tag-default-color:var(--background-color-1) !important;
 }

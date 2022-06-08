@@ -1,10 +1,18 @@
-<script lang="ts" setup name="home-hread"></script>
+<script lang="ts" setup name="home-hread">
+import { useRouter } from "vue-router";
+
+const routers = useRouter();
+
+const onClickToSerach = () => {
+	routers.push("Search");
+};
+</script>
 
 <template>
 	<div class="home-hread">
 		<van-nav-bar>
 			<template #title>
-				<van-search shape="round" disabled />
+				<van-search shape="round" disabled @click="onClickToSerach" />
 			</template>
 			<template #left>
 				<van-icon

@@ -1,5 +1,11 @@
 import { isObject } from "../utils/index";
-import { createRouter, createWebHistory, RouteRecordRaw, useRoute } from "vue-router";
+import {
+	createRouter,
+	createWebHashHistory,
+	createWebHistory,
+	RouteRecordRaw,
+	useRoute
+} from "vue-router";
 
 // 路由
 const routes: RouteRecordRaw[] = [
@@ -42,6 +48,8 @@ const router = createRouter({
 	history: createWebHistory(),
 	routes
 });
+
+console.log(createWebHashHistory());
 
 // 这个是获取对应dom的top
 export const toRouterScroll = (dom = document.querySelector(".page-centent")!) => {
