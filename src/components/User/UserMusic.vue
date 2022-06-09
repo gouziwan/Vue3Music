@@ -131,7 +131,7 @@ watch(
 		</div>
 		<div class="user-music-list">
 			<Tabs
-				background="var(--background-color-2)"
+				background="var(--background-color-light)"
 				scrollspy
 				title-active-color="var(--font-main-color)"
 				sticky
@@ -222,7 +222,7 @@ watch(
 			height: 1.3rem;
 			width: 1.3rem;
 			margin-right: var(--margin-size-left-mini);
-			background-color: darkgray;
+			background-color: rgb(90, 90, 90);
 			border-radius: 0.2rem;
 		}
 	}

@@ -6,7 +6,7 @@
 	--background-color-1: rgb(25, 25, 25);
 	--background-color-2: rgb(40, 40, 40);
 	--background-color-3: rgb(20, 20, 20);
-	--background-color-light: rgb(49, 49, 49);
+	--background-color-light: rgb(25, 25, 25);
 	--background-color-contrast:#fff;
 	
 	/*主要的字体颜色*/
@@ -16,7 +16,7 @@
 	--font-main-color-3: rgb(100, 100, 100);
 	--border-color-1: rgb(115, 115, 115);
 	--border-color-2: rgb(87, 87, 87);
-
+	--border-color-3:rgb(40, 40, 40);
 
 	/* 边距 */
 	--padding-size-medium: 20px;
@@ -47,4 +47,5 @@
 	--van-cell-background-color:transparent !important;
 	--van-cell-active-color:var(--background-color-2);
 	--van-tag-default-color:var(--background-color-1) !important;
+	--van-border-color:var(--border-color-3) !important;
 }

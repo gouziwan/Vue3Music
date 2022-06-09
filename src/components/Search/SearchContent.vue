@@ -1,9 +1,15 @@
 <script lang="ts" setup>
+import { table } from "console";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { getTopSerach } from "../../Api/Search/index";
+import { serachKeyword } from "../../config/routerFrom";
+import { getAncestorNodes } from "../../utils";
 import Ellipsis from "../Ellipsis.vue";
 
 const serachResult = ref<any>([]);
+
+const routers = useRouter();
 
 const isShowAll = ref(false);
 
@@ -23,6 +29,20 @@ const serachArr = computed(() => {
 const onClickAnAll = () => {
 	isShowAll.value = true;
 };
+
+const onClickToSerachDetails = (e: any) => {
+	const node = getAncestorNodes(e.target, "serach-content-item");
+
+	if (node != null) {
+		let serachWord = node.dataset.searchword;
+		routers.push({
+			name: "SearchDeails",
+			state: {
+				[serachKeyword]: serachWord
+			}
+		});
+	}
+};
 </script>
 <template>
 	<div class="top-serach">
@@ -37,8 +57,14 @@ const onClickAnAll = () => {
 				</van-button>
 			</div>
 		</div>
-		<div class="content" v-show="serachResult.length > 0">
-			<div class="content-item" v-for="(item, index) in serachArr" :key="index">
+		<div class="content" v-show="serachResult.length > 0" @click="onClickToSerachDetails">
+			<div
+				id="serach-content-item"
+				class="content-item"
+				:data-searchword="item.searchWord"
+				v-for="(item, index) in serachArr"
+				:key="index"
+			>
 				<van-cell center clickable size="normal">
 					<template #title>
 						<div class="content-title">

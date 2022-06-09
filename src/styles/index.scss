@@ -16,11 +16,12 @@ html,body,#app{
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: var(--background-main-color);
     .page-centent{
         height: 100%;
         flex: 1;
         overflow: auto;
-        background-color:var(--background-color-2);
+       background-color: var(--background-main-color-2);
 
     }
 

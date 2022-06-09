@@ -8,7 +8,10 @@ import {
 	SwipeItem,
 	Image as VantImage,
 	Button,
-	Cell
+	Cell,
+	Tabs,
+	Tab,
+	CellGroup
 } from "vant";
 
 export default function useComponent(app: any) {
@@ -21,5 +24,8 @@ export default function useComponent(app: any) {
 		.use(SwipeItem)
 		.use(VantImage)
 		.use(Button)
-		.use(Cell);
+		.use(Cell)
+		.use(Tabs)
+		.use(Tab)
+		.use(CellGroup);
 }

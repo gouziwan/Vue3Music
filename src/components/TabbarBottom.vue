@@ -34,7 +34,7 @@ watchEffect(() => (active.value = route.path as string));
 </script>
 
 <template>
-	<Tabbar v-model="active" placeholder :border="false">
+	<Tabbar v-model="active" placeholder>
 		<TabbarItem v-for="(item, index) in tabs" :key="index" :name="item.path" :to="item.path">
 			{{ item.txt }}
 			<template #icon>

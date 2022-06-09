@@ -6,6 +6,7 @@ import {
 	RouteRecordRaw,
 	useRoute
 } from "vue-router";
+import { serachKeyword } from "../config/routerFrom";
 
 // 路由
 const routes: RouteRecordRaw[] = [
@@ -40,6 +41,14 @@ const routes: RouteRecordRaw[] = [
 			default: () => import("../view/Search.vue")
 		},
 		name: "Search"
+	},
+	{
+		path: `/searchdetails`,
+		components: {
+			hread: () => import("../components/SearchDetails/Hread.vue"),
+			default: () => import("../view/SearchDetails.vue")
+		},
+		name: "SearchDeails"
 	}
 ];
 

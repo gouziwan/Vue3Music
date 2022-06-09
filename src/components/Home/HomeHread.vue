@@ -31,8 +31,4 @@ const onClickToSerach = () => {
 	max-width: 80%;
 	width: 100%;
 }
-
-::v-deep .van-nav-bar::after {
-	content: none;
-}
 </style>
