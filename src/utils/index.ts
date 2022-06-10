@@ -95,3 +95,14 @@ export const antiShaking = (function () {
 		}, time));
 	};
 })();
+
+// 播放次数 把一个 12312313 -> 转成 1231万次
+export function getPlayCountText(count: number, suffix: string = "万"): string {
+	count = count / 10000;
+
+	if (count > 10000) {
+		return getPlayCountText(count, "亿");
+	}
+
+	return count.toFixed(1) + suffix;
+}
