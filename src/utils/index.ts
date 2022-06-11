@@ -38,9 +38,13 @@ export function isArray(value: any) {
 // 获取当前节点 某个祖先节点 用于获取当前节点的
 export function getAncestorNodes(target: HTMLDivElement, id: string) {
 	if (target.id === id) return target;
-	let parent = target.parentNode! as HTMLDivElement;
+	let parent = target.parentNode! as any;
 
-	while (parent.id !== id && parent !== document.body) {
+	let name = id[0] === "#" ? "id" : "className";
+
+	id = id.slice(1);
+
+	while (parent[name] !== id && parent !== document.body) {
 		parent = parent.parentNode! as HTMLDivElement;
 	}
 

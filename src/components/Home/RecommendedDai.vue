@@ -3,18 +3,36 @@ import { getRecommendedDaily } from "../../Api/Home";
 import ListModule from "./ListModule.vue";
 import { Image } from "vant";
 import { ref } from "vue";
-import { getAcquire, getArrRoundValue } from "../../utils/index";
+import { getAcquire, getAncestorNodes, getArrRoundValue, isObject } from "../../utils/index";
 import Ellipsis from "../Ellipsis.vue";
+import { useRouter } from "vue-router";
 let result = ref<any[]>([]);
 
 getRecommendedDaily(res => (result.value = getArrRoundValue(res.result, 10)));
+
+const router = useRouter();
+
+const onClickToPlayList = (e: Event) => {
+	const node = getAncestorNodes(e.target as HTMLDivElement, ".home-recea-items") as HTMLDivElement;
+
+	const id = isObject(node) && node.dataset ? node.dataset.id : false;
+
+	if (id) {
+		router.push({
+			name: "PlayListDetails",
+			state: {
+				id
+			}
+		});
+	}
+};
 </script>
 
 <template>
 	<ListModule :isShow="result.length > 0">
 		<div class="home-recea">
-			<div class="home-inner">
-				<div class="home-recea-items" v-for="item in result">
+			<div class="home-inner" @click="onClickToPlayList">
+				<div class="home-recea-items" v-for="item in result" :data-id="item.id">
 					<Image
 						:src="getAcquire(item.picUrl, '300y300')"
 						width="2.5rem"

@@ -16,9 +16,13 @@ state.initLogin();
 	<div class="page">
 		<div class="page-head">
 			<router-view name="hread" v-slot="{ Component }">
-				<keep-alive max="20" :include="keepHread">
-					<component :is="Component"></component>
-				</keep-alive>
+				<template v-if="Component">
+					<keep-alive max="20" :include="keepHread">
+						<component :is="Component"></component>
+					</keep-alive>
+				</template>
+
+				<template v-else> </template>
 			</router-view>
 		</div>
 		<div class="page-centent">

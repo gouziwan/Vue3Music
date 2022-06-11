@@ -31,7 +31,7 @@ const onClickAnAll = () => {
 };
 
 const onClickToSerachDetails = (e: any) => {
-	const node = getAncestorNodes(e.target, "serach-content-item");
+	const node = getAncestorNodes(e.target, "#serach-content-item");
 
 	if (node != null) {
 		let serachWord = node.dataset.searchword;
