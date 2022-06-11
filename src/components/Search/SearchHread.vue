@@ -8,8 +8,15 @@ import { useRouter } from "vue-router";
 
 const store = useSearchState();
 const localStorage = useLocalStorage();
-
 const routers = useRouter();
+
+const onClickSearchButtonTo = () =>
+	routers.push({
+		path: "/searchdetails",
+		state: {
+			[serachHistor]: store.serach
+		}
+	});
 
 const onSubmit = () => {
 	if (store.serach.length <= 0) return;
@@ -22,6 +29,7 @@ const onSubmit = () => {
 		localStorage[serachHistor].push(store.serach);
 	}
 	// 跳转路由把参数传给那个页面
+	onClickSearchButtonTo();
 };
 
 const onChange = (value: string) => {
@@ -38,7 +46,7 @@ const onChange = (value: string) => {
 
 const onClickBack = () => {
 	if (store.serach.length > 0) {
-		store.$reset();
+		store.reset();
 	} else {
 		routers.go(-1);
 	}

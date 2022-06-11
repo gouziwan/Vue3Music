@@ -49,6 +49,11 @@ const routes: RouteRecordRaw[] = [
 			default: () => import("../view/SearchDetails.vue")
 		},
 		name: "SearchDeails"
+	},
+	{
+		path: `/playlistdetails`,
+		name: "PlayListDetails",
+		components: {}
 	}
 ];
 

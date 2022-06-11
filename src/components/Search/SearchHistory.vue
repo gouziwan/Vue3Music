@@ -4,8 +4,11 @@ import { serachHistor } from "../../config/localStorage";
 import { computed } from "vue";
 import { isArray } from "../../utils";
 import { Tag, Dialog } from "vant";
+import { useRouter } from "vue-router";
 
 const store = useLocalStorage();
+
+const router = useRouter();
 
 const serachRsult = computed(() => {
 	return isArray(store[serachHistor]) && store[serachHistor].length > 0;
@@ -21,13 +24,21 @@ const onRemoveSearch = () => {
 		store[serachHistor] = [];
 	});
 };
+
+const onClickSearchButtonTo = (item: string) =>
+	router.push({
+		path: "/searchdetails",
+		state: {
+			[serachHistor]: item
+		}
+	});
 </script>
 <template>
 	<div class="serarch-history" v-if="serachRsult">
 		<div class="history-title">历史</div>
 		<div class="history-content">
 			<div class="history-item" v-for="item in store[serachHistor]">
-				<Tag round size="medium">
+				<Tag round size="medium" @click="onClickSearchButtonTo(item)">
 					{{ item }}
 				</Tag>
 			</div>

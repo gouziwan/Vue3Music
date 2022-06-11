@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { getSearchResult } from "../Api/Search";
 import { serachKeyword } from "../config/routerFrom";
 import { SerachTypeKeys } from "../enum/SerachType";
 import Ellipsis from "../components/Ellipsis.vue";
 import { Loading, List } from "vant";
-import { getAcquire, getPlayCountText, isObject } from "../utils";
+import { getAcquire, getPlayCountText, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
+import SongListDetails from "../components/SongListDetails.vue";
 
 interface TabsType {
 	// 标题
@@ -47,32 +48,18 @@ interface TabsType {
 
 const offsetTop = ref(0);
 
-onMounted(() => {
-	offsetTop.value =
-		document.querySelector<HTMLDivElement>(".serach-detail>.van-nav-bar")!.offsetHeight - 1;
+let current = ref(0);
 
-	let buttonTop =
-		offsetTop.value + document.querySelector<HTMLDivElement>(".van-tabs__wrap")!.offsetHeight;
+let songsDetails = ref();
 
-	let node = document.querySelector(".van-tabs__content");
+// 显示的 歌曲详情的
+const show = ref(false);
 
-	let button: HTMLDivElement;
-
-	node!.addEventListener("scroll", e => {
-		// 假如他不存在
-		if (!button) {
-			button = document.querySelector<HTMLDivElement>(".serach-cell-all")!;
-		}
-
-		if (node!.scrollTop > 0 && button.className == "serach-cell-all") {
-			button.classList.add("fixed");
-			button.style.top = buttonTop + "px";
-		} else if (node!.scrollTop <= 0 && button.className == "serach-cell-all fixed") {
-			button.classList.remove("fixed");
-			button.style.top = "";
-		}
-	});
-});
+onMounted(
+	() =>
+		(offsetTop.value =
+			document.querySelector<HTMLDivElement>(".serach-detail>.van-nav-bar")!.offsetHeight - 1)
+);
 
 const tabsArr = ref<TabsType[]>([
 	{
@@ -103,7 +90,8 @@ const tabsArr = ref<TabsType[]>([
 			height: "2rem",
 			radius: "0.3rem"
 		},
-		isLoading: false
+		isLoading: false,
+		imgdpi: "200y200"
 	},
 	{
 		title: "歌单",
@@ -156,9 +144,15 @@ const onRendered = (index: number, title: string) => {
 				const data = res.result;
 				tabsArr.value[index].arr = data[key];
 				tabsArr.value[index].max = data[countkey];
+
+				songsDetails.value = data[key][0];
 			}
 		}
 	});
+
+	if (title === "单曲") {
+		cellTop();
+	}
 };
 
 const getAuthorLabel = (item: any, tabs: TabsType) => {
@@ -185,6 +179,54 @@ const getName = (item: any, name: string) => {
 const getImage = (item: any, tabs: TabsType) => {
 	return getAcquire(item[tabs.url!], tabs.imgdpi!);
 };
+
+// 这个函数主要是解决 播放全部可以悬浮
+function cellTop() {
+	let buttonTop =
+		offsetTop.value + document.querySelector<HTMLDivElement>(".van-tabs__wrap")!.offsetHeight;
+	let node = document.querySelector("#serach-details-1");
+
+	let button: HTMLDivElement;
+	node!.addEventListener("scroll", e => {
+		// 假如他不存在
+		if (!button) {
+			button = document.querySelector<HTMLDivElement>(".serach-cell-all")!;
+		}
+		if (node!.scrollTop > 0 && button.className == "serach-cell-all") {
+			button.classList.add("fixed");
+			button.style.top = buttonTop + "px";
+		} else if (node!.scrollTop <= 0 && button.className == "serach-cell-all fixed") {
+			button.classList.remove("fixed");
+			button.style.top = "";
+		}
+	});
+}
+
+// 获取当前激活列表的条数
+
+const onLoad = () => {
+	const { key, title } = tabsArr.value[current.value];
+
+	(function (index: number) {
+		getSearchResult({
+			type: title as SerachTypeKeys,
+			keywored: keysword,
+			callback: res => {
+				if (res.code === 200) {
+					const data = res.result;
+					tabsArr.value[index].arr.push(...data[key]);
+					tabsArr.value[index].isLoading = false;
+				}
+			}
+		});
+	})(current.value);
+};
+
+// 点击查看1歌曲详情
+const onClickSongsDefault = (item: any) => {
+	songsDetails.value = item;
+	show.value = true;
+};
 </script>
 <template>
 	<div class="serach-details-content">
@@ -195,67 +237,87 @@ const getImage = (item: any, tabs: TabsType) => {
 			@rendered="onRendered"
 			sticky
 			:offset-top="offsetTop"
+			v-model:active="current"
 		>
 			<van-tab v-for="(item, index) in tabsArr" :title="item.title" :name="index">
 				<div class="serach-details-tabs" :id="`serach-details-${index + 1}`">
-					<div class="serach-cell-all" v-show="item.arr.length > 0">
-						<van-cell v-if="item.title === '单曲'" title="播放全部" center clickable>
-							<template #icon>
-								<div class="icon-music-o">
-									<van-icon name="music-o" size="0.5rem" />
+					<List
+						offset="50"
+						@load="onLoad"
+						v-model:loading="item.isLoading"
+						:immediate-check="false"
+					>
+						<!-- 加载的自定义文案 -->
+						<template #loading>
+							<Loading color="#ee0a24" size="20px">加载中。。。</Loading>
+						</template>
+
+						<div class="serach-cell-all" v-show="item.arr.length > 0">
+							<van-cell v-if="item.title === '单曲'" title="播放全部" center clickable>
+								<template #icon>
+									<div class="icon-music-o">
+										<van-icon name="music-o" size="0.5rem" />
+									</div>
+								</template>
+							</van-cell>
+						</div>
+
+						<van-cell
+							clickable
+							v-for="value in item.arr"
+							:center="!item.cellCenter"
+							:border="item.isBorder == true"
+						>
+							<template #title v-if="item.isOmitTitle">
+								{{ getName(value, item.name) }}
+							</template>
+							<template #title v-else>
+								<Ellipsis clamp="1" epsis>
+									{{ getName(value, item.name) }}
+								</Ellipsis>
+							</template>
+
+							<template #icon v-if="item.type == 2 || item.type == 3 || item.type == 4">
+								<div style="margin-right: 10px">
+									<van-image
+										:src="getImage(value, item)"
+										:width="item.imgSize!.width"
+										:height="item.imgSize!.height"
+										:radius="item.imgSize!.radius"
+										fit="cover"
+										lazy-load
+									>
+									</van-image>
 								</div>
 							</template>
+
+							<template #label>
+								<div class="serach-label">
+									<Ellipsis clamp="1" epsis color="var(--font-main-color-3)">
+										{{ getAuthorLabel(value, item) }}
+									</Ellipsis>
+								</div>
+							</template>
+							<template #right-icon v-if="!item.isShowRightIcon">
+								<van-icon
+									name="doggengduo"
+									class-prefix="dog"
+									size="0.5rem"
+									@click="onClickSongsDefault(value)"
+								/>
+							</template>
 						</van-cell>
-					</div>
-
-					<van-cell
-						clickable
-						v-for="value in item.arr"
-						:center="!item.cellCenter"
-						:border="item.isBorder == true"
-					>
-						<template #title v-if="item.isOmitTitle">
-							{{ getName(value, item.name) }}
-						</template>
-						<template #title v-else>
-							<Ellipsis clamp="1" epsis>
-								{{ getName(value, item.name) }}
-							</Ellipsis>
-						</template>
-
-						<template #icon v-if="item.type == 2 || item.type == 3 || item.type == 4">
-							<div style="margin-right: 10px">
-								<van-image
-									:src="getImage(value, item)"
-									:width="item.imgSize!.width"
-									:height="item.imgSize!.height"
-									:radius="item.imgSize!.radius"
-									fit="cover"
-									lazy-load
-								>
-								</van-image>
-							</div>
-						</template>
-
-						<template #label>
-							<div class="serach-label">
-								<Ellipsis clamp="1" epsis color="var(--font-main-color-3)">
-									{{ getAuthorLabel(value, item) }}
-								</Ellipsis>
-							</div>
-						</template>
-						<template #right-icon v-if="!item.isShowRightIcon">
-							<van-icon name="doggengduo" class-prefix="dog" size="0.5rem" />
-						</template>
-					</van-cell>
-
-					<div v-show="item.isLoading || item.arr.length <= 0" class="serarch-loading">
-						<Loading color="#ee0a24">加载中。。。</Loading>
+					</List>
+					<div v-show="item.arr.length <= 0" class="serarch-loading">
+						<Loading color="#ee0a24" size="20px">加载中。。。</Loading>
 					</div>
 				</div>
 			</van-tab>
 		</van-tabs>
 	</div>
+
+	<!-- 弹出歌曲详情 -->
+	<SongListDetails :item="songsDetails" v-model:show="show" />
 </template>
 
 <style lang="scss">

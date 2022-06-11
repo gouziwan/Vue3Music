@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Toast } from "vant";
-const ip = "10.52.1.131";
+const ip = "10.52.3.204";
 
 export const url = `http://${ip}:5000`;
 

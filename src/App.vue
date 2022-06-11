@@ -3,6 +3,7 @@ import TabbarBottomVue from "./components/TabbarBottom.vue";
 import Login from "./components/Login.vue";
 import AddSongs from "./components/AddSongs.vue";
 import { useStore } from "./state/user";
+
 // 用户刷新登录的
 const state = useStore();
 const keepAlive = ["Home", "User"];

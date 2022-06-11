@@ -1,5 +1,5 @@
 // 获取指定图片的质量 就是 宽度高度
-export function getAcquire(src: string, str: string = "300y300") {
+export function getAcquire(src: string, str: string = "100y100") {
 	return (src += `?param=${str}`);
 }
 

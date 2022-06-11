@@ -11,7 +11,8 @@ import {
 	Cell,
 	Tabs,
 	Tab,
-	CellGroup
+	CellGroup,
+	Popup
 } from "vant";
 
 export default function useComponent(app: any) {
@@ -27,5 +28,6 @@ export default function useComponent(app: any) {
 		.use(Cell)
 		.use(Tabs)
 		.use(Tab)
-		.use(CellGroup);
+		.use(CellGroup)
+		.use(Popup);
 }

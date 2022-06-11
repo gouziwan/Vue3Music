@@ -21,6 +21,10 @@ export const useSearchState = defineStore("serach", {
 		},
 		setSerachResult(value: any[] | null) {
 			this.serachResult = value;
+		},
+		reset() {
+			this.serach = "";
+			this.serachResult = null;
 		}
 	},
 	getters: {
