@@ -25,6 +25,11 @@
 	--margin-size-left-mini:10px;
 	--margin-size-medium: 20px;
 
+
+	/* 加载的颜色 */
+
+	--loading-color:#ee0a24;
+
 	/* vant nav-bar-background-color */
 	--van-nav-bar-background-color: var(--background-main-color) !important;
 	--van-search-background-color: transparent !important;
