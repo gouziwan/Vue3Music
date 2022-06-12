@@ -90,7 +90,7 @@ const onBack = () => router.go(-1);
 		<div class="details_hread">
 			<van-nav-bar :border="false" fixed placeholder z-index="99" ref="navbar">
 				<template #title>
-					<div class="title">歌单</div>
+					<div class="title">歌单 {{ data.trackCount }}</div>
 				</template>
 				<template #left>
 					<van-icon

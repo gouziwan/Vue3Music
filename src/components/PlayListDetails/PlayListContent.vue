@@ -43,9 +43,7 @@ const getContentHeight = computed(() => {
 				<template v-slot:default="item">
 					<van-cell>
 						<template #title>
-							<Ellipsis clamp="1" epsis>
-								{{ item.value.name }}
-							</Ellipsis>
+							<Ellipsis clamp="1" epsis> {{ item.value.name }} {{ item.chi }} </Ellipsis>
 						</template>
 						<template #label>
 							<Ellipsis clamp="1" epsis>

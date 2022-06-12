@@ -38,6 +38,23 @@ const getEndIndex = computed(() => {
 	return endIndex;
 });
 
+// 获取截取数组的长度
+const sliceArr = computed(() => {
+	const arr = props.data.slice(startIndex.value, getEndIndex.value);
+
+	return arr.length <= 0 ? props.data.slice(0, 1) : arr;
+});
+
+const getPaddingTop = computed(() => {
+	return startIndex.value * outHeight.value + "px";
+});
+
+const getPaddingBottom = computed(() => {
+	return (props.data.length - 1 - getEndIndex.value) * outHeight.value + "px";
+});
+
+const chiNum = ref(0);
+
 // 添加监听事件
 function handelScroll() {
 	const box = document.querySelector("#" + props.id)!;
@@ -46,21 +63,27 @@ function handelScroll() {
 
 	box?.addEventListener("scroll", () => {
 		if (box?.scrollTop - content.offsetTop < 0) {
-			return;
+			return 0;
 		}
-
 		startIndex.value = Math.floor((box.scrollTop - content.offsetTop) / outHeight.value);
 
-		console.log(startIndex.value + 1);
+		chiNum.value = document.querySelector(".virual-list")?.children.length;
 	});
 }
+
+// 获取总长度
 </script>
 <template>
 	<div class="virtual-content" ref="content">
 		<div class="virtual-inner">
-			<div class="virtual-box"></div>
-			<div class="virual-list">
-				<slot v-for="(item, index) in props.data" :value="item" :index="index"></slot>
+			<div
+				class="virual-list"
+				:style="{
+					paddingTop: getPaddingTop,
+					paddingBottom: getPaddingBottom
+				}"
+			>
+				<slot :value="item" :index="index" v-for="(item, index) in sliceArr" :chi="chiNum"></slot>
 			</div>
 		</div>
 	</div>
