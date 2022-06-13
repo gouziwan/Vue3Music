@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watchEffect } from "vue";
 import { getPlaylistDetails } from "../Api/PlayListDetails";
 import { songsId } from "../config/routerFrom";
 import Ellipsis from "../components/Ellipsis.vue";
-import { getAcquire, isArray, isObject } from "../utils";
+import { getAcquire, isObject } from "../utils";
 import { useRouter } from "vue-router";
 import PlayListContent from "../components/PlayListDetails/PlayListContent.vue";
 
@@ -16,6 +16,21 @@ const navbar = ref<any>();
 const isScroll = ref(false);
 
 const router = useRouter();
+
+// 当前歌单是否收藏
+const collection = computed(() => {
+	return true;
+});
+
+// 激活的图标样式
+const showActiveIcon = computed(() => {
+	return collection.value ? "dogshoucang1" : "dogshoucang";
+});
+
+// 激活的颜色
+const activeColor = computed(() => {
+	return collection.value ? "var(--tabbar-active-color)" : "var(--font-main-color)";
+});
 
 getPlaylistDetails(id, res => {
 	if (res.code === 200) {
@@ -37,11 +52,8 @@ watchEffect(() => {
 
 	if (isObject(data.value) && back) {
 		back.src = data.value.coverImgUrl;
-
 		navBack.src = data.value.coverImgUrl;
 	}
-
-	console.log(data.value);
 });
 
 // 滚动条时间
@@ -54,12 +66,9 @@ onMounted(() => {
 
 	box.addEventListener("scroll", e => {
 		const top = box.scrollTop;
-
 		top > 0 ? (isScroll.value = true) : (isScroll.value = false);
 		// 往上移动的时候背景图也往上移动
-
 		back.style.top = -top + "px";
-
 		if (top < 0) {
 			back.style.top = 0 + "px";
 			back.style.height = height + Math.abs(top) + "px";
@@ -83,6 +92,13 @@ const getAvatarName = computed(() => {
 
 // 返回上一级
 const onBack = () => router.go(-1);
+
+// 点击收藏或取消收藏歌单
+const onClickConllection = () => {
+	// 判断是否登录状态不是弹出登录
+
+	console.log(`点击收藏歌单`);
+};
 </script>
 
 <template>
@@ -90,7 +106,7 @@ const onBack = () => router.go(-1);
 		<div class="details_hread">
 			<van-nav-bar :border="false" fixed placeholder z-index="99" ref="navbar">
 				<template #title>
-					<div class="title">歌单 {{ data.trackCount }}</div>
+					<div class="title">歌单</div>
 				</template>
 				<template #left>
 					<van-icon
@@ -156,9 +172,20 @@ const onBack = () => router.go(-1);
 
 			<!-- 胶囊 -->
 			<div class="details-groud">
-				<div class="details-left-button">
-					<van-icon name="dogshoucang" class-prefix="dog" size="0.4rem" color="#fff"></van-icon>
-					<span> 收藏 </span>
+				<div class="details-left-button" @click="onClickConllection">
+					<van-icon
+						:name="showActiveIcon"
+						class-prefix="dog"
+						size="0.4rem"
+						:color="activeColor"
+					></van-icon>
+					<span
+						:style="{
+							color: activeColor
+						}"
+					>
+						{{ collection ? "已收藏" : "收藏" }}
+					</span>
 				</div>
 				<div class="details-right-button">
 					<van-icon name="dogpinglun" class-prefix="dog" size="0.4rem" color="#fff"></van-icon>
