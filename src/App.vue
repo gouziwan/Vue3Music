@@ -37,7 +37,5 @@ state.initLogin();
 		</div>
 		<!-- 登录 -->
 		<Login />
-		<!-- 添加歌曲的界面 -->
-		<AddSongs />
 	</div>
 </template>

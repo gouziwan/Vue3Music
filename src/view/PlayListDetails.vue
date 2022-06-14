@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, watchEffect } from "vue";
-import { getPlaylistDetails } from "../Api/PlayListDetails";
+import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
+import { getPlaylistDetails, collectionPlaySongs } from "../Api/PlayListDetails";
 import { songsId } from "../config/routerFrom";
 import Ellipsis from "../components/Ellipsis.vue";
-import { getAcquire, isObject } from "../utils";
+import { getAcquire, isArray, isObject } from "../utils";
 import { useRouter } from "vue-router";
 import PlayListContent from "../components/PlayListDetails/PlayListContent.vue";
+import { useStore } from "../state/user";
+import { useLocalStorage } from "../utils/useLocalStorage";
+import { userCookieName } from "../config/localStorage";
+import SongListDetails from "../components/SongListDetails.vue";
 
 const id = history.state[songsId];
 
@@ -17,9 +21,21 @@ const isScroll = ref(false);
 
 const router = useRouter();
 
+const userState = useStore();
+
+const storage = useLocalStorage();
+
+const isShowDetails = ref(false);
+
+const currentItem = shallowRef(undefined);
+
 // 当前歌单是否收藏
 const collection = computed(() => {
-	return true;
+	if (!userState.isLogin) return false;
+
+	return isArray(userState.collectSongs)
+		? !!userState.collectSongs.filter((el: any) => el.id === data.value.id)[0]
+		: false;
 });
 
 // 激活的图标样式
@@ -96,11 +112,16 @@ const onBack = () => router.go(-1);
 // 点击收藏或取消收藏歌单
 const onClickConllection = () => {
 	// 判断是否登录状态不是弹出登录
+	if (!userState.isExecLogin()) return;
+	// 目前收藏不了
+	collectionPlaySongs(data.value.id, !collection.value, storage[userCookieName], (res, data) => {});
+};
 
-	console.log(`点击收藏歌单`);
+const onClickShowDefault = (item: any) => {
+	currentItem.value = item;
+	isShowDetails.value = true;
 };
 </script>
-
 <template>
 	<div class="paly_list-details" id="paly_list-details">
 		<div class="details_hread">
@@ -115,10 +136,6 @@ const onClickConllection = () => {
 						size="0.4rem"
 						@click="onBack"
 					/>
-				</template>
-
-				<template #right>
-					<van-icon name="search" size="0.4rem" color="var(--font-main-color)" />
 				</template>
 			</van-nav-bar>
 			<div class="van-nav-bar-content" v-show="isScroll">
@@ -165,7 +182,7 @@ const onClickConllection = () => {
 					</template>
 				</van-cell>
 			</div>
-			<div class="details_back">
+			<div class="details_back" v-show="isObject(data)">
 				<img src="" class="details_back_img" />
 				<div class="mask"></div>
 			</div>
@@ -194,7 +211,9 @@ const onClickConllection = () => {
 			</div>
 		</div>
 
-		<PlayListContent :tracks="data.trackIds" />
+		<PlayListContent :tracks="data.trackIds" @click="onClickShowDefault" />
+
+		<SongListDetails :item="currentItem" v-model:show="isShowDetails" />
 	</div>
 </template>
 

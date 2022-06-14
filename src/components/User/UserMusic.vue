@@ -7,13 +7,19 @@ import { deleteUserSongs, getUserSongList } from "../../Api/user";
 import { isArray, getAcquire } from "../../utils/index";
 import Ellipsis from "../Ellipsis.vue";
 import { toRouterScroll, upRouterScroll } from "../../routers";
-import { onBeforeRouteLeave } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
+import AddSongs from "../../components/AddSongs.vue";
+import { songsId } from "../../config/routerFrom";
 
 const store = useStore();
 
 const popup = userPopup();
 
 const offsetTop = ref(0);
+
+const show = ref(false);
+
+const router = useRouter();
 
 const tabsArr = [
 	{
@@ -54,7 +60,8 @@ function onAddClick() {
 		Toast.fail(`请先登录`);
 		return;
 	}
-	popup.reviseIsAddSongs(true);
+
+	show.value = true;
 }
 
 function createBeforeClose(key: string) {
@@ -66,6 +73,19 @@ function createBeforeClose(key: string) {
 		}
 	};
 }
+
+const onClickToSongsDefault = (item: any) => {
+	let id;
+
+	item === "喜欢的音乐" ? (id = store.likeSongs[0].id) : (id = item.id);
+
+	router.push({
+		name: "PlayListDetails",
+		state: {
+			[songsId]: id
+		}
+	});
+};
 
 const deClose = (id: any, key: string) =>
 	new Promise((resolve, reject) => {
@@ -100,7 +120,6 @@ watch(
 			getUserSongList(store.userId, res => {
 				if (res.code === 200) {
 					store.reviseUserSongs(res.playlist);
-					console.log(res.playlist);
 				}
 			});
 		}
@@ -113,7 +132,12 @@ watch(
 <template>
 	<div class="user-my-music">
 		<div class="user-like-music">
-			<Cell title="我喜欢的音乐" :label="store.getLikeSongsCount" center>
+			<Cell
+				title="我喜欢的音乐"
+				:label="store.getLikeSongsCount"
+				center
+				@click="onClickToSongsDefault('喜欢的音乐')"
+			>
 				<template #icon>
 					<div class="user-like-icon" v-if="!store.getLikeSonsImag">
 						<Icon name="dogiconzhengli" class-prefix="dog" size="0.8rem"></Icon>
@@ -149,11 +173,6 @@ watch(
 										<Icon :name="item.valueIcon!" class-prefix="dog" size="0.35rem" />
 									</div>
 								</template>
-								<template #right-icon>
-									<div class="icon">
-										<Icon :name="item.rightIcon" class-prefix="dog" size="0.35rem" />
-									</div>
-								</template>
 							</Cell>
 						</div>
 						<div class="create-music-content">
@@ -164,7 +183,7 @@ watch(
 									:key="value.id"
 								>
 									<SwipeCell :before-close="item.beforeClose" :name="value.id">
-										<Cell>
+										<Cell @click="onClickToSongsDefault(value)">
 											<template #icon>
 												<div style="margin-right: var(--margin-size-left-mini)">
 													<Image
@@ -202,6 +221,9 @@ watch(
 				</Tab>
 			</Tabs>
 		</div>
+
+		<!-- 添加歌曲的界面 -->
+		<AddSongs v-model:show="show" />
 	</div>
 </template>
 

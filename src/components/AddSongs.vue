@@ -1,16 +1,29 @@
 <script lang="ts" setup>
 import { Popup, Cell, Field, Toast } from "vant";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { addUserSongs } from "../Api/user";
-import { useStore } from "../state/popup";
 import { useStore as useState } from "../state/user";
-const state = useStore();
+
+const props = defineProps({
+	show: {
+		type: Boolean,
+		default: false
+	}
+});
 
 const store = useState();
 
 const input = ref();
 
 const songsName = ref("");
+
+const show = ref(false);
+
+const emit = defineEmits(["update:show", "create-success"]);
+
+const onClickOverlay = () => {
+	emit("update:show", false);
+};
 
 const onOpened = () => {
 	let dom = input.value.$el?.querySelector("input") as HTMLInputElement;
@@ -20,14 +33,15 @@ const onOpened = () => {
 	}
 };
 
-const onClickColer = () => state.reviseIsAddSongs(false);
+const onClickColer = () => onClickOverlay();
 
 const onClickCrate = () => {
 	addUserSongs(songsName.value, res => {
 		if (res.code === 200) {
 			Toast.success(`创建成功`);
 			store.addcreatePlayList(res.playlist, "left");
-			state.reviseIsAddSongs(false);
+			onClickOverlay();
+			emit("create-success", res.playlist);
 		}
 	});
 };
@@ -39,9 +53,13 @@ const wanStyle = computed(() => {
 		padding: "0 10px"
 	};
 });
+
+watchEffect(() => {
+	show.value = props.show;
+});
 </script>
 <template>
-	<Popup v-model:show="state.isAddSongs" position="bottom" @opened="onOpened">
+	<Popup v-model:show="show" position="bottom" @opened="onOpened" @click-overlay="onClickOverlay">
 		<div class="addSongs-content">
 			<div class="addSongs-titlte">
 				<Cell center>

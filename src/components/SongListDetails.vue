@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { defineProps, computed, ref, watchEffect } from "vue";
+import { useStore } from "../state/user";
+import UserSongsListVue from "./UserSongsList.vue";
 import { getAcquire, isArray } from "../utils";
+
+const userState = useStore();
 
 const props = defineProps({
 	item: {
@@ -29,6 +33,8 @@ const getImage = computed(() => {
 
 const show = ref(props.show);
 
+const songShow = ref(false);
+
 watchEffect(() => {
 	show.value = props.show;
 });
@@ -37,18 +43,28 @@ const onClickOverlay = () => {
 	emit("update:show", false);
 };
 
+function onClickConllectionSongs() {
+	if (!userState.isExecLogin()) return;
+	songShow.value = true;
+
+	onClickOverlay();
+}
+
 const tabs = [
 	{
 		icon: "dogbofang1",
-		title: "播放歌曲"
+		title: "播放歌曲",
+		fn: () => {}
 	},
 	{
 		icon: "dogshoucang",
-		title: "收藏到歌单"
+		title: "收藏到歌单",
+		fn: onClickConllectionSongs
 	},
 	{
 		icon: "dogpinglun",
-		title: "评论"
+		title: "评论",
+		fn: () => {}
 	}
 ];
 </script>
@@ -77,7 +93,7 @@ const tabs = [
 			</div>
 
 			<div class="detailstSong-content">
-				<van-cell v-for="item in tabs" center>
+				<van-cell v-for="item in tabs" center @click="item.fn">
 					<template #icon>
 						<van-icon class-prefix="dog" :name="item.icon" size="0.5rem" />
 					</template>
@@ -91,6 +107,7 @@ const tabs = [
 			</div>
 		</div>
 	</van-popup>
+	<UserSongsListVue v-model:show="songShow" :tranckId="props.item.id" />
 </template>
 
 <style lang="scss">

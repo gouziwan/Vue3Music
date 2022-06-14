@@ -1,8 +1,11 @@
+import { Toast } from "vant";
 import { defineStore } from "pinia";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { userCookieName } from "../config/localStorage";
-import { getUserLoginState } from "../Api/user";
+import { getUserLoginState, getUserSongList } from "../Api/user";
 import { getAcquire, isObject } from "../utils";
+
+import { useStore as usePopup } from "./popup";
 
 export const useStore = defineStore("user", {
 	state() {
@@ -19,6 +22,18 @@ export const useStore = defineStore("user", {
 		};
 	},
 	actions: {
+		// 判断 用户是否登录然后执行函数 false 为 没有登录
+		isExecLogin(isProps: Boolean = true) {
+			const state = usePopup();
+
+			if (!this.isLogin) {
+				Toast.fail(`请先登录`);
+				isProps ? state.reviseShowLogin(true) : "";
+			}
+
+			return this.isLogin;
+		},
+
 		// 修改 isLogin的状态
 		reviseLoginState(state: boolean) {
 			this.isLogin = state;
@@ -95,6 +110,12 @@ export const useStore = defineStore("user", {
 				getUserLoginState(name, res => {
 					if (res.data.code === 200) {
 						this.reviseUserInfo(res.data, true);
+
+						getUserSongList(this.userId, res => {
+							if (res.code === 200) {
+								this.reviseUserSongs(res.playlist);
+							}
+						});
 					}
 				});
 			}

@@ -80,8 +80,7 @@ export function banDoubleClick() {
 
 		document.addEventListener("touchend", (e: Event) => {
 			let current = Date.now();
-
-			if (current - old <= 300) {
+			if (current - old <= 500) {
 				e.preventDefault();
 				old = current;
 				return;

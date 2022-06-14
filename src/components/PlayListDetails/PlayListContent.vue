@@ -10,6 +10,8 @@ const props = defineProps(["tracks"]);
 
 const songsArr = shallowRef<any[] | null>(null);
 
+const emit = defineEmits(["click"]);
+
 watchEffect(() => {
 	if (isArray(props.tracks) && props.tracks.length > 0) {
 		getPlaySongsDetails(props.tracks, res => {
@@ -51,6 +53,10 @@ onMounted(() => {
 		}
 	});
 });
+
+const onClickShowDefault = (item: any) => {
+	emit("click", item);
+};
 </script>
 <template>
 	<div class="play-list-content">
@@ -85,7 +91,12 @@ onMounted(() => {
 						</template>
 
 						<template #right-icon>
-							<van-icon name="doggengduo" class-prefix="dog" size="0.4rem" />
+							<van-icon
+								name="doggengduo"
+								class-prefix="dog"
+								size="0.4rem"
+								@click="onClickShowDefault(item.value)"
+							/>
 						</template>
 					</van-cell>
 				</template>

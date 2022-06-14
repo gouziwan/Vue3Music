@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref } from "vue";
 import { getSearchResult } from "../Api/Search";
-import { serachKeyword } from "../config/routerFrom";
+import { serachKeyword, songsId } from "../config/routerFrom";
 import { SerachTypeKeys } from "../enum/SerachType";
 import Ellipsis from "../components/Ellipsis.vue";
 import { Loading, List } from "vant";
 import { getAcquire, getPlayCountText, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
+import { useRouter } from "vue-router";
 
 interface TabsType {
 	// 标题
@@ -44,6 +45,7 @@ interface TabsType {
 	isBorder?: true;
 	// 是否当前正在加载
 	isLoading: Boolean;
+	click: Function;
 }
 
 const offsetTop = ref(0);
@@ -51,6 +53,8 @@ const offsetTop = ref(0);
 let current = ref(0);
 
 let songsDetails = ref();
+
+const router = useRouter();
 
 // 显示的 歌曲详情的
 const show = ref(false);
@@ -71,7 +75,10 @@ const tabsArr = ref<TabsType[]>([
 		name: "name",
 		type: 1,
 		isBorder: true,
-		isLoading: false
+		isLoading: false,
+		click: (item: any) => {
+			console.log(item);
+		}
 	},
 	{
 		title: "视频",
@@ -91,7 +98,10 @@ const tabsArr = ref<TabsType[]>([
 			radius: "0.3rem"
 		},
 		isLoading: false,
-		imgdpi: "200y200"
+		imgdpi: "200y200",
+		click: (item: any) => {
+			console.log(item);
+		}
 	},
 	{
 		title: "歌单",
@@ -109,7 +119,15 @@ const tabsArr = ref<TabsType[]>([
 		},
 		isShowRightIcon: true,
 		imgdpi: "100y100",
-		isLoading: false
+		isLoading: false,
+		click: (item: any) => {
+			router.push({
+				name: "PlayListDetails",
+				state: {
+					[songsId]: item.id
+				}
+			});
+		}
 	},
 	{
 		title: "专辑",
@@ -127,7 +145,10 @@ const tabsArr = ref<TabsType[]>([
 		},
 		isShowRightIcon: true,
 		imgdpi: "100y100",
-		isLoading: false
+		isLoading: false,
+		click: (item: any) => {
+			console.log(item);
+		}
 	}
 ]);
 
@@ -267,6 +288,7 @@ const onClickSongsDefault = (item: any) => {
 							v-for="value in item.arr"
 							:center="!item.cellCenter"
 							:border="item.isBorder == true"
+							@click="item.click(value)"
 						>
 							<template #title v-if="item.isOmitTitle">
 								{{ getName(value, item.name) }}
