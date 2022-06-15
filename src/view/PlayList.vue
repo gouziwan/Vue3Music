@@ -82,6 +82,10 @@ function onClick(e: Event) {
 	});
 }
 
+function onClickToClassify() {
+	router.push(`AllSongsClassify`);
+}
+
 // 滚动到底部加载
 function onLoad() {
 	getActive(active.value);
@@ -92,7 +96,7 @@ function onLoad() {
 	<div class="play_list-page" ref="contentPage">
 		<template v-if="tabs.length > 0">
 			<div class="tabs">
-				<div class="tabs-all-icon">
+				<div class="tabs-all-icon" @click="onClickToClassify">
 					<van-icon name="apps-o" size="0.5rem" />
 				</div>
 				<van-tabs

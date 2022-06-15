@@ -63,6 +63,13 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			default: () => import("../view/PlayListDetails.vue")
 		}
+	},
+	{
+		path: `/allsongsclassify`,
+		name: "AllSongsClassify",
+		components: {
+			default: () => import("../view/AllSongsClassify.vue")
+		}
 	}
 ];
 
