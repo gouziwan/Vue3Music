@@ -54,4 +54,5 @@
 	--van-tag-default-color:var(--background-color-1) !important;
 	--van-border-color:var(--border-color-3) !important;
 	--van-image-placeholder-background-color:var(--background-color-2) !important;
+	--van-nav-bar-title-text-color:var(--font-main-color) !important;
 }

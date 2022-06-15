@@ -76,15 +76,19 @@ export const throttle = (function () {
 
 export function banDoubleClick() {
 	window.onload = () => {
-		let old = Date.now();
+		let tiem = null as any;
+
+		let isClick = false;
 
 		document.addEventListener("touchend", (e: Event) => {
-			let current = Date.now();
-			if (current - old <= 500) {
+			if (isClick === true) {
 				e.preventDefault();
-				old = current;
-				return;
 			}
+			clearTimeout(tiem);
+			isClick = true;
+			tiem = setTimeout(() => {
+				isClick = false;
+			}, 300);
 		});
 	};
 }

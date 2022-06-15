@@ -1,5 +1,9 @@
 <script lang="ts" setup>
+import { useRouter } from "vue-router";
+import { getAncestorNodes } from "../../utils";
 import Day from "../../utils/Date";
+
+const router = useRouter();
 
 const menuDate = [
 	{
@@ -9,7 +13,10 @@ const menuDate = [
 	},
 	{
 		icon: "dog-dogicon-test",
-		txt: "推荐歌单"
+		txt: "推荐歌单",
+		click() {
+			router.push("PlayList");
+		}
 	},
 	{
 		icon: "dogpaihangbang2",
@@ -18,11 +25,30 @@ const menuDate = [
 ];
 
 const date = new Day();
+
+const onClick = (e: Event) => {
+	let target = e.target as HTMLDivElement;
+
+	target = getAncestorNodes(target, ".home-menubar-item");
+
+	if (target && target.dataset.index != undefined) {
+		const { index } = target.dataset;
+
+		let tab = menuDate[index as any];
+
+		tab.click && tab.click();
+	}
+};
 </script>
 
 <template>
 	<div class="home-menubar">
-		<div class="home-menubar-item" v-for="item in menuDate">
+		<div
+			class="home-menubar-item"
+			v-for="(item, index) in menuDate"
+			:data-index="index"
+			@click="onClick"
+		>
 			<div class="home-menubar-icon">
 				<i :class="`dog ${item.icon}`"></i>
 				<template v-if="item.is">

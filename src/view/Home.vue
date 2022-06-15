@@ -9,7 +9,6 @@ import HotTopic from "../components/Home/HotTopic.vue";
 import { onActivated } from "vue";
 import { toRouterScroll, upRouterScroll } from "../routers/index";
 import { onBeforeRouteLeave } from "vue-router";
-import { NavBar, Icon, Search } from "vant";
 
 onActivated(() => {
 	toRouterScroll();

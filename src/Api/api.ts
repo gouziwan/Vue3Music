@@ -1,7 +1,7 @@
 import { isObject } from "../utils";
 import axios, { AxiosRequestConfig } from "axios";
 import { Toast } from "vant";
-const ip = "10.52.1.84";
+const ip = "10.52.4.221";
 
 export const url = `http://${ip}:5000`;
 

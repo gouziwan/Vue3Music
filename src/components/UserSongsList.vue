@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { Popup, Toast } from "vant";
-import { ref, watchEffect, defineProps } from "vue";
+import { ref, watchEffect, defineProps, computed } from "vue";
 import { upPlayListSongs } from "../Api/PlayListDetails";
 import { useStore } from "../state/user";
+import { isArray } from "../utils";
 
 const props = defineProps(["show", "tranckId"]);
 
@@ -13,7 +14,20 @@ const onClickOverlay = () => {
 };
 const show = ref(false);
 const user = useStore();
-const songsArr = [...user.likeSongs, ...user.createPlaylist];
+
+const songsArr = computed<any[]>(() => {
+	let arr = [];
+
+	if (isArray(user.likeSongs)) {
+		arr.push(...user.likeSongs);
+	}
+
+	if (isArray(user.createPlaylist)) {
+		arr.push(...user.createPlaylist);
+	}
+
+	return arr;
+});
 
 watchEffect(() => {
 	show.value = props.show;
