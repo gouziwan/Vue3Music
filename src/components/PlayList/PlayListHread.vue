@@ -8,8 +8,13 @@ const props = defineProps({
 	}
 });
 
+const emit = defineEmits(["click"]);
+
 const router = useRouter();
-const onClick = () => router.go(-1);
+const onClick = () => {
+	router.go(-1);
+	emit("click");
+};
 </script>
 <template>
 	<van-nav-bar :title="props.title" :border="false">

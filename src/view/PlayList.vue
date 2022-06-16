@@ -2,10 +2,11 @@
 import { onMounted, ref } from "vue";
 import { getBoutiquePlaylist, getHotCatilst } from "../Api/PlayList";
 import { Loading, List } from "vant";
-import { isObject, getAcquire, getAncestorNodes } from "../utils";
-import EllipsisVue from "../components/Ellipsis.vue";
+import { isObject } from "../utils";
 import { useRouter } from "vue-router";
 import { songsId } from "../config/routerFrom";
+
+import SongsListVue from "../components/SongsList.vue";
 
 const tabs = ref<any[]>([]);
 
@@ -47,9 +48,9 @@ function getActive(index: number) {
 	if (!isObject(tab)) return;
 
 	// 如果是第一次请求的或就请求当前的
-	const item = tab.arr.length > 0 ? tab.arr[tab.arr.length - 1].updateTime : Date.now();
+	const len = tab.arr.length;
 
-	getBoutiquePlaylist(tab.title, 30, item, res => {
+	getBoutiquePlaylist(tab.title, 30, len, res => {
 		if (res.code === 200) {
 			// 没有下一页说明加载完成
 			if (res.playlists.length <= 0 && res.more === false) {
@@ -65,15 +66,7 @@ function getActive(index: number) {
 	});
 }
 
-function onClick(e: Event) {
-	let tagert = e.target as HTMLDivElement;
-
-	tagert = getAncestorNodes(tagert, ".item-list");
-
-	if (!isObject(tagert) || tagert.dataset.id == undefined) return;
-
-	let id = tagert.dataset.id;
-
+function onClick(id: string) {
 	router.push({
 		name: "PlayListDetails",
 		state: {
@@ -111,26 +104,11 @@ function onLoad() {
 							@load="onLoad"
 							:finished="item.finished"
 							:finished-text="item.finisheMessage"
+							offset="100"
 						>
 							<template v-if="item.arr.length > 0">
-								<div class="item-content" @click="onClick">
-									<div class="item-list" v-for="value in item.arr" :data-id="value.id">
-										<div class="item-list-imgage">
-											<van-image
-												:src="getAcquire(value.coverImgUrl, '3000y300')"
-												radius="0.3rem"
-												lazy-load
-											></van-image>
-										</div>
-										<div class="item-list-txt">
-											<EllipsisVue clamp="2" epsis>
-												{{ value.name }}
-											</EllipsisVue>
-										</div>
-									</div>
-								</div>
+								<SongsListVue :data="item.arr" @click="onClick"></SongsListVue>
 							</template>
-
 							<template v-else-if="item.finished">
 								<div class="error-message">
 									{{ item.message }}
@@ -201,27 +179,6 @@ function onLoad() {
 
 		.van-tabs__wrap {
 			padding-right: 90px;
-		}
-
-		.item-content {
-			display: flex;
-			flex-wrap: wrap;
-			margin-top: 20px;
-			width: 100%;
-
-			.item-list-imgage {
-				width: 230px;
-				height: 230px;
-			}
-
-			.item-list-txt {
-				margin-top: 20px;
-			}
-
-			.item-list {
-				width: 230px;
-				margin: 30px 10px;
-			}
 		}
 	}
 }

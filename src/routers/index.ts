@@ -70,6 +70,16 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			default: () => import("../view/AllSongsClassify.vue")
 		}
+	},
+	{
+		path: `/songsSingCatilst`,
+		name: "SongSingCatlist",
+		components: {
+			default: () => import("../view/SongSingCatlist.vue")
+		},
+		meta: {
+			top: 0
+		}
 	}
 ];
 
@@ -90,15 +100,23 @@ export const toRouterScroll = (dom = document.querySelector(".page-centent")!) =
 		const { top } = r.meta! as any;
 		Promise.resolve().then(() => (dom.scrollTop = top));
 	}
+
+	return r;
 };
 
 // 组件离开的时候缓存当前位置
-export const upRouterScroll = (to: any, from: any) => {
+export const upRouterScroll = (
+	to: any,
+	from: any,
+	dom = document.querySelector<HTMLDivElement>(".page-centent")
+) => {
 	let name = from.name;
 	let r = routes.filter(el => el.name === name)[0];
 	if (isObject(r.meta)) {
-		r.meta!.top = document.querySelector<HTMLDivElement>(".page-centent")!.scrollTop;
+		r.meta!.top = dom!.scrollTop;
 	}
+
+	return r;
 };
 
 export default router;

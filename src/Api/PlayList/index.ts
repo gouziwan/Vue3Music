@@ -14,8 +14,8 @@ export const getHotCatilst = (callback: RequestCallBack) => {
 export const getBoutiquePlaylist = (
 	cat: any,
 	limit: number = 30,
-	before: number,
+	offset: number,
 	callback: RequestCallBack
 ) => {
-	return request(`/top/playlist/highquality?before=${before}&limit=${limit}&cat=${cat}`, callback);
+	return request(`/top/playlist?offset=${offset}&limit=${limit}&cat=${cat}`, callback);
 };

@@ -52,7 +52,9 @@ onActivated(() => {
 });
 
 // 缓存滚动条的位置
-onBeforeRouteLeave(upRouterScroll);
+onBeforeRouteLeave((to, from) => {
+	upRouterScroll(to, from);
+});
 
 function onAddClick() {
 	if (!store.isLogin) {

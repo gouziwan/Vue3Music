@@ -6,7 +6,8 @@ import { useStore } from "./state/user";
 
 // 用户刷新登录的
 const state = useStore();
-const keepAlive = ["Home", "User"];
+const keepAlive = ["Home", "User", "songs-sing-catist"];
+
 const keepHread = ["home-hread", "user-hread", "search-hread"];
 
 state.initLogin();

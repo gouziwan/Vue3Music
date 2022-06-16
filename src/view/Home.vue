@@ -14,7 +14,9 @@ onActivated(() => {
 	toRouterScroll();
 });
 //这个是组件离开的时候调用的
-onBeforeRouteLeave(upRouterScroll);
+onBeforeRouteLeave((to, from) => {
+	upRouterScroll(to, from);
+});
 </script>
 
 <template>
