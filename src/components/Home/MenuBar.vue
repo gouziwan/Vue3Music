@@ -47,13 +47,8 @@ const onClick = (e: Event) => {
 </script>
 
 <template>
-	<div class="home-menubar">
-		<div
-			class="home-menubar-item"
-			v-for="(item, index) in menuDate"
-			:data-index="index"
-			@click="onClick"
-		>
+	<div class="home-menubar" @click="onClick">
+		<div class="home-menubar-item" v-for="(item, index) in menuDate" :data-index="index">
 			<div class="home-menubar-icon">
 				<i :class="`dog ${item.icon}`"></i>
 				<template v-if="item.is">
@@ -77,7 +72,7 @@ const onClick = (e: Event) => {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
+		padding: 10px;
 		.dog {
 			font-size: 55px;
 		}

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import TabbarBottomVue from "./components/TabbarBottom.vue";
 import Login from "./components/Login.vue";
-import AddSongs from "./components/AddSongs.vue";
 import { useStore } from "./state/user";
+import SetSidebar from "./components/SetSidebar.vue";
 
 // 用户刷新登录的
 const state = useStore();
@@ -38,5 +38,7 @@ state.initLogin();
 		</div>
 		<!-- 登录 -->
 		<Login />
+		<!-- 设置侧边栏 -->
+		<SetSidebar />
 	</div>
 </template>

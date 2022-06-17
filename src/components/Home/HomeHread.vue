@@ -1,11 +1,15 @@
 <script lang="ts" setup name="home-hread">
 import { useRouter } from "vue-router";
-
+import { useStore } from "../../state/popup";
 const routers = useRouter();
 
 const onClickToSerach = () => {
 	routers.push("Search");
 };
+
+const popup = useStore();
+
+const onClickShowSidebar = () => popup.reviseShowSidebar(true);
 </script>
 
 <template>
@@ -20,6 +24,7 @@ const onClickToSerach = () => {
 					class-prefix="dog"
 					name="dogliebiao"
 					color="var(--font-main-color)"
+					@click="onClickShowSidebar"
 				></van-icon>
 			</template>
 		</van-nav-bar>

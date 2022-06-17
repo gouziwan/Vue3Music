@@ -7,10 +7,13 @@ import { Loading } from "vant";
 import Ellipsis from "../components/Ellipsis.vue";
 import { getAcquire } from "../utils/index";
 import SongListDetails from "../components/SongListDetails.vue";
+import { useStore as usePopup } from "../state/popup";
 
 const user = useStore();
 
 const value = ref<any[]>([]);
+
+const popup = usePopup();
 
 watchEffect(() => {
 	if (user.isLogin && value.value.length <= 0) {
@@ -36,6 +39,8 @@ const onClickShowCurrentSongsDetails = (item: any) => {
 	currentItem.value = item;
 	show.value = true;
 };
+
+const onClickLogin = () => popup.reviseShowLogin(true);
 </script>
 <template>
 	<div class="no_break">
@@ -97,7 +102,11 @@ const onClickShowCurrentSongsDetails = (item: any) => {
 		</template>
 
 		<template v-else>
-			<div class="no_bareak-e"><van-button plain type="primary" round>请先登录</van-button></div>
+			<div class="no_bareak-e">
+				<van-button plain type="primary" size="small" round @click="onClickLogin">
+					请先登录
+				</van-button>
+			</div>
 		</template>
 	</div>
 
@@ -133,11 +142,17 @@ const onClickShowCurrentSongsDetails = (item: any) => {
 	}
 
 	.no_bareak-e {
+		display: flex;
+		justify-content: center;
+		margin-top: 100px;
 		.van-button {
 			background-color: transparent;
 		}
-		.van-button::before {
-			border-color: red;
+
+		.van-button--primary {
+			border-color: var(--border-color-1);
+			color: #fff;
+			padding: 30px 70px;
 		}
 	}
 
