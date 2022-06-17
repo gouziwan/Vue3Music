@@ -17,6 +17,12 @@ const { title, buttonTxt } = defineProps({
 		default: true
 	}
 });
+
+const emit = defineEmits(["click"]);
+
+const onClick = (e: Event) => {
+	emit("click", e);
+};
 </script>
 <template>
 	<div class="home-list-modules">
@@ -25,7 +31,7 @@ const { title, buttonTxt } = defineProps({
 				<slot name="hread">
 					<h2>{{ title }}</h2>
 				</slot>
-				<van-button round size="mini" plain v-if="isButton"
+				<van-button round size="mini" plain v-if="isButton" @click="onClick"
 					>{{ buttonTxt }} <van-icon name="arrow" />
 				</van-button>
 			</div>

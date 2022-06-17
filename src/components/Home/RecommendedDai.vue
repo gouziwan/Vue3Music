@@ -26,10 +26,14 @@ const onClickToPlayList = (e: Event) => {
 		});
 	}
 };
+
+const onClick = () => {
+	router.push(`PlayList`);
+};
 </script>
 
 <template>
-	<ListModule :isShow="result.length > 0">
+	<ListModule :isShow="result.length > 0" @click="onClick">
 		<div class="home-recea">
 			<div class="home-inner" @click="onClickToPlayList">
 				<div class="home-recea-items" v-for="item in result" :data-id="item.id">

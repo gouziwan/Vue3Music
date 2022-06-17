@@ -114,11 +114,11 @@ const tabs = [
 .detailstSong {
 	width: 100%;
 	color: var(--font-main-color);
-
 	background-color: var(--background-color-2);
-
 	.detailstSong-hread {
 		.img {
+			width: 1.5rem;
+			height: 1.5rem;
 			margin-right: 20px;
 		}
 	}

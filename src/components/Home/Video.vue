@@ -12,7 +12,7 @@ const videoList = shallowReactive({
 getRecommendedMv(res => (videoList.value = res.result));
 </script>
 <template>
-	<ListModule title="推荐MV" isShow>
+	<ListModule title="推荐MV" :isShow="videoList.value.length > 0">
 		<div class="reco-mv">
 			<div class="reco-mv-inner">
 				<div class="reco-mv-inner-item" v-for="item in videoList.value">

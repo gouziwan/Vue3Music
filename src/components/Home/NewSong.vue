@@ -70,7 +70,7 @@ watchEffect(() => {
 });
 </script>
 <template>
-	<ListModules isShow title="新歌推荐">
+	<ListModules :isShow="tabs[0].value.length > 0">
 		<template #hread>
 			<div class="tabs-name">
 				<div

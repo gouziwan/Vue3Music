@@ -9,20 +9,25 @@ const menuDate = [
 	{
 		icon: "dogrili1",
 		txt: "每日推荐",
-		is: true
+		is: true,
+		click: to("/obreak")
 	},
 	{
 		icon: "dog-dogicon-test",
 		txt: "推荐歌单",
-		click() {
-			router.push("PlayList");
-		}
+		click: to("PlayList")
 	},
 	{
 		icon: "dogpaihangbang2",
 		txt: "排行榜"
 	}
 ];
+
+function to(path: string) {
+	return function () {
+		router.push(path);
+	};
+}
 
 const date = new Day();
 

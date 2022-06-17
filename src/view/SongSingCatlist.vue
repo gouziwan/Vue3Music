@@ -1,4 +1,3 @@
-script
 <script lang="ts" setup name="songs-sing-catist">
 import PlayListHread from "../components/PlayList/PlayListHread.vue";
 import { songsId, TagName } from "../config/routerFrom";
