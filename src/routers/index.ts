@@ -85,6 +85,14 @@ const routes: RouteRecordRaw[] = [
 		path: `/obreak`,
 		name: "NoBreak",
 		components: { default: () => import("../view/NoBreak.vue") }
+	},
+	{
+		path: `/top`,
+		name: "Billboard",
+		components: {
+			default: () => import("../view/Billboard.vue")
+		},
+		meta: {}
 	}
 ];
 

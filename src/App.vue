@@ -2,11 +2,11 @@
 import TabbarBottomVue from "./components/TabbarBottom.vue";
 import Login from "./components/Login.vue";
 import { useStore } from "./state/user";
-import SetSidebar from "./components/SetSidebar.vue";
+import Sidebar from "./components/Sidebar.vue";
 
 // 用户刷新登录的
 const state = useStore();
-const keepAlive = ["Home", "User", "songs-sing-catist"];
+const keepAlive = ["Home", "User", "songs-sing-catist", "Billboard"];
 
 const keepHread = ["home-hread", "user-hread", "search-hread"];
 
@@ -39,6 +39,6 @@ state.initLogin();
 		<!-- 登录 -->
 		<Login />
 		<!-- 设置侧边栏 -->
-		<SetSidebar />
+		<Sidebar />
 	</div>
 </template>

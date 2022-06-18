@@ -5,8 +5,11 @@ import { getRankingList, getRankingListSong } from "../../Api/Home/index";
 import { ref } from "vue";
 import { getAcquire } from "../../utils";
 import Ellipsis from "../Ellipsis.vue";
+import { useRouter } from "vue-router";
 
 const list = ref<any[]>([]);
+
+const router = useRouter();
 
 getRankingList(async res => {
 	let result = await Promise.all(res.list.slice(0, 5).map((el: any) => getRankingListSong(el.id)));
@@ -17,9 +20,13 @@ const getAvatarTxt = (item: any) => {
 	let avatar = item.ar.map((v: any) => v.name).join("/");
 	return avatar;
 };
+
+const onClick = () => {
+	router.push("/top");
+};
 </script>
 <template>
-	<ListModule title="排行榜" :isShow="list.length > 0">
+	<ListModule title="排行榜" :isShow="list.length > 0" @click="onClick">
 		<Swipe :show-indicators="false">
 			<SwipeItem v-for="item in list">
 				<div class="home-ran-content">

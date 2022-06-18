@@ -1,9 +1,8 @@
 @font-face {
-  font-family: "dog";
-  /* Project id 3235656 */
-  src: url('//at.alicdn.com/t/font_3235656_twfuzezul3.woff2?t=1653968665309') format('woff2'),
-    url('//at.alicdn.com/t/font_3235656_twfuzezul3.woff?t=1653968665309') format('woff'),
-    url('//at.alicdn.com/t/font_3235656_twfuzezul3.ttf?t=1653968665309') format('truetype');
+  font-family: "dog"; /* Project id 3235656 */
+  src: url('iconfont.woff2?t=1655524106948') format('woff2'),
+       url('iconfont.woff?t=1655524106948') format('woff'),
+       url('iconfont.ttf?t=1655524106948') format('truetype');
 }
 .dog {
   font-family: "dog" !important;
@@ -11,6 +10,24 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.dog-dogicon-:before {
+  content: "\e722";
+}
+
+.dog-dogshezhi:before {
+  content: "\e62b";
+}
+.dog-dogweibiaoti--:before {
+  content: "\e60e";
+}
+.dog-dogdark:before {
+  content: "\e666";
+}
+
+.dog-dogxiaoxizhongxin:before {
+  content: "\e615";
 }
 
 .dog-dogmeiyougengduoxiaoxi:before {

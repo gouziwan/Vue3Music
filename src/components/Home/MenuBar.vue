@@ -15,11 +15,12 @@ const menuDate = [
 	{
 		icon: "dog-dogicon-test",
 		txt: "推荐歌单",
-		click: to("PlayList")
+		click: to("/PlayList")
 	},
 	{
 		icon: "dogpaihangbang2",
-		txt: "排行榜"
+		txt: "排行榜",
+		click: to("/top")
 	}
 ];
 
