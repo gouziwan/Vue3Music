@@ -5,14 +5,21 @@ import { getRecommendedMv } from "../../Api/Home/index";
 import { shallowReactive } from "vue";
 import Ellipsis from "../Ellipsis.vue";
 import { getAcquire } from "../../utils/index";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const videoList = shallowReactive({
 	value: [] as any[]
 });
 getRecommendedMv(res => (videoList.value = res.result));
+
+const onClick = () => {
+	router.push("/video");
+};
 </script>
 <template>
-	<ListModule title="推荐MV" :isShow="videoList.value.length > 0">
+	<ListModule title="推荐MV" :isShow="videoList.value.length > 0" @click="onClick">
 		<div class="reco-mv">
 			<div class="reco-mv-inner">
 				<div class="reco-mv-inner-item" v-for="item in videoList.value">

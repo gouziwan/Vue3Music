@@ -41,3 +41,8 @@ export const upPlayListSongs = (
 		callback
 	);
 };
+
+// 获取专辑
+export const getAlbumContent = (id?: string, callback?: RequestCallBack) => {
+	return request(`/album?id=${id}`, callback);
+};

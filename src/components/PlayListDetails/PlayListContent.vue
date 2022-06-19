@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { ref, defineProps, watchEffect, shallowRef, computed, onMounted } from "vue";
+import { defineProps, watchEffect, shallowRef, computed, onMounted } from "vue";
 import { getPlaySongsDetails } from "../../Api/PlayListDetails";
 import { isArray } from "../../utils";
 import { Loading } from "vant";
 import VirtualList from "../VirtualList.vue";
 import Ellipsis from "../Ellipsis.vue";
+import { keyw } from "../../config/routerFrom";
 
 const props = defineProps(["tracks"]);
 
@@ -12,13 +13,20 @@ const songsArr = shallowRef<any[] | null>(null);
 
 const emit = defineEmits(["click"]);
 
+const keyword = history.state[keyw];
+
 watchEffect(() => {
-	if (isArray(props.tracks) && props.tracks.length > 0) {
-		getPlaySongsDetails(props.tracks, res => {
-			if (res.code == 200) {
-				songsArr.value = res.songs;
-			}
-		});
+	// 不是专辑请求
+	if (keyword !== "专辑") {
+		if (isArray(props.tracks) && props.tracks.length > 0) {
+			getPlaySongsDetails(props.tracks, res => {
+				if (res.code == 200) {
+					songsArr.value = res.songs;
+				}
+			});
+		}
+	} else {
+		songsArr.value = props.tracks;
 	}
 });
 

@@ -4,9 +4,14 @@ import { useStore } from "../state/popup";
 import UserAvatarVue from "./User/UserAvatar.vue";
 import { Button, Switch } from "vant";
 import { useStore as userStore } from "../state/user";
+import { userSignin } from "../Api/user";
+import { useLocalStorage } from "../utils/useLocalStorage";
+import { userCookieName } from "../config/localStorage";
 const usePopup = useStore();
 
 const userState = userStore();
+
+const storage = useLocalStorage();
 
 const getStyle = computed(() => {
 	return {
@@ -16,8 +21,23 @@ const getStyle = computed(() => {
 
 const active = ref(false);
 
+const isSignin = ref(false);
+
+const signinText = computed(() => {
+	return isSignin.value === false ? "签到" : "已签到";
+});
+
 const onClickUserSignin = () => {
-	console.log(`点击用户签到`);
+	userSignin(res => {
+		if (res.code === 200) {
+			isSignin.value = true;
+		}
+	});
+};
+
+const onClickLogOut = () => {
+	storage.remove(userCookieName);
+	userState.$reset();
 };
 
 const grouping: GroupingType = {
@@ -67,7 +87,9 @@ const grouping: GroupingType = {
 				></UserAvatarVue>
 			</div>
 			<div class="user_signin" v-if="userState.isLogin">
-				<Button round size="small" @click="onClickUserSignin">签到</Button>
+				<Button round size="small" @click="onClickUserSignin" :disabled="isSignin">
+					{{ signinText }}
+				</Button>
 			</div>
 			<div class="content-cell">
 				<div class="cell-item" v-for="value in grouping">
@@ -94,7 +116,7 @@ const grouping: GroupingType = {
 				</div>
 
 				<div class="ccontent-button" v-if="userState.isLogin">
-					<Button round>退出登录</Button>
+					<Button round @click="onClickLogOut">退出登录</Button>
 				</div>
 			</div>
 		</div>

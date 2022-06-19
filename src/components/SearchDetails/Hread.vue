@@ -13,8 +13,6 @@ const state = useSearchState();
 // 返回上一级
 const onback = () => router.go(-1);
 
-console.log(keyword, history.state);
-
 // 跳转到搜索页面
 const onToSearch = () => {
 	// 设置keyword

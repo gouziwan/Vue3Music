@@ -12,6 +12,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dog-dogdianyingshipin:before {
+  content: "\e60f";
+}
+
+.dog-dogshipin:before {
+  content: "\e708";
+}
+
+
 .dog-dogicon-:before {
   content: "\e722";
 }

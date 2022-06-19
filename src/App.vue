@@ -3,12 +3,11 @@ import TabbarBottomVue from "./components/TabbarBottom.vue";
 import Login from "./components/Login.vue";
 import { useStore } from "./state/user";
 import Sidebar from "./components/Sidebar.vue";
-
+import { cacheStore } from "./state/Cache";
 // 用户刷新登录的
 const state = useStore();
-const keepAlive = ["Home", "User", "songs-sing-catist", "Billboard"];
 
-const keepHread = ["home-hread", "user-hread", "search-hread"];
+const cache = cacheStore();
 
 state.initLogin();
 </script>
@@ -18,7 +17,7 @@ state.initLogin();
 		<div class="page-head">
 			<router-view name="hread" v-slot="{ Component }">
 				<template v-if="Component">
-					<keep-alive max="20" :include="keepHread">
+					<keep-alive max="20" :include="cache.keepHread">
 						<component :is="Component"></component>
 					</keep-alive>
 				</template>
@@ -28,7 +27,7 @@ state.initLogin();
 		</div>
 		<div class="page-centent">
 			<router-view v-slot="{ Component }">
-				<keep-alive max="10" :include="keepAlive">
+				<keep-alive max="20" :include="cache.keepAlive">
 					<component :is="Component" :key="$route.name"></component>
 				</keep-alive>
 			</router-view>

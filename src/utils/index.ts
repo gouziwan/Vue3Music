@@ -105,11 +105,13 @@ export const antiShaking = (function () {
 
 // 播放次数 把一个 12312313 -> 转成 1231万次
 export function getPlayCountText(count: number, suffix: string = "万"): string {
-	count = count / 10000;
+	let value = count / 10000;
 
-	if (count > 10000) {
-		return getPlayCountText(count, "亿");
+	if (value > 10000) {
+		return getPlayCountText(value, "亿");
+	} else if (value < 1) {
+		return count + "";
 	}
 
-	return count.toFixed(1) + suffix;
+	return value.toFixed(1) + suffix;
 }

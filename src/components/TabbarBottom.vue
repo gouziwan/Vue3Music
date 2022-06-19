@@ -18,6 +18,12 @@ const tabs = [
 		activeName: "dogyinle2"
 	},
 	{
+		txt: "视频",
+		path: "/video",
+		inactiveName: "dogdianyingshipin",
+		activeName: "dogshipin"
+	},
+	{
 		txt: "我的",
 		path: "/User",
 		inactiveName: "dogwode4",

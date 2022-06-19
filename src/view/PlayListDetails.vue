@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
-import { getPlaylistDetails, collectionPlaySongs } from "../Api/PlayListDetails";
-import { songsId } from "../config/routerFrom";
+import { getPlaylistDetails, collectionPlaySongs, getAlbumContent } from "../Api/PlayListDetails";
+import { songsId, keyw } from "../config/routerFrom";
 import Ellipsis from "../components/Ellipsis.vue";
 import { getAcquire, isArray, isObject } from "../utils";
 import { useRouter } from "vue-router";
@@ -12,6 +12,9 @@ import { userCookieName } from "../config/localStorage";
 import SongListDetails from "../components/SongListDetails.vue";
 
 const id = history.state[songsId];
+
+// 判断是歌单还是专辑 key值
+const keyword = history.state[keyw];
 
 const data = ref<any>({});
 
@@ -28,6 +31,8 @@ const storage = useLocalStorage();
 const isShowDetails = ref(false);
 
 const currentItem = shallowRef(undefined);
+
+const isPlay = computed(() => (keyword === "专辑" ? false : true));
 
 // 当前歌单是否收藏
 const collection = computed(() => {
@@ -48,11 +53,26 @@ const activeColor = computed(() => {
 	return collection.value ? "var(--tabbar-active-color)" : "var(--font-main-color)";
 });
 
-getPlaylistDetails(id, res => {
-	if (res.code === 200) {
-		data.value = res.playlist;
-	}
-});
+function isRequestPlays() {
+	isPlay.value
+		? getPlaylistDetails(id, res => {
+				if (res.code === 200) {
+					data.value = res.playlist;
+				}
+		  })
+		: getAlbumContent(id, res => {
+				if (res.code === 200) {
+					data.value = {
+						...res.album,
+						trackIds: res.songs
+					};
+
+					console.log(data);
+				}
+		  });
+}
+
+isRequestPlays();
 
 // 获取简介
 const getAbstract = computed(() => {
@@ -66,9 +86,11 @@ watchEffect(() => {
 
 	let navBack = document.querySelector<HTMLImageElement>(".van-nav-bar-content>.details_back_img")!;
 
+	const img = data.value.coverImgUrl || data.value.blurPicUrl;
+
 	if (isObject(data.value) && back) {
-		back.src = data.value.coverImgUrl;
-		navBack.src = data.value.coverImgUrl;
+		back.src = img;
+		navBack.src = img;
 	}
 });
 
@@ -94,16 +116,28 @@ onMounted(() => {
 
 // 获取创建者的头像
 const getAuthorImage = computed(() => {
-	return isObject(data.value.creator) && data.value.creator.avatarUrl
-		? getAcquire(data.value.creator.avatarUrl)
-		: "";
+	const value = data.value;
+
+	if (isPlay.value) {
+		return isObject(value.creator) && value.creator.avatarUrl
+			? getAcquire(value.creator.avatarUrl)
+			: "";
+	} else {
+		return isObject(value.artist) && value.artist.img1v1Url
+			? getAcquire(value.artist.img1v1Url)
+			: "";
+	}
 });
 
 // 获取创建者的名字
 const getAvatarName = computed(() => {
-	return isObject(data.value.creator) && data.value.creator.nickname
-		? data.value.creator.nickname
-		: "";
+	const value = data.value;
+
+	if (isPlay.value) {
+		return isObject(value.creator) && value.creator.nickname ? value.creator.nickname : "";
+	} else {
+		return isObject(value.artist) && value.artist.name ? value.artist.name : "";
+	}
 });
 
 // 返回上一级
@@ -127,7 +161,7 @@ const onClickShowDefault = (item: any) => {
 		<div class="details_hread">
 			<van-nav-bar :border="false" fixed placeholder z-index="99" ref="navbar">
 				<template #title>
-					<div class="title">歌单</div>
+					<div class="title">{{ isPlay ? "歌单" : "专辑" }}</div>
 				</template>
 				<template #left>
 					<van-icon
@@ -147,7 +181,7 @@ const onClickShowDefault = (item: any) => {
 				<van-cell label-class="cell-label" :border="false">
 					<template #icon>
 						<van-image
-							:src="getAcquire(data.coverImgUrl, '200y200')"
+							:src="getAcquire(data.coverImgUrl || data.blurPicUrl, '200y200')"
 							width="3rem"
 							height="3rem"
 							radius="0.3rem"

@@ -1,52 +1,14 @@
-<script lang="ts" setup>
-import { onMounted, ref } from "vue";
+<script lang="ts" setup name="SearchDetails">
+import { onActivated, onMounted, ref, onDeactivated } from "vue";
 import { getSearchResult } from "../Api/Search";
-import { serachKeyword, songsId } from "../config/routerFrom";
+import { keyw, serachKeyword, songsId } from "../config/routerFrom";
 import { SerachTypeKeys } from "../enum/SerachType";
 import Ellipsis from "../components/Ellipsis.vue";
 import { Loading, List } from "vant";
 import { getAcquire, getPlayCountText, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
-import { useRouter } from "vue-router";
-
-interface TabsType {
-	// 标题
-	title: string;
-	// 数据
-	arr: any[];
-	// 最大值
-	max: number;
-	// 获取数组的key
-	key: string;
-	// 总数的key
-	countkey: string;
-	// name 是标题的 key值
-	name: string;
-	// 类型
-	type: number;
-	// 图片的url连接
-	url?: string;
-	// 图片显示大小
-	imgSize?: {
-		width: string;
-		height: string;
-		radius: string;
-	};
-	// 是否隐藏左边的管理图标
-	isShowRightIcon?: Boolean;
-	// 	是否省略 title 标题
-	isOmitTitle?: Boolean;
-	// 是否居中文字  true 是不需要 false 是需要
-	cellCenter?: Boolean;
-	// 图片分辨率 默认 300y300
-	imgdpi?: string;
-	// 是否要边框线
-	isBorder?: true;
-	// 是否当前正在加载
-	isLoading: Boolean;
-	click: Function;
-}
+import { onBeforeRouteLeave, useRouter, onBeforeRouteUpdate } from "vue-router";
 
 const offsetTop = ref(0);
 
@@ -59,11 +21,9 @@ const router = useRouter();
 // 显示的 歌曲详情的
 const show = ref(false);
 
-onMounted(
-	() =>
-		(offsetTop.value =
-			document.querySelector<HTMLDivElement>(".serach-detail>.van-nav-bar")!.offsetHeight - 1)
-);
+const keysword = ref(history.state[serachKeyword]);
+
+let isUpdate = ref(false);
 
 const tabsArr = ref<TabsType[]>([
 	{
@@ -147,19 +107,23 @@ const tabsArr = ref<TabsType[]>([
 		imgdpi: "100y100",
 		isLoading: false,
 		click: (item: any) => {
-			console.log(item);
+			router.push({
+				name: "PlayListDetails",
+				state: {
+					[songsId]: item.id,
+					[keyw]: "专辑"
+				}
+			});
 		}
 	}
 ]);
-
-const keysword = history.state[serachKeyword];
 
 const onRendered = (index: number, title: string) => {
 	const { key, countkey } = tabsArr.value[index];
 
 	getSearchResult({
 		type: title as SerachTypeKeys,
-		keywored: keysword,
+		keywored: keysword.value,
 		callback: res => {
 			if (res.code === 200) {
 				const data = res.result;
@@ -224,14 +188,13 @@ function cellTop() {
 }
 
 // 获取当前激活列表的条数
-
 const onLoad = () => {
 	const { key, title } = tabsArr.value[current.value];
 
 	(function (index: number) {
 		getSearchResult({
 			type: title as SerachTypeKeys,
-			keywored: keysword,
+			keywored: keysword.value,
 			callback: res => {
 				if (res.code === 200) {
 					const data = res.result;
@@ -248,6 +211,30 @@ const onClickSongsDefault = (item: any) => {
 	songsDetails.value = item;
 	show.value = true;
 };
+
+onBeforeRouteLeave(to => {
+	if (to.name !== "PlayListDetails") {
+		isUpdate.value = true;
+		current.value = 0;
+	} else {
+		isUpdate.value = false;
+	}
+});
+
+onActivated(() => {
+	if (offsetTop.value === 0) {
+		offsetTop.value =
+			document.querySelector<HTMLDivElement>(".serach-detail>.van-nav-bar")!.offsetHeight - 1;
+	}
+
+	if (isUpdate) {
+		tabsArr.value.forEach(el => (el.arr = []));
+		keysword.value = history.state[serachKeyword];
+		onLoad();
+
+		tabsArr.value[current.value].isLoading = true;
+	}
+});
 </script>
 <template>
 	<div class="serach-details-content">
@@ -262,12 +249,7 @@ const onClickSongsDefault = (item: any) => {
 		>
 			<van-tab v-for="(item, index) in tabsArr" :title="item.title" :name="index">
 				<div class="serach-details-tabs" :id="`serach-details-${index + 1}`">
-					<List
-						offset="50"
-						@load="onLoad"
-						v-model:loading="item.isLoading"
-						:immediate-check="false"
-					>
+					<List offset="50" @load="onLoad" v-model:loading="item.isLoading">
 						<!-- 加载的自定义文案 -->
 						<template #loading>
 							<Loading color="#ee0a24" size="20px">加载中。。。</Loading>
@@ -330,9 +312,6 @@ const onClickSongsDefault = (item: any) => {
 							</template>
 						</van-cell>
 					</List>
-					<div v-show="item.arr.length <= 0" class="serarch-loading">
-						<Loading color="#ee0a24" size="20px">加载中。。。</Loading>
-					</div>
 				</div>
 			</van-tab>
 		</van-tabs>

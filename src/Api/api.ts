@@ -34,7 +34,7 @@ _request.interceptors.response.use(
 export const request = async function (
 	config: AxiosRequestConfig | string,
 	callback?: RequestCallBack
-) {
+): Promise<any> {
 	let res = await _request(config as AxiosRequestConfig);
 	callback && callback(res.data, res);
 	return res;

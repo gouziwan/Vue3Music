@@ -93,6 +93,19 @@ const routes: RouteRecordRaw[] = [
 			default: () => import("../view/Billboard.vue")
 		},
 		meta: {}
+	},
+	{
+		path: `/video`,
+		name: "Video",
+		components: {
+			default: () => import("../view/Video.vue")
+		}
+	},
+	{
+		path: `/text`,
+		components: {
+			default: () => import("../view/Text.vue")
+		}
 	}
 ];
 

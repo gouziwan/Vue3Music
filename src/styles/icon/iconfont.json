@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4608981",
+      "name": "电影，视频",
+      "font_class": "dianyingshipin",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "16588081",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e708",
+      "unicode_decimal": 59144
+    },
+    {
       "icon_id": "5709056",
       "name": "icon_dress up",
       "font_class": "icon-",
