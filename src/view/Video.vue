@@ -8,6 +8,7 @@ import { isObject, getAcquire, getPlayCountText } from "../utils";
 import { GiveSelectType } from "../enum/giveALike";
 import { useStore } from "../state/user";
 import { useStore as usePupop } from "../state/popup";
+import { useRouter } from "vue-router";
 
 const videoArr = ref<VideoClassifyType[]>([]);
 
@@ -18,6 +19,8 @@ const offsetTop = ref();
 const store = useStore();
 
 const pup = usePupop();
+
+const router = useRouter();
 
 const getOffsetTop = computed(() => {
 	let top = isObject(offsetTop.value) ? offsetTop.value.offsetTop : 0;
@@ -93,6 +96,10 @@ function onClickVideoGive(value: any) {
 		}
 	});
 }
+
+function toCommentsPage() {
+	router.push({ name: "Comments" });
+}
 </script>
 <template>
 	<div class="video">
@@ -160,7 +167,7 @@ function onClickVideoGive(value: any) {
 												/>
 												<p>{{ getPlayCountText(value.data.praisedCount) }}</p>
 											</div>
-											<div class="icon">
+											<div class="icon" @click="toCommentsPage">
 												<van-icon name="chat-o" size="0.35rem" />
 												<p>{{ getPlayCountText(value.data.commentCount) }}</p>
 											</div>

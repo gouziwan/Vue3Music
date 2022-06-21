@@ -62,6 +62,7 @@ export const getVideoDefault = (id?: string | number, offset = 0, callback?: Req
 		)
 	);
 
+// 点赞
 export const giveALike = (
 	t: GiveSelectType,
 	type: GiveResourcesType,

@@ -106,6 +106,13 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			default: () => import("../view/Text.vue")
 		}
+	},
+	{
+		path: `/comments`,
+		name: "Comments",
+		components: {
+			default: () => import("../view/Comments.vue")
+		}
 	}
 ];
 
