@@ -1,16 +1,23 @@
 <script lang="ts" setup name="Video">
 import { Toast, Loading, List } from "vant";
 import { computed, onActivated, ref } from "vue";
-import { getVideoClassify, getVideoDefault } from "../Api/video";
+import { getVideoClassify, getVideoDefault, giveALike } from "../Api/video";
 import PlayListHreadVue from "../components/PlayList/PlayListHread.vue";
 import Ellipsis from "../components/Ellipsis.vue";
 import { isObject, getAcquire, getPlayCountText } from "../utils";
+import { GiveSelectType } from "../enum/giveALike";
+import { useStore } from "../state/user";
+import { useStore as usePupop } from "../state/popup";
 
 const videoArr = ref<VideoClassifyType[]>([]);
 
 const active = ref(0);
 
 const offsetTop = ref();
+
+const store = useStore();
+
+const pup = usePupop();
 
 const getOffsetTop = computed(() => {
 	let top = isObject(offsetTop.value) ? offsetTop.value.offsetTop : 0;
@@ -53,6 +60,36 @@ function onLoad() {
 		} else if (res.code === 200 && res.datas.length > 0) {
 			tabs.videoArr.push(...res.datas);
 			tabs.isLogin = false;
+		}
+	});
+}
+
+function showActiveIcon(value: any) {
+	// 一开始肯定的 undefined
+	return value.isLike == true ? "like" : "like-o";
+}
+
+function activeColor(value: any) {
+	return value.isLike == true ? "red" : "var(--font-main-color)";
+}
+
+function onClickVideoGive(value: any) {
+	if (!store.isLogin) {
+		Toast.fail(`请登录`);
+		pup.reviseShowLogin(true);
+		return;
+	}
+	const {
+		data: { vid }
+	} = value;
+
+	let str = value.isLike == true ? "取消点赞" : ("点赞" as GiveSelectType);
+
+	giveALike(str, "视频", vid, res => {
+		if (res.code == 200) {
+			// 点赞成功或者失败
+			value.isLike = !value.isLike;
+			value.isLike == false ? value.data.praisedCount-- : value.data.praisedCount++;
 		}
 	});
 }
@@ -115,8 +152,12 @@ function onLoad() {
 										</div>
 
 										<div class="right">
-											<div class="icon">
-												<van-icon name="like-o" size="0.35rem" />
+											<div class="icon" @click="onClickVideoGive(value)">
+												<van-icon
+													:name="showActiveIcon(value)"
+													:color="activeColor(value)"
+													size="0.35rem"
+												/>
 												<p>{{ getPlayCountText(value.data.praisedCount) }}</p>
 											</div>
 											<div class="icon">

@@ -1,14 +1,14 @@
 <script lang="ts" setup name="SearchDetails">
-import { onActivated, onMounted, ref, onDeactivated } from "vue";
+import { onActivated, ref, nextTick } from "vue";
 import { getSearchResult } from "../Api/Search";
 import { keyw, serachKeyword, songsId } from "../config/routerFrom";
 import { SerachTypeKeys } from "../enum/SerachType";
 import Ellipsis from "../components/Ellipsis.vue";
 import { Loading, List } from "vant";
-import { getAcquire, getPlayCountText, isArray, isObject } from "../utils";
+import { getAcquire, getPlayCountText, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
-import { onBeforeRouteLeave, useRouter, onBeforeRouteUpdate } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 const offsetTop = ref(0);
 
@@ -38,7 +38,8 @@ const tabsArr = ref<TabsType[]>([
 		isLoading: false,
 		click: (item: any) => {
 			console.log(item);
-		}
+		},
+		offsetTop: 0
 	},
 	{
 		title: "视频",
@@ -61,7 +62,8 @@ const tabsArr = ref<TabsType[]>([
 		imgdpi: "200y200",
 		click: (item: any) => {
 			console.log(item);
-		}
+		},
+		offsetTop: 0
 	},
 	{
 		title: "歌单",
@@ -87,7 +89,8 @@ const tabsArr = ref<TabsType[]>([
 					[songsId]: item.id
 				}
 			});
-		}
+		},
+		offsetTop: 0
 	},
 	{
 		title: "专辑",
@@ -114,7 +117,8 @@ const tabsArr = ref<TabsType[]>([
 					[keyw]: "专辑"
 				}
 			});
-		}
+		},
+		offsetTop: 0
 	}
 ]);
 
@@ -215,9 +219,12 @@ const onClickSongsDefault = (item: any) => {
 onBeforeRouteLeave(to => {
 	if (to.name !== "PlayListDetails") {
 		isUpdate.value = true;
+		tabsArr.value[current.value].offsetTop = 0;
 		current.value = 0;
 	} else {
 		isUpdate.value = false;
+		// 缓存当前的 offsetTop位置
+		getNodeOffsetTop();
 	}
 });
 
@@ -227,14 +234,31 @@ onActivated(() => {
 			document.querySelector<HTMLDivElement>(".serach-detail>.van-nav-bar")!.offsetHeight - 1;
 	}
 
-	if (isUpdate) {
-		tabsArr.value.forEach(el => (el.arr = []));
+	if (isUpdate.value) {
+		tabsArr.value.forEach(el => {
+			el.arr = [];
+			el.offsetTop = 0;
+		});
 		keysword.value = history.state[serachKeyword];
 		onLoad();
-
 		tabsArr.value[current.value].isLoading = true;
 	}
+
+	const top = tabsArr.value[current.value].offsetTop!;
+
+	if (top != 0 && top != undefined) {
+		nextTick(
+			() =>
+				(document.querySelector<HTMLDivElement>(`#serach-details-${current.value + 1}`)!.scrollTop =
+					top)
+		);
+	}
 });
+
+function getNodeOffsetTop() {
+	let node = document.querySelector<HTMLDivElement>(`#serach-details-${current.value + 1}`)!;
+	tabsArr.value[current.value].offsetTop = node.scrollTop;
+}
 </script>
 <template>
 	<div class="serach-details-content">
@@ -264,7 +288,6 @@ onActivated(() => {
 								</template>
 							</van-cell>
 						</div>
-
 						<van-cell
 							clickable
 							v-for="value in item.arr"

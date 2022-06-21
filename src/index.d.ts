@@ -61,4 +61,6 @@ interface TabsType {
 	// 是否当前正在加载
 	isLoading: Boolean;
 	click: Function;
+	// 缓存 offsetTop 跳转到指定 -> 页面的时候缓存指定 的offsetTop
+	offsetTop: number;
 }

@@ -1,3 +1,6 @@
+import { userCookieName } from "./../../config/localStorage";
+import { GiveResources, GiveResourcesType, GiveSelect, GiveSelectType } from "../../enum/giveALike";
+import { useLocalStorage } from "../../utils/useLocalStorage";
 import { getTouristsCookies } from "../user";
 import { request } from "./../api";
 
@@ -33,7 +36,7 @@ function getCookie(callback: CookieCallback) {
 			let videoValue = await callback(cookie);
 			resolve(videoValue);
 		} else {
-			resolve({ code: 400, messages: "请求失败" });
+			resolve({ code: 400, messages: "请求失败!,请重试" });
 		}
 	});
 }
@@ -58,3 +61,17 @@ export const getVideoDefault = (id?: string | number, offset = 0, callback?: Req
 			)
 		)
 	);
+
+export const giveALike = (
+	t: GiveSelectType,
+	type: GiveResourcesType,
+	id: string,
+	callback?: RequestCallBack
+) => {
+	const cookie = useLocalStorage()[userCookieName];
+	// @ts-ignore
+	t = GiveSelect[t];
+	// @ts-ignore
+	type = GiveResources[type];
+	return request(`/resource/like?t=${t}&type=${type}&id=${id}&cookie=${cookie}`, callback);
+};
