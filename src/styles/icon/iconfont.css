@@ -12,6 +12,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dog-dogdianzan:before {
+  content: "\e8ad";
+}
+
+.dog-dogdianzan1:before {
+  content: "\e8c3";
+}
+
 .dog-dogdianyingshipin:before {
   content: "\e60f";
 }

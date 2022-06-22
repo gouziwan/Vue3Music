@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
 import { getPlaylistDetails, collectionPlaySongs, getAlbumContent } from "../Api/PlayListDetails";
-import { songsId, keyw } from "../config/routerFrom";
+import { songsId, keyw, commentsPara } from "../config/routerFrom";
 import Ellipsis from "../components/Ellipsis.vue";
 import { getAcquire, isArray, isObject } from "../utils";
 import { useRouter } from "vue-router";
@@ -155,6 +155,16 @@ const onClickShowDefault = (item: any) => {
 	currentItem.value = item;
 	isShowDetails.value = true;
 };
+
+const onClickToSharePage = () => {
+	router.push({
+		name: "Comments",
+		state: {
+			[commentsPara.id]: id,
+			[commentsPara.type]: "歌单"
+		}
+	});
+};
 </script>
 <template>
 	<div class="paly_list-details" id="paly_list-details">
@@ -238,7 +248,7 @@ const onClickShowDefault = (item: any) => {
 						{{ collection ? "已收藏" : "收藏" }}
 					</span>
 				</div>
-				<div class="details-right-button">
+				<div class="details-right-button" @click="onClickToSharePage">
 					<van-icon name="dogpinglun" class-prefix="dog" size="0.4rem" color="#fff"></van-icon>
 					<span> 分享 </span>
 				</div>

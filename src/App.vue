@@ -14,6 +14,7 @@ state.initLogin();
 
 <template>
 	<div class="page">
+		<!-- 头部的 -->
 		<div class="page-head">
 			<router-view name="hread" v-slot="{ Component }">
 				<template v-if="Component">
@@ -21,10 +22,10 @@ state.initLogin();
 						<component :is="Component"></component>
 					</keep-alive>
 				</template>
-
 				<template v-else> </template>
 			</router-view>
 		</div>
+		<!-- 身体部分 -->
 		<div class="page-centent">
 			<router-view v-slot="{ Component }">
 				<keep-alive max="20" :include="cache.keepAlive">
@@ -32,6 +33,7 @@ state.initLogin();
 				</keep-alive>
 			</router-view>
 		</div>
+		<!-- 底部导航栏  -->
 		<div class="page-button">
 			<TabbarBottomVue />
 		</div>

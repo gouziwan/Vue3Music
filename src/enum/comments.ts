@@ -12,8 +12,8 @@ export type CommentsValueType = keyof typeof CommentsValue;
 
 export const enum SortValue {
 	"推荐" = 1,
-	"热度" = 2,
-	"时间" = 3
+	"最热" = 2,
+	"最新" = 3
 }
 
 export type SortValueType = keyof typeof SortValue;
