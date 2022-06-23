@@ -9,7 +9,7 @@ import { useLocalStorage } from "../../utils/useLocalStorage";
 import { request } from "../api";
 
 export interface CommentsValue {
-	pageNode?: number;
+	pageNo?: number;
 	pageSize?: number;
 	sortType?: SortValueType;
 	cursor?: number;
@@ -18,7 +18,7 @@ export interface CommentsValue {
 export interface CommentsParameter {
 	id: any;
 	type: CommentsValueType;
-	pageNode?: number;
+	pageNo?: number;
 	pageSize?: number;
 	sortType?: SortValueType;
 	cursor?: number;
@@ -26,13 +26,13 @@ export interface CommentsParameter {
 
 // 获取评论资源
 export const getComments = (data: CommentsParameter, callback: RequestCallBack) => {
-	let { id, type, pageNode = 1, pageSize = 20, sortType = "推荐", cursor = Date.now() } = data;
+	let { id, type, pageNo = 1, pageSize = 30, sortType = "推荐", cursor = Date.now() } = data;
 	// @ts-ignore
 	type = CommentsValues[type];
 	// @ts-ignore
 	sortType = SortValue[sortType];
 	return request(
-		`/comment/new?type=${type}&id=${id}&pageNode=${pageNode}&pageSize=${pageSize}&sortType=${sortType}&cursor=${cursor}`,
+		`/comment/new?type=${type}&id=${id}&pageNo=${pageNo}&pageSize=${pageSize}&sortType=${sortType}&cursor=${cursor}`,
 		callback
 	);
 };

@@ -66,8 +66,6 @@ function isRequestPlays() {
 						...res.album,
 						trackIds: res.songs
 					};
-
-					console.log(data);
 				}
 		  });
 }
@@ -118,14 +116,12 @@ onMounted(() => {
 const getAuthorImage = computed(() => {
 	const value = data.value;
 
+	if (!isObject(value.creator)) return;
+
 	if (isPlay.value) {
-		return isObject(value.creator) && value.creator.avatarUrl
-			? getAcquire(value.creator.avatarUrl)
-			: "";
+		return value.creator.avatarUrl ? getAcquire(value.creator.avatarUrl) : "";
 	} else {
-		return isObject(value.artist) && value.artist.img1v1Url
-			? getAcquire(value.artist.img1v1Url)
-			: "";
+		return value.artist.img1v1Url ? getAcquire(value.artist.img1v1Url) : "";
 	}
 });
 
@@ -250,7 +246,7 @@ const onClickToSharePage = () => {
 				</div>
 				<div class="details-right-button" @click="onClickToSharePage">
 					<van-icon name="dogpinglun" class-prefix="dog" size="0.4rem" color="#fff"></van-icon>
-					<span> 分享 </span>
+					<span> 评论 </span>
 				</div>
 			</div>
 		</div>

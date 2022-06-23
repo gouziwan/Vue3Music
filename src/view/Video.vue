@@ -9,6 +9,7 @@ import { GiveSelectType } from "../enum/giveALike";
 import { useStore } from "../state/user";
 import { useStore as usePupop } from "../state/popup";
 import { useRouter } from "vue-router";
+import { commentsPara } from "../config/routerFrom";
 
 const videoArr = ref<VideoClassifyType[]>([]);
 
@@ -97,8 +98,15 @@ function onClickVideoGive(value: any) {
 	});
 }
 
-function toCommentsPage() {
-	router.push({ name: "Comments" });
+function toCommentsPage(value: any) {
+	const vid = value.data.vid;
+	router.push({
+		name: "Comments",
+		state: {
+			[commentsPara.id]: vid,
+			[commentsPara.type]: "视频"
+		}
+	});
 }
 </script>
 <template>
@@ -167,7 +175,7 @@ function toCommentsPage() {
 												/>
 												<p>{{ getPlayCountText(value.data.praisedCount) }}</p>
 											</div>
-											<div class="icon" @click="toCommentsPage">
+											<div class="icon" @click="toCommentsPage(value)">
 												<van-icon name="chat-o" size="0.35rem" />
 												<p>{{ getPlayCountText(value.data.commentCount) }}</p>
 											</div>
@@ -189,6 +197,7 @@ function toCommentsPage() {
 
 <style lang="scss">
 .video {
+	padding-bottom: 100px;
 	color: var(--font-main-color);
 	height: 100%;
 	overflow: hidden;

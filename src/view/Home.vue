@@ -42,6 +42,6 @@ onBeforeRouteLeave((to, from) => {
 }
 
 .home {
-	height: 10000px;
+	padding-bottom: 100px;
 }
 </style>

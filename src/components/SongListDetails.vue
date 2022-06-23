@@ -3,8 +3,12 @@ import { defineProps, computed, ref, watchEffect } from "vue";
 import { useStore } from "../state/user";
 import UserSongsListVue from "./UserSongsList.vue";
 import { getAcquire, isArray } from "../utils";
+import { useRouter } from "vue-router";
+import { commentsPara } from "../config/routerFrom";
 
 const userState = useStore();
+
+const router = useRouter();
 
 const props = defineProps({
 	item: {
@@ -64,7 +68,14 @@ const tabs = [
 	{
 		icon: "dogpinglun",
 		title: "评论",
-		fn: () => {}
+		fn: () =>
+			router.push({
+				name: "Comments",
+				state: {
+					[commentsPara.id]: props.item.id,
+					[commentsPara.type]: "歌曲"
+				}
+			})
 	}
 ];
 </script>

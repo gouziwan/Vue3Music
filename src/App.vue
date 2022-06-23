@@ -4,10 +4,15 @@ import Login from "./components/Login.vue";
 import { useStore } from "./state/user";
 import Sidebar from "./components/Sidebar.vue";
 import { cacheStore } from "./state/Cache";
+import { ref, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+
 // 用户刷新登录的
 const state = useStore();
 
 const cache = cacheStore();
+
+const route = useRoute();
 
 state.initLogin();
 </script>
@@ -34,6 +39,7 @@ state.initLogin();
 			</router-view>
 		</div>
 		<!-- 底部导航栏  -->
+
 		<div class="page-button">
 			<TabbarBottomVue />
 		</div>
@@ -43,3 +49,5 @@ state.initLogin();
 		<Sidebar />
 	</div>
 </template>
+
+<style lang="scss"></style>

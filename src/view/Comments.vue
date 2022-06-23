@@ -8,6 +8,7 @@ import { getAncestorNodes, isArray } from "../utils";
 import { SortValueType } from "../enum/comments";
 import { useStore } from "../state/popup";
 import { useStore as userState } from "../state/user";
+
 const state = history.state;
 const id = state[commentsPara.id];
 const type = state[commentsPara.type];
@@ -50,8 +51,11 @@ function getCommentsValue(data: CommentsValue = {}, c: Function = callback) {
 		},
 		res => {
 			if (res.code === 200) {
-				if (!res.data.hasMore) return (finished.value = true);
 				c(res);
+				if (!res.data.hasMore) {
+					finished.value = true;
+					return;
+				}
 			}
 		}
 	);
@@ -63,18 +67,18 @@ const onClickSwitch = (index: number) => {
 	commentValue.value = {};
 	const t = tabs.value[index];
 	getCommentsValue({ sortType: t.title as SortValueType });
+	finished.value = false;
 };
 
 function onLoad() {
 	const index = currentIndex.value;
 	const t = tabs.value[index];
 	if (!isArray(commentValue.value.comments)) return;
-	const len = commentValue.value.comments.length;
 	getCommentsValue(
 		{
 			sortType: t.title as SortValueType,
-			pageNode: Math.floor(commentValue.value.comments.length / 20) + 1,
-			cursor: commentValue.value.comments[len - 1].time
+			pageNo: Math.floor(commentValue.value.comments.length / 30) + 1,
+			cursor: commentValue.value.cursor
 		},
 		(res: any) => {
 			if (index === currentIndex.value) {
@@ -102,13 +106,17 @@ const onClickCommentsLike = (e: Event) => {
 
 	let values = commentValue.value.comments.filter((el: any) => el.commentId == cid)[0];
 
-	getCommentsGiveLike(id, cid, values.like, "歌单", res => {
+	getCommentsGiveLike(id, cid, values.like, type, res => {
 		if (res.code === 200) {
 			values.like = !values.like;
 			values.like === false ? values.likedCount-- : values.likedCount++;
 		}
 	});
 };
+
+const getTitle = computed(() =>
+	commentValue.value.totalCount != undefined ? `评论(${commentValue.value.totalCount})` : "评论"
+);
 
 const getIcon = (item: any) => {
 	return item.like == true ? "dogdianzan1" : "dogdianzan";
@@ -123,7 +131,7 @@ getCommentsValue();
 
 <template>
 	<div class="comments_page">
-		<PlayListHreadVue title="评论" />
+		<PlayListHreadVue :title="getTitle" />
 
 		<div class="comments_content">
 			<div class="comments_content_tabsl">
@@ -238,7 +246,8 @@ getCommentsValue();
 			padding: 0 20px;
 			flex: 1;
 			height: 100%;
-			overflow: auto;
+			overflow-y: auto;
+			overflow-x: hidden;
 			.content_item {
 				padding: 20px 0;
 				width: 100%;
