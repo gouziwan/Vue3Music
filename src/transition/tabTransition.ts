@@ -7,8 +7,11 @@ export function beforeEnter(el: HTMLDivElement) {
 
 // 进入时
 export function enter(el: HTMLDivElement, done: any) {
-	el.style.bottom = "0px";
-	done();
+	// 这里要把他放进 微任务 是 因素 display:none 原因 先让你显示出来再执行动画直接执行不会有动画效果
+	Promise.resolve().then(() => {
+		el.style.bottom = "0px";
+		done();
+	});
 }
 
 // 进入完成
@@ -26,5 +29,7 @@ export function beforeLeave(el: HTMLDivElement) {
 // 离开时
 export function leave(el: HTMLDivElement, done: any) {
 	el.style.bottom = "-100px";
-	// done();
+	setTimeout(() => {
+		done();
+	}, 300);
 }

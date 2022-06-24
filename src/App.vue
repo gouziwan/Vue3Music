@@ -4,17 +4,21 @@ import Login from "./components/Login.vue";
 import { useStore } from "./state/user";
 import Sidebar from "./components/Sidebar.vue";
 import { cacheStore } from "./state/Cache";
-import { ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
+import AudiosCell from "./components/AudiosCell.vue";
+import { audioStore } from "./state/audios";
+import { onMounted } from "vue";
 
 // 用户刷新登录的
 const state = useStore();
 
 const cache = cacheStore();
 
-const route = useRoute();
-
 state.initLogin();
+
+const audio = audioStore();
+
+onMounted(() => audio.setAudioNode(document.querySelector<HTMLAudioElement>("#audios")!));
 </script>
 
 <template>
@@ -41,7 +45,9 @@ state.initLogin();
 		<!-- 底部导航栏  -->
 
 		<div class="page-button">
+			<AudiosCell />
 			<TabbarBottomVue />
+			<audio id="audios" src="./public/CMJ - 所念皆星河.mp3"></audio>
 		</div>
 		<!-- 登录 -->
 		<Login />
@@ -50,4 +56,13 @@ state.initLogin();
 	</div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.van-tabbar--fixed {
+	position: relative;
+}
+
+.audios {
+	position: absolute;
+	top: 0;
+}
+</style>

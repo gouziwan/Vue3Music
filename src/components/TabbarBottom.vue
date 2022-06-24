@@ -67,7 +67,7 @@ watchEffect(() => {
 		@enter-cancelled="enterCancelled"
 		@leave="leave"
 	>
-		<Tabbar v-model="active" v-if="isShow">
+		<Tabbar v-model="active" v-show="isShow" :border="false">
 			<TabbarItem v-for="(item, index) in tabs" :key="index" :name="item.path" :to="item.path">
 				{{ item.txt }}
 				<template #icon>
