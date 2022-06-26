@@ -9,7 +9,7 @@ import { getAcquire, getPlayCountText, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-
+import { audioStore } from "../state/audios";
 const offsetTop = ref(0);
 
 let current = ref(0);
@@ -24,6 +24,8 @@ const show = ref(false);
 const keysword = ref(history.state[serachKeyword]);
 
 let isUpdate = ref(false);
+
+const audios = audioStore();
 
 const tabsArr = ref<TabsType[]>([
 	{
@@ -259,6 +261,10 @@ function getNodeOffsetTop() {
 	let node = document.querySelector<HTMLDivElement>(`#serach-details-${current.value + 1}`)!;
 	tabsArr.value[current.value].offsetTop = node.scrollTop;
 }
+
+function onClickAllPlay() {
+	audios.addAllPlay(tabsArr.value[0].arr);
+}
 </script>
 <template>
 	<div class="serach-details-content">
@@ -280,7 +286,13 @@ function getNodeOffsetTop() {
 						</template>
 
 						<div class="serach-cell-all" v-show="item.arr.length > 0">
-							<van-cell v-if="item.title === '单曲'" title="播放全部" center clickable>
+							<van-cell
+								v-if="item.title === '单曲'"
+								title="播放全部"
+								center
+								clickable
+								@click="onClickAllPlay"
+							>
 								<template #icon>
 									<div class="icon-music-o">
 										<van-icon name="music-o" size="0.5rem" />

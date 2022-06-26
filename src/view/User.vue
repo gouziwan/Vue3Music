@@ -13,6 +13,5 @@ import UserMusic from "../components/User/UserMusic.vue";
 <style lang="scss">
 .user {
 	color: var(--font-main-color);
-	padding-bottom: 100px;
 }
 </style>

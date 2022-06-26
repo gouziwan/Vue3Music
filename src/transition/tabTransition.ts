@@ -7,11 +7,11 @@ export function beforeEnter(el: HTMLDivElement) {
 
 // 进入时
 export function enter(el: HTMLDivElement, done: any) {
-	// 这里要把他放进 微任务 是 因素 display:none 原因 先让你显示出来再执行动画直接执行不会有动画效果
-	Promise.resolve().then(() => {
+	// 这里要把他放进 宏任务 是 因素 display:none 原因 先让你显示出来再执行动画直接执行不会有动画效果
+	setTimeout(() => {
 		el.style.bottom = "0px";
 		done();
-	});
+	}, 0);
 }
 
 // 进入完成

@@ -40,8 +40,4 @@ onBeforeRouteLeave((to, from) => {
 ::v-deep .van-nav-bar::after {
 	content: none;
 }
-
-.home {
-	padding-bottom: 100px;
-}
 </style>

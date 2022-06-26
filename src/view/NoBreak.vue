@@ -8,12 +8,15 @@ import Ellipsis from "../components/Ellipsis.vue";
 import { getAcquire } from "../utils/index";
 import SongListDetails from "../components/SongListDetails.vue";
 import { useStore as usePopup } from "../state/popup";
+import { audioStore } from "../state/audios";
 
 const user = useStore();
 
 const value = ref<any[]>([]);
 
 const popup = usePopup();
+
+const audioState = audioStore();
 
 watchEffect(() => {
 	if (user.isLogin && value.value.length <= 0) {
@@ -35,12 +38,21 @@ const getAvatar = (item: any) => {
 	return item.ar.map((el: any) => el.name).join("/") + "-" + item.al.name;
 };
 
-const onClickShowCurrentSongsDetails = (item: any) => {
+const onClickShowCurrentSongsDetails = (item: any, e: Event) => {
+	e.stopPropagation();
 	currentItem.value = item;
 	show.value = true;
 };
 
 const onClickLogin = () => popup.reviseShowLogin(true);
+
+// 当前歌单列表
+const onClickPlayCurrent = (songs: any) => {
+	audioState.addSongsSingle(songs);
+};
+
+// 播放全部歌曲
+const onClickAllPlay = () => audioState.addAllPlay(value.value);
 </script>
 <template>
 	<div class="no_break">
@@ -48,7 +60,7 @@ const onClickLogin = () => popup.reviseShowLogin(true);
 		<template v-if="user.isLogin">
 			<div class="no_break_content" v-if="value.length > 0">
 				<div class="button">
-					<van-cell title="全部播放">
+					<van-cell title="全部播放" @click="onClickAllPlay">
 						<template #icon>
 							<div class="icon">
 								<van-icon name="dogbofang1" class-prefix="dog" size="0.4rem"></van-icon>
@@ -58,7 +70,7 @@ const onClickLogin = () => popup.reviseShowLogin(true);
 				</div>
 
 				<div class="cotent">
-					<van-cell v-for="item in value" :border="false" center>
+					<van-cell v-for="item in value" :border="false" center @click="onClickPlayCurrent(item)">
 						<template #icon>
 							<div class="images">
 								<van-image
@@ -87,7 +99,7 @@ const onClickLogin = () => popup.reviseShowLogin(true);
 								name="doggengduo"
 								class-prefix="dog"
 								size="0.5rem"
-								@click="onClickShowCurrentSongsDetails(item)"
+								@click="onClickShowCurrentSongsDetails(item, $event)"
 							></van-icon>
 						</template>
 					</van-cell>

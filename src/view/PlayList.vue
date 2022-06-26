@@ -133,8 +133,6 @@ function onLoad() {
 	color: var(--font-main-color);
 	height: 100%;
 	overflow: hidden;
-	padding-bottom: 100px;
-
 	.tabs {
 		height: 100%;
 		.van-tabs {

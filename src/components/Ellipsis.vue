@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, StyleValue } from "vue";
 
-const { clamp, epsis, size, color } = defineProps({
+const props = defineProps({
 	clamp: {
 		type: [String, Number],
 		default: "2"
@@ -21,17 +21,17 @@ const { clamp, epsis, size, color } = defineProps({
 });
 
 const getClassName = computed(() => {
-	return ["ellipsis-txt", epsis ? "ellipsis-1" : ""];
+	return ["ellipsis-txt", props.epsis ? "ellipsis-1" : ""];
 });
 
 const getClassStyle = computed(() => {
 	let data = {
-		fontSize: size,
-		color
+		fontSize: props.size,
+		color: props.color
 	} as any;
 
-	if (epsis) {
-		data["-webkit-line-clamp"] = clamp;
+	if (props.epsis) {
+		data["-webkit-line-clamp"] = props.clamp;
 	}
 
 	return data;

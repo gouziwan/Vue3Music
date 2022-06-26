@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import { getPlaySongsDetails } from "../Api/PlayListDetails";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { isObject } from "../utils";
 import Ellipsis from "./Ellipsis.vue";
 import { Circle } from "vant";
 import { audioStore } from "../state/audios";
+import { useStore } from "../state/popup";
 const value = ref();
 
 const audio = audioStore();
+
+const p = useStore();
 
 getPlaySongsDetails([{ id: "347230" }], res => {
 	value.value = res.songs[0];
@@ -21,36 +24,49 @@ const getUrl = computed(() => {
 	return isObject(value.value) ? value.value.al.picUrl : "";
 });
 
-const rate = ref(0);
-
+const rateTiem = computed(() => {
+	if (audio.duration == 0) return 0;
+	return audio.currentTiem / (audio.duration / 100);
+});
 // 点击开关闭
 const onClickSwiperPlay = () => audio.switchPlay();
-
 // 播放状态的按钮
 const playIcon = computed(() => (audio.playState ? "pause" : "play"));
+// 点击显示歌曲列表
+const onClickShowSongsPlay = () => p.reviseSongs(true);
 </script>
 <template>
 	<van-cell center>
 		<template #icon>
-			<van-image :src="getUrl" width="0.8rem" height="0.8rem" radius="0.1rem"></van-image>
+			<van-image
+				:src="audio.getAudiosImage"
+				width="0.8rem"
+				height="0.8rem"
+				radius="0.1rem"
+			></van-image>
 		</template>
 
 		<template #title>
 			<div class="title">
 				<Ellipsis clamp="1" epsis>
-					{{ getTitle }}
+					{{ audio.getAudiosTitle }}
 				</Ellipsis>
 			</div>
 		</template>
 
 		<template #right-icon>
-			<van-icon name="dogbofangliebiao" class-prefix="dog" size="0.55rem"></van-icon>
+			<van-icon
+				name="dogbofangliebiao"
+				class-prefix="dog"
+				size="0.55rem"
+				@click="onClickShowSongsPlay"
+			></van-icon>
 		</template>
 
 		<template #value>
 			<div class="value-icon">
 				<div class="value-ciroce" @click="onClickSwiperPlay">
-					<Circle :current-rate="rate" :speed="1" :rate="100" layer-color="var()" size="0.6rem">
+					<Circle :current-rate="rateTiem" :speed="1" :rate="100" size="0.6rem">
 						<van-icon :name="playIcon" />
 					</Circle>
 				</div>

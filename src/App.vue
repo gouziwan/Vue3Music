@@ -4,11 +4,10 @@ import Login from "./components/Login.vue";
 import { useStore } from "./state/user";
 import Sidebar from "./components/Sidebar.vue";
 import { cacheStore } from "./state/Cache";
-import { useRoute } from "vue-router";
 import AudiosCell from "./components/AudiosCell.vue";
 import { audioStore } from "./state/audios";
 import { onMounted } from "vue";
-
+import CurrentSongsList from "./components/CurrentSongsList.vue";
 // 用户刷新登录的
 const state = useStore();
 
@@ -47,12 +46,14 @@ onMounted(() => audio.setAudioNode(document.querySelector<HTMLAudioElement>("#au
 		<div class="page-button">
 			<AudiosCell />
 			<TabbarBottomVue />
-			<audio id="audios" src="./public/CMJ - 所念皆星河.mp3"></audio>
+			<audio id="audios" :src="audio.getAudiosUrl"></audio>
 		</div>
 		<!-- 登录 -->
 		<Login />
 		<!-- 设置侧边栏 -->
 		<Sidebar />
+		<!-- 歌曲列表 -->
+		<CurrentSongsList />
 	</div>
 </template>
 

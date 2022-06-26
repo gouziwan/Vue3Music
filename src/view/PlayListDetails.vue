@@ -10,6 +10,7 @@ import { useStore } from "../state/user";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { userCookieName } from "../config/localStorage";
 import SongListDetails from "../components/SongListDetails.vue";
+import { audioStore } from "../state/audios";
 
 const id = history.state[songsId];
 
@@ -31,6 +32,8 @@ const storage = useLocalStorage();
 const isShowDetails = ref(false);
 
 const currentItem = shallowRef(undefined);
+
+const audios = audioStore();
 
 const isPlay = computed(() => (keyword === "专辑" ? false : true));
 
@@ -161,6 +164,9 @@ const onClickToSharePage = () => {
 		}
 	});
 };
+
+// 歌单高亮效果
+const playActive = computed(() => {});
 </script>
 <template>
 	<div class="paly_list-details" id="paly_list-details">

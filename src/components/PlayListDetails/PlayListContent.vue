@@ -6,6 +6,7 @@ import { Loading } from "vant";
 import VirtualList from "../VirtualList.vue";
 import Ellipsis from "../Ellipsis.vue";
 import { keyw } from "../../config/routerFrom";
+import { audioStore } from "../../state/audios";
 
 const props = defineProps(["tracks"]);
 
@@ -15,18 +16,26 @@ const emit = defineEmits(["click"]);
 
 const keyword = history.state[keyw];
 
+const audioState = audioStore();
+
 watchEffect(() => {
 	// 不是专辑请求
 	if (keyword !== "专辑") {
 		if (isArray(props.tracks) && props.tracks.length > 0) {
 			getPlaySongsDetails(props.tracks, res => {
 				if (res.code == 200) {
-					songsArr.value = res.songs;
+					songsArr.value = res.songs.map((el: { index: any }, index: number) => {
+						el.index = index;
+						return el;
+					});
 				}
 			});
 		}
 	} else {
-		songsArr.value = props.tracks;
+		songsArr.value = props.tracks.map((el: { index: any }, index: number) => {
+			el.index = index;
+			return el;
+		});
 	}
 });
 
@@ -62,8 +71,22 @@ onMounted(() => {
 	});
 });
 
-const onClickShowDefault = (item: any) => {
+const onClickShowDefault = (item: any, e: Event) => {
+	e.stopPropagation();
 	emit("click", item);
+};
+
+// 点击添加所有歌曲进入所有歌单
+const onClickAllPlay = () => audioState.addAllPlay(songsArr.value);
+
+const isPlaySongs = (item: any) => {
+	if (audioState.currentAudios == null) return false;
+	return item.id === audioState.currentAudios.id;
+};
+
+// 当前歌单列表
+const onClickPlayCurrent = (songs: any) => {
+	audioState.addSongsSingle(songs);
 };
 </script>
 <template>
@@ -75,7 +98,7 @@ const onClickShowDefault = (item: any) => {
 		<div class="play-item" v-else>
 			<div class="play-cell-item">
 				<div class="play-cell-div">
-					<van-cell :title="`播放全部(${props.tracks.length})`">
+					<van-cell :title="`播放全部(${props.tracks.length})`" @click="onClickAllPlay">
 						<template #icon>
 							<div style="margin-right: 10px">
 								<van-icon name="dogbofang1" class-prefix="dog" size="0.4rem" />
@@ -86,9 +109,25 @@ const onClickShowDefault = (item: any) => {
 			</div>
 			<VirtualList :data="songsArr" id="paly_list-details" :height="getContentHeight">
 				<template v-slot:default="item">
-					<van-cell clickable :border="false" center>
+					<van-cell clickable :border="false" center @click="onClickPlayCurrent(item.value)">
+						<template #icon>
+							<div class="cell-icon">
+								<p v-if="!isPlaySongs(item.value)">{{ item.value.index + 1 }}</p>
+								<van-icon
+									v-else
+									name="dogshengyin"
+									class-prefix="dog"
+									size="0.4rem"
+									color="red"
+								></van-icon>
+							</div>
+						</template>
 						<template #title>
-							<Ellipsis clamp="1" epsis>
+							<Ellipsis
+								clamp="1"
+								epsis
+								:color="isPlaySongs(item.value) == false ? 'var(--font-main-color)' : 'red'"
+							>
 								{{ item.value.name }}
 							</Ellipsis>
 						</template>
@@ -103,7 +142,7 @@ const onClickShowDefault = (item: any) => {
 								name="doggengduo"
 								class-prefix="dog"
 								size="0.4rem"
-								@click="onClickShowDefault(item.value)"
+								@click="onClickShowDefault(item.value, $event)"
 							/>
 						</template>
 					</van-cell>
@@ -132,6 +171,9 @@ const onClickShowDefault = (item: any) => {
 			position: fixed;
 			top: 92px;
 			z-index: 99;
+		}
+		.cell-icon {
+			width: 0.6rem;
 		}
 	}
 }

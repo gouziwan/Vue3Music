@@ -120,7 +120,7 @@ function setStarIndex(box: any, content: HTMLDivElement) {
 					paddingBottom: getPaddingBottom
 				}"
 			>
-				<slot :value="item" :index="index" v-for="(item, index) in sliceArr"></slot>
+				<slot :value="item" :index="startIndex + index" v-for="(item, index) in sliceArr"></slot>
 			</div>
 		</div>
 	</div>

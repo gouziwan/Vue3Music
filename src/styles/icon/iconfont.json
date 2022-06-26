@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20016118",
+      "name": "单曲循环",
+      "font_class": "danquxunhuan",
+      "unicode": "f1f9",
+      "unicode_decimal": 61945
+    },
+    {
+      "icon_id": "20016119",
+      "name": "列表循环",
+      "font_class": "liebiaoxunhuan",
+      "unicode": "f1fa",
+      "unicode_decimal": 61946
+    },
+    {
+      "icon_id": "145434",
+      "name": "声音",
+      "font_class": "shengyin",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
       "icon_id": "11372651",
       "name": "点赞",
       "font_class": "dianzan",

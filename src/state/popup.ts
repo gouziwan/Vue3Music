@@ -5,7 +5,9 @@ export const useStore = defineStore("popup", {
 		return {
 			isShowLogin: false,
 			// 侧边栏
-			sidebar: false
+			sidebar: false,
+			// 歌单
+			songs: false
 		};
 	},
 	actions: {
@@ -16,6 +18,9 @@ export const useStore = defineStore("popup", {
 		// 修改侧边栏状态
 		reviseShowSidebar(state: boolean) {
 			this.sidebar = state;
+		},
+		reviseSongs(state: boolean) {
+			this.songs = state;
 		}
 	}
 });

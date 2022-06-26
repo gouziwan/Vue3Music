@@ -197,13 +197,14 @@ function toCommentsPage(value: any) {
 
 <style lang="scss">
 .video {
-	padding-bottom: 100px;
+	// padding-bottom: 100px;
 	color: var(--font-main-color);
 	height: 100%;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	background-color: transparent;
+	box-sizing: content-box;
 	.video-content {
 		height: 100%;
 		flex: 1;

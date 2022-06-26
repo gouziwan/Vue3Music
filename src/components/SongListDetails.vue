@@ -5,10 +5,13 @@ import UserSongsListVue from "./UserSongsList.vue";
 import { getAcquire, isArray } from "../utils";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
+import { audioStore } from "../state/audios";
 
 const userState = useStore();
 
 const router = useRouter();
+
+const audio = audioStore();
 
 const props = defineProps({
 	item: {
@@ -50,7 +53,6 @@ const onClickOverlay = () => {
 function onClickConllectionSongs() {
 	if (!userState.isExecLogin()) return;
 	songShow.value = true;
-
 	onClickOverlay();
 }
 
@@ -58,7 +60,10 @@ const tabs = [
 	{
 		icon: "dogbofang1",
 		title: "播放歌曲",
-		fn: () => {}
+		fn: () => {
+			audio.addSongsSingle(props.item);
+			emit("update:show", false);
+		}
 	},
 	{
 		icon: "dogshoucang",
