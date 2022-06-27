@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from "../utils/index";
+import { getAcquire, isArray, isObject, isString } from "../utils/index";
 import { defineStore } from "pinia";
 import { getPlayUrl } from "../Api/Audio";
 import { Toast } from "vant";
@@ -103,6 +103,10 @@ export const audioStore = defineStore("audios", {
 			this.audio.pause();
 			// 移除监听时长
 			this.removerEvent();
+		},
+
+		playCut() {
+			this.playState ? this.pause() : this.play();
 		},
 
 		// 监听音频对象的长度
@@ -223,7 +227,7 @@ export const audioStore = defineStore("audios", {
 		},
 
 		getAudiosImage(state) {
-			return isObject(state.currentAudios) ? state.currentAudios.al.picUrl : "";
+			return isObject(state.currentAudios) ? getAcquire(state.currentAudios.al.picUrl) : "";
 		},
 
 		getAudiosTitle(state) {

@@ -3,13 +3,16 @@ import ListModule from "./ListModule.vue";
 import { Swipe, SwipeItem, Image } from "vant";
 import { getRankingList, getRankingListSong } from "../../Api/Home/index";
 import { ref } from "vue";
-import { getAcquire } from "../../utils";
+import { getAcquire, getAncestorNodes } from "../../utils";
 import Ellipsis from "../Ellipsis.vue";
 import { useRouter } from "vue-router";
+import { audioStore } from "../../state/audios";
 
 const list = ref<any[]>([]);
 
 const router = useRouter();
+
+const audioState = audioStore();
 
 getRankingList(async res => {
 	let result = await Promise.all(res.list.slice(0, 5).map((el: any) => getRankingListSong(el.id)));
@@ -24,14 +27,39 @@ const getAvatarTxt = (item: any) => {
 const onClick = () => {
 	router.push("/top");
 };
+
+const onClickPlaySongs = (e: Event) => {
+	let tagert = e.target as HTMLDivElement;
+	tagert = getAncestorNodes(tagert, ".home-ran-items");
+
+	if (tagert == null) return;
+
+	let id = tagert.dataset.id;
+
+	if (!id) return;
+
+	const index = tagert.dataset.index as unknown as number;
+
+	const songs = list.value
+		.filter((el: any) => el.id == index)[0]
+		.tracks.slice(0, 3)
+		.filter((el: any) => el.id == parseInt(id!))[0];
+
+	audioState.addSongsSingle(songs);
+};
 </script>
 <template>
 	<ListModule title="排行榜" :isShow="list.length > 0" @click="onClick">
 		<Swipe :show-indicators="false">
 			<SwipeItem v-for="item in list">
-				<div class="home-ran-content">
+				<div class="home-ran-content" @click="onClickPlaySongs">
 					<div class="home-ran-title">{{ item.name }}</div>
-					<div class="home-ran-items" v-for="(val, index) in item.tracks.slice(0, 3)">
+					<div
+						class="home-ran-items"
+						:data-id="val.id"
+						:data-index="item.id"
+						v-for="(val, index) in item.tracks.slice(0, 3)"
+					>
 						<div class="home-ran-img">
 							<Image
 								radius="0.3rem"

@@ -6,6 +6,7 @@ import { getAcquire, isArray } from "../utils";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
+import { isPlaySongs } from "../minxins/audio";
 
 const userState = useStore();
 
@@ -61,8 +62,13 @@ const tabs = [
 		icon: "dogbofang1",
 		title: "播放歌曲",
 		fn: () => {
-			audio.addSongsSingle(props.item);
-			emit("update:show", false);
+			if (isPlaySongs(props.item)) {
+				// 如果他当前播放点击跟他这个id 一致 停止 或者播放
+				audio.playCut();
+			} else {
+				audio.addSongsSingle(props.item);
+				emit("update:show", false);
+			}
 		}
 	},
 	{
@@ -83,6 +89,10 @@ const tabs = [
 			})
 	}
 ];
+
+function getActiverIcon(icon: string) {
+	return audio.playState && isPlaySongs(props.item) ? "dogbofang" : icon;
+}
 </script>
 
 <template>
@@ -109,9 +119,11 @@ const tabs = [
 			</div>
 
 			<div class="detailstSong-content">
-				<van-cell v-for="item in tabs" center @click="item.fn">
+				<van-cell v-for="(item, index) in tabs" center @click="item.fn">
 					<template #icon>
-						<van-icon class-prefix="dog" :name="item.icon" size="0.5rem" />
+						<van-icon class-prefix="dog" :name="item.icon" size="0.5rem" v-if="index != 0" />
+
+						<van-icon class-prefix="dog" :name="getActiverIcon(item.icon)" size="0.5rem" v-else />
 					</template>
 
 					<template #title>

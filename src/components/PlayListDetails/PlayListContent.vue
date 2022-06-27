@@ -7,6 +7,7 @@ import VirtualList from "../VirtualList.vue";
 import Ellipsis from "../Ellipsis.vue";
 import { keyw } from "../../config/routerFrom";
 import { audioStore } from "../../state/audios";
+import { onClickPlayCurrent, isPlaySongs, onClickAllPlay } from "../../minxins/audio";
 
 const props = defineProps(["tracks"]);
 
@@ -15,8 +16,6 @@ const songsArr = shallowRef<any[] | null>(null);
 const emit = defineEmits(["click"]);
 
 const keyword = history.state[keyw];
-
-const audioState = audioStore();
 
 watchEffect(() => {
 	// 不是专辑请求
@@ -75,19 +74,6 @@ const onClickShowDefault = (item: any, e: Event) => {
 	e.stopPropagation();
 	emit("click", item);
 };
-
-// 点击添加所有歌曲进入所有歌单
-const onClickAllPlay = () => audioState.addAllPlay(songsArr.value);
-
-const isPlaySongs = (item: any) => {
-	if (audioState.currentAudios == null) return false;
-	return item.id === audioState.currentAudios.id;
-};
-
-// 当前歌单列表
-const onClickPlayCurrent = (songs: any) => {
-	audioState.addSongsSingle(songs);
-};
 </script>
 <template>
 	<div class="play-list-content">
@@ -98,7 +84,7 @@ const onClickPlayCurrent = (songs: any) => {
 		<div class="play-item" v-else>
 			<div class="play-cell-item">
 				<div class="play-cell-div">
-					<van-cell :title="`播放全部(${props.tracks.length})`" @click="onClickAllPlay">
+					<van-cell :title="`播放全部(${props.tracks.length})`" @click="onClickAllPlay(songsArr)">
 						<template #icon>
 							<div style="margin-right: 10px">
 								<van-icon name="dogbofang1" class-prefix="dog" size="0.4rem" />

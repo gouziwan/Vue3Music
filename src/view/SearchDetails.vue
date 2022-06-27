@@ -9,7 +9,8 @@ import { getAcquire, getPlayCountText, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-import { audioStore } from "../state/audios";
+import { onClickAllPlay, isPlaySongs, onClickPlayCurrent } from "../minxins/audio";
+
 const offsetTop = ref(0);
 
 let current = ref(0);
@@ -25,8 +26,6 @@ const keysword = ref(history.state[serachKeyword]);
 
 let isUpdate = ref(false);
 
-const audios = audioStore();
-
 const tabsArr = ref<TabsType[]>([
 	{
 		title: "单曲",
@@ -38,9 +37,7 @@ const tabsArr = ref<TabsType[]>([
 		type: 1,
 		isBorder: true,
 		isLoading: false,
-		click: (item: any) => {
-			console.log(item);
-		},
+		click: (item: any) => onClickPlayCurrent(item),
 		offsetTop: 0
 	},
 	{
@@ -213,7 +210,8 @@ const onLoad = () => {
 };
 
 // 点击查看1歌曲详情
-const onClickSongsDefault = (item: any) => {
+const onClickSongsDefault = (item: any, e: Event) => {
+	e.stopPropagation();
 	songsDetails.value = item;
 	show.value = true;
 };
@@ -261,10 +259,6 @@ function getNodeOffsetTop() {
 	let node = document.querySelector<HTMLDivElement>(`#serach-details-${current.value + 1}`)!;
 	tabsArr.value[current.value].offsetTop = node.scrollTop;
 }
-
-function onClickAllPlay() {
-	audios.addAllPlay(tabsArr.value[0].arr);
-}
 </script>
 <template>
 	<div class="serach-details-content">
@@ -291,7 +285,7 @@ function onClickAllPlay() {
 								title="播放全部"
 								center
 								clickable
-								@click="onClickAllPlay"
+								@click="onClickAllPlay(item.arr)"
 							>
 								<template #icon>
 									<div class="icon-music-o">
@@ -311,7 +305,15 @@ function onClickAllPlay() {
 								{{ getName(value, item.name) }}
 							</template>
 							<template #title v-else>
-								<Ellipsis clamp="1" epsis>
+								<Ellipsis clamp="1" epsis v-if="item.title !== '单曲'">
+									{{ getName(value, item.name) }}
+								</Ellipsis>
+								<Ellipsis
+									clamp="1"
+									epsis
+									v-else
+									:color="isPlaySongs(value) ? 'red' : 'var(--font-main-color)'"
+								>
 									{{ getName(value, item.name) }}
 								</Ellipsis>
 							</template>
@@ -330,6 +332,13 @@ function onClickAllPlay() {
 								</div>
 							</template>
 
+							<!-- 播放单曲出现的小喇叭 -->
+							<template #icon v-if="item.title === '单曲' && isPlaySongs(value)">
+								<div style="margin-right: 10px">
+									<van-icon name="dogshengyin" class-prefix="dog" color="red" size="0.5rem" />
+								</div>
+							</template>
+
 							<template #label>
 								<div class="serach-label">
 									<Ellipsis clamp="1" epsis color="var(--font-main-color-3)">
@@ -342,7 +351,7 @@ function onClickAllPlay() {
 									name="doggengduo"
 									class-prefix="dog"
 									size="0.5rem"
-									@click="onClickSongsDefault(value)"
+									@click="onClickSongsDefault(value, $event)"
 								/>
 							</template>
 						</van-cell>
