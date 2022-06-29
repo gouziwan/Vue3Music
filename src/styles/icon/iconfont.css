@@ -12,6 +12,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.dog-dogshangyishou:before {
+  content: "\e684";
+}
+
+.dog-dogxiayishou:before {
+  content: "\e685";
+}
+
+
 .dog-dogdanquxunhuan:before {
   content: "\f1f9";
 }

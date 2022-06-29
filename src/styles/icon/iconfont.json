@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "17718105",
+      "name": "上一首",
+      "font_class": "shangyishou",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "17718110",
+      "name": "下一首",
+      "font_class": "xiayishou",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
       "icon_id": "20016118",
       "name": "单曲循环",
       "font_class": "danquxunhuan",

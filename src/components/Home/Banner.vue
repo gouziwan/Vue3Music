@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { getBanner } from "../../Api/Home";
-
 import LoadingContentVue from "../LoadingContent.vue";
+import { onClickPlayCurrent } from "../../minxins/audio";
 
 const banners = ref<any[]>([]);
 
@@ -11,6 +11,14 @@ getBanner(res => (banners.value = res.banners));
 const swipeInstance = ref();
 
 const clickSwipeTo = (index: number) => swipeInstance.value.swipeTo(index);
+
+const onClickBanners = (banner: any) => {
+	switch (banner.targetType) {
+		case 1:
+			onClickPlayCurrent(banner.song);
+			break;
+	}
+};
 </script>
 
 <template>
@@ -19,7 +27,14 @@ const clickSwipeTo = (index: number) => swipeInstance.value.swipeTo(index);
 		<van-swipe autoplay="3000" ref="swipeInstance" v-else>
 			<van-swipe-item v-for="item in banners">
 				<div class="home-banner-item">
-					<van-image width="100%" height="4rem" :src="item.pic" fit="cover" radius="0.2rem" />
+					<van-image
+						width="100%"
+						height="4rem"
+						:src="item.pic"
+						fit="cover"
+						radius="0.2rem"
+						@click="onClickBanners(item)"
+					/>
 				</div>
 			</van-swipe-item>
 			<template #indicator="{ active, total }">

@@ -7,7 +7,9 @@ export const useStore = defineStore("popup", {
 			// 侧边栏
 			sidebar: false,
 			// 歌单
-			songs: false
+			songs: false,
+			//歌单详情页
+			audiosContent: false
 		};
 	},
 	actions: {
@@ -21,6 +23,9 @@ export const useStore = defineStore("popup", {
 		},
 		reviseSongs(state: boolean) {
 			this.songs = state;
+		},
+		revieseAudiosContent(state: boolean) {
+			this.audiosContent = state;
 		}
 	}
 });

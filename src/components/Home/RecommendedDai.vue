@@ -14,9 +14,7 @@ const router = useRouter();
 
 const onClickToPlayList = (e: Event) => {
 	const node = getAncestorNodes(e.target as HTMLDivElement, ".home-recea-items") as HTMLDivElement;
-
 	const id = isObject(node) && node.dataset ? node.dataset.id : false;
-
 	if (id) {
 		router.push({
 			name: "PlayListDetails",

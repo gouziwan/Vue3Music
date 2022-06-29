@@ -1,7 +1,7 @@
 import { isObject } from "../utils";
 import axios, { AxiosRequestConfig } from "axios";
 import { Toast } from "vant";
-const ip = "10.52.1.42";
+const ip = "10.52.4.142";
 
 export const url = `http://${ip}:5000`;
 
@@ -23,7 +23,6 @@ _request.interceptors.response.use(
 			: `请求出错`;
 
 		Toast.fail(messages);
-
 		return {
 			code: error.response.status,
 			messages: messages

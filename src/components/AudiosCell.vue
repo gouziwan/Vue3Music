@@ -28,15 +28,23 @@ const rateTiem = computed(() => {
 	if (audio.duration == 0) return 0;
 	return audio.currentTiem / (audio.duration / 100);
 });
-// 点击开关闭
-const onClickSwiperPlay = () => audio.switchPlay();
+// 点击开关闭歌曲播放状态
+const onClickSwiperPlay = (e: Event) => {
+	e.stopPropagation();
+	audio.switchPlay();
+};
 // 播放状态的按钮
 const playIcon = computed(() => (audio.playState ? "pause" : "play"));
 // 点击显示歌曲列表
-const onClickShowSongsPlay = () => p.reviseSongs(true);
+const onClickShowSongsPlay = (e: Event) => {
+	e.stopPropagation();
+	p.reviseSongs(true);
+};
+// 点击显示当前播放歌曲的详情
+const onClickSongsDefault = () => p.revieseAudiosContent(true);
 </script>
 <template>
-	<van-cell center>
+	<van-cell center @click="onClickSongsDefault">
 		<template #icon>
 			<van-image
 				:src="audio.getAudiosImage"

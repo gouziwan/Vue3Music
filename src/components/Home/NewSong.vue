@@ -4,6 +4,9 @@ import { ref, reactive, watchEffect } from "vue";
 import { getAlbum, getNewCourier, getNewDisc } from "../../Api/Home";
 import { getAcquire, subArr } from "../../utils/index";
 import Ellipsis from "../Ellipsis.vue";
+import { getPlaySongsDetails } from "../../Api/PlayListDetails";
+import { onClickPlayCurrent } from "../../minxins/audio";
+import { Toast } from "vant";
 
 interface Tabs {
 	title: string;
@@ -45,22 +48,27 @@ getAlbum(res => (tabs[2].cache = res.albums.slice(0, nums)));
 
 const getImageSrc = (item: any, title: string) => {
 	let src;
-	switch (title) {
-		case "新歌":
-			src = item.album.picUrl;
-			break;
-		case "新碟":
-			src = item.picUrl;
-			break;
-		case "专辑":
-			src = item.picUrl;
-			break;
+
+	if (title === "新歌") {
+		src = item.album.picUrl;
+	} else if (title === "新碟" || title === "专辑") {
+		src = item.picUrl;
 	}
 
 	return getAcquire(src);
 };
 
 const getAvatarTxt = (item: any) => item.artists.map((item: any) => item.name).join("/");
+
+const onClick = (item: any) => {
+	getPlaySongsDetails([{ id: item.id }], res => {
+		if (res.code == 200 && res.songs.length > 0) {
+			onClickPlayCurrent(res.songs[0]);
+		} else {
+			Toast.fail(`获取歌曲连接失败`);
+		}
+	});
+};
 
 watchEffect(() => {
 	const arr = tabs.filter(el => el.title === active.value)[0];
@@ -70,7 +78,7 @@ watchEffect(() => {
 });
 </script>
 <template>
-	<ListModules :isShow="tabs[0].value.length > 0">
+	<ListModules :isShow="tabs[0].value.length > 0" :isButton="false">
 		<template #hread>
 			<div class="tabs-name">
 				<div
@@ -86,16 +94,24 @@ watchEffect(() => {
 
 		<div class="tabs-content">
 			<div class="tabs-content-item" v-for="item in tabs" v-show="item.title === active">
-				<van-swipe :show-indicators="false" v-if="item.value.length > 0" :loop="false">
+				<van-swipe :show-indicators="false" :loop="false">
 					<van-swipe-item v-for="index in 3">
-						<van-cell v-for="value in subArr(item.value, index, 3)" :border="false" center>
+						<van-cell
+							clickable
+							v-for="value in subArr(item.value, index, 3)"
+							:border="false"
+							center
+							@click="onClick(value)"
+						>
 							<template #icon>
-								<van-image
-									:src="getImageSrc(value, item.title)"
-									width="1.5rem"
-									radius="0.2rem"
-									height="1.5rem"
-								></van-image>
+								<div class="Image">
+									<van-image
+										:src="getImageSrc(value, item.title)"
+										width="1.5rem"
+										radius="0.2rem"
+										height="1.5rem"
+									></van-image>
+								</div>
 							</template>
 
 							<template #title>
@@ -131,6 +147,18 @@ watchEffect(() => {
 			color: var(--font-main-color);
 		}
 	}
+
+	.Image {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+}
+.tabs-content {
+	margin-top: 20px;
+}
+
+::v-deep(.van-cell) {
+	border-radius: 0.2rem;
 }
 
 .tabs-cell-title {
