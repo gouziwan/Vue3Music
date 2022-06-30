@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { Popup } from "vant";
+import { Popup, Toast } from "vant";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
 import { isObject } from "../utils";
@@ -9,25 +11,54 @@ const audio = audioStore();
 
 const p = useStore();
 
+const router = useRouter();
+
 const h = window.innerHeight + "px";
 
 const onClickShow = () => p.revieseAudiosContent(false);
 
-const getCurrentImage = computed(() => {
-	return isObject(audio.currentAudios) && isObject(audio.currentAudios.al)
-		? audio.currentAudios.al.picUrl
-		: "";
-});
-
 const contentStyle = computed(() => {
 	return {
-		backgroundImage: `url(${getCurrentImage.value})`,
+		backgroundImage: `url(${audio.getAudiosImage})`,
 		height: h
 	};
 });
 
 const getSongsName = computed(() => {
 	return isObject(audio.currentAudios) ? audio.currentAudios.name : "";
+});
+
+// icon ->
+const isLoog = computed(() => {
+	return audio.isLoopPlay ? "dogliebiaoxunhuan" : "dogdanquxunhuan";
+});
+
+// 切换播放模式
+const onClickSwiperModel = () => {
+	audio.isLoopPlay = !audio.isLoopPlay;
+
+	Toast(audio.isLoopPlay ? "歌单循环" : "单曲播放");
+};
+
+// 跳转到评论
+const onClickToComments = () => {
+	p.revieseAudiosContent(false);
+	router.push({
+		name: "Comments",
+		state: {
+			[commentsPara.id]: audio.currentAudios.id,
+			[commentsPara.type]: "歌曲"
+		}
+	});
+};
+
+// 点击显示歌单列表
+const onClickShowSongs = () => {
+	p.reviseSongs(true);
+};
+
+const playIcon = computed(() => {
+	return audio.playState ? "dogbofang" : "dogbofang1";
 });
 </script>
 <template>
@@ -49,7 +80,12 @@ const getSongsName = computed(() => {
 					</div>
 					<div class="audios-button">
 						<van-icon name="like-o" size="0.5rem" />
-						<van-icon name="dogpinglun" class-prefix="dog" size="0.5rem" />
+						<van-icon
+							name="dogpinglun"
+							class-prefix="dog"
+							size="0.5rem"
+							@click="onClickToComments"
+						/>
 						<van-icon name="doggengduo" class-prefix="dog" size="0.5rem" />
 					</div>
 				</div>
@@ -66,11 +102,11 @@ const getSongsName = computed(() => {
 					<div class="right-text">0:00</div>
 				</div>
 				<div class="audios-button">
-					<van-icon name="dogdanquxunhuan" class-prefix="dog" size="0.7rem" />
+					<van-icon :name="isLoog" class-prefix="dog" size="0.7rem" @click="onClickSwiperModel" />
 					<van-icon name="dogshangyishou" class-prefix="dog" size="0.7rem" />
-					<van-icon name="dogbofang" class-prefix="dog" size="1rem" />
+					<van-icon :name="playIcon" class-prefix="dog" size="1rem" @click="audio.playCut" />
 					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" />
-					<van-icon name="dogliebiao" class-prefix="dog" size="0.7rem" />
+					<van-icon name="dogliebiao" class-prefix="dog" size="0.7rem" @click="onClickShowSongs" />
 				</div>
 			</div>
 			<div class="back"></div>
