@@ -90,10 +90,11 @@ const onTouchmove = (e: TouchEvent) => {
 		}
 		image.value!.style.left = x + "px";
 		back.value!.style.width = x + iw / 2 + "px";
+		audio.conversionTiem(offsetX(t.pageX));
 	});
 };
 
-const onTouchend = (e: Event) => {
+const onTouchend = (e: TouchEvent) => {
 	e.preventDefault();
 };
 
@@ -120,6 +121,15 @@ const sliderStyle = computed(() => {
 });
 
 const date = new Day();
+
+const onClickToLocation = (e: MouseEvent) => {
+	audio.conversionTiem(offsetX(e.pageX));
+};
+
+const offsetX = (x: number) => {
+	const { left } = t.value!.getBoundingClientRect();
+	return (x - left) / t.value!.offsetWidth;
+};
 </script>
 <template>
 	<Popup v-model:show="p.audiosContent" position="bottom">
@@ -154,7 +164,7 @@ const date = new Day();
 			<div class="audios-default-button">
 				<div class="audios-progressbar-content">
 					<div class="lett-text">{{ date.conversionTiem(audio.currentTiem) }}</div>
-					<div class="progressbar">
+					<div class="progressbar" @click="onClickToLocation">
 						<div class="progressbar-t" ref="t"></div>
 						<div class="progressbar-back" ref="back" :style="backStyle"></div>
 						<img
@@ -171,9 +181,14 @@ const date = new Day();
 				</div>
 				<div class="audios-button">
 					<van-icon :name="isLoog" class-prefix="dog" size="0.7rem" @click="onClickSwiperModel" />
-					<van-icon name="dogshangyishou" class-prefix="dog" size="0.7rem" />
+					<van-icon
+						name="dogshangyishou"
+						class-prefix="dog"
+						size="0.7rem"
+						@click="audio.previousSongs"
+					/>
 					<van-icon :name="playIcon" class-prefix="dog" size="1rem" @click="audio.playCut" />
-					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" />
+					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" @click="audio.nextSongs" />
 					<van-icon name="dogliebiao" class-prefix="dog" size="0.7rem" @click="onClickShowSongs" />
 				</div>
 			</div>

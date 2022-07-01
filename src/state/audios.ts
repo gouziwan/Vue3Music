@@ -32,7 +32,12 @@ export const audioStore = defineStore("audios", {
 		//set 当前播放的对象数据
 		setCurrentAudios() {
 			if (this.playList.length <= 0) return;
-			const currentIndex = this.currentIndex >= this.playList.length ? 0 : this.currentIndex;
+			const currentIndex =
+				this.currentIndex >= this.playList.length
+					? 0
+					: this.currentIndex < 0
+					? this.playList.length - 1
+					: this.currentIndex;
 			// 当前的数据取出来
 			this.currentAudios = this.playList[currentIndex];
 			//这里主要是做一个 如果是循环播放的话 就 等于当前的 currentIndex就好
@@ -219,6 +224,26 @@ export const audioStore = defineStore("audios", {
 			this.currentIndex = 0;
 			this.duration = 0;
 			this.currentTiem = 0;
+		},
+		// 下一首歌曲
+		nextSongs() {
+			this.pause();
+			this.setCurrentAudios();
+			this.currentTiem = 0;
+			this.duration = 0;
+		},
+		// 上一首Previous
+		previousSongs() {
+			this.pause();
+			this.currentIndex -= 2;
+			this.setCurrentAudios();
+			this.currentTiem = 0;
+			this.duration = 0;
+		},
+		// 转换 当前的比例
+		conversionTiem(nums: number) {
+			this.currentTiem = nums * this.duration;
+			this.audio.currentTime = this.currentTiem;
 		}
 	},
 	getters: {
