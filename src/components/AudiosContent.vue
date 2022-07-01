@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { Popup, Toast } from "vant";
-import { computed } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
 import { isObject } from "../utils";
+import Day from "../utils/Date";
 
 const audio = audioStore();
 
@@ -16,6 +17,8 @@ const router = useRouter();
 const h = window.innerHeight + "px";
 
 const onClickShow = () => p.revieseAudiosContent(false);
+
+let onInvalidates = undefined;
 
 const contentStyle = computed(() => {
 	return {
@@ -28,7 +31,6 @@ const getSongsName = computed(() => {
 	return isObject(audio.currentAudios) ? audio.currentAudios.name : "";
 });
 
-// icon ->
 const isLoog = computed(() => {
 	return audio.isLoopPlay ? "dogliebiaoxunhuan" : "dogdanquxunhuan";
 });
@@ -36,7 +38,6 @@ const isLoog = computed(() => {
 // 切换播放模式
 const onClickSwiperModel = () => {
 	audio.isLoopPlay = !audio.isLoopPlay;
-
 	Toast(audio.isLoopPlay ? "歌单循环" : "单曲播放");
 };
 
@@ -60,6 +61,65 @@ const onClickShowSongs = () => {
 const playIcon = computed(() => {
 	return audio.playState ? "dogbofang" : "dogbofang1";
 });
+
+//  他可以激活
+const image = ref<HTMLDivElement>();
+
+const back = ref<HTMLDListElement>();
+
+const t = ref<HTMLDivElement>();
+
+const onTouchstart = (e: Event) => {
+	e.preventDefault();
+};
+
+const onTouchmove = (e: TouchEvent) => {
+	e.preventDefault();
+	requestAnimationFrame(() => {
+		const { targetTouches } = e;
+		const t = targetTouches[0];
+		const parentNode = image.value!.parentNode as HTMLDivElement;
+		const left = parentNode.getBoundingClientRect().left;
+		const w = parentNode.offsetWidth;
+		const iw = image.value!.offsetWidth;
+		let x = t.clientX - (left + iw);
+		if (x < -iw / 2) {
+			x = -iw / 2;
+		} else if (x > w - iw / 2) {
+			x = w - iw / 2;
+		}
+		image.value!.style.left = x + "px";
+		back.value!.style.width = x + iw / 2 + "px";
+	});
+};
+
+const onTouchend = (e: Event) => {
+	e.preventDefault();
+};
+
+// 计算当前播放的位置进度条
+const getCurrentX = computed(() => {
+	let width = isObject(t.value) ? t.value!.offsetWidth : 0;
+
+	let wi = (audio.currentTiem / audio.duration) * width;
+
+	return wi > width ? width : wi;
+});
+
+const backStyle = computed(() => {
+	return {
+		width: getCurrentX.value! + "px"
+	};
+});
+
+const sliderStyle = computed(() => {
+	const wi = isObject(image.value) ? image.value!.offsetWidth / 2 : 0;
+	return {
+		left: getCurrentX.value - wi + "px"
+	};
+});
+
+const date = new Day();
 </script>
 <template>
 	<Popup v-model:show="p.audiosContent" position="bottom">
@@ -93,13 +153,21 @@ const playIcon = computed(() => {
 
 			<div class="audios-default-button">
 				<div class="audios-progressbar-content">
-					<div class="lett-text">0:00</div>
+					<div class="lett-text">{{ date.conversionTiem(audio.currentTiem) }}</div>
 					<div class="progressbar">
-						<div class="progressbar-t"></div>
-						<div class="progressbar-back"></div>
-						<img src="../assets/dog.png" class="dog-icon" />
+						<div class="progressbar-t" ref="t"></div>
+						<div class="progressbar-back" ref="back" :style="backStyle"></div>
+						<img
+							src="../assets/dog.png"
+							class="dog-icon"
+							@touchstart="onTouchstart"
+							@touchmove="onTouchmove"
+							@touchend="onTouchend"
+							ref="image"
+							:style="sliderStyle"
+						/>
 					</div>
-					<div class="right-text">0:00</div>
+					<div class="right-text">{{ date.conversionTiem(audio.duration) }}</div>
 				</div>
 				<div class="audios-button">
 					<van-icon :name="isLoog" class-prefix="dog" size="0.7rem" @click="onClickSwiperModel" />
@@ -130,9 +198,9 @@ const playIcon = computed(() => {
 	box-sizing: content-box;
 	background-size: cover;
 	background-position: center;
-
 	position: relative;
 	z-index: 1;
+
 	&::after {
 		content: "";
 		width: 100%;
@@ -210,7 +278,7 @@ const playIcon = computed(() => {
 				@extend .progressbar-t;
 				position: absolute;
 				top: 0;
-				width: 30px;
+				width: 0px;
 				background-color: yellow;
 			}
 
@@ -219,7 +287,7 @@ const playIcon = computed(() => {
 				height: 30px;
 				position: absolute;
 				top: -10px;
-				left: 0;
+				left: -15px;
 			}
 		}
 	}

@@ -37,6 +37,13 @@ class Day {
 		};
 		return formatArr.map(k => data[k as keyof typeof data].call(this)).join(join);
 	}
+
+	// 把当前的number 转化为 -> 0:00格式
+	conversionTiem(n: number) {
+		let r = Math.floor(n / 60);
+		let t = parseInt(n - r * 60 + "");
+		return `${r}:${t * 1 < 10 ? "0" + t : t}`;
+	}
 }
 
 export default Day;
