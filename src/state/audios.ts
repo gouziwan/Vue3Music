@@ -21,7 +21,8 @@ export const audioStore = defineStore("audios", {
 			url: null,
 			nums: 0,
 			// 是否循环播放
-			isLoopPlay: true
+			isLoopPlay: true,
+			img: ""
 		};
 	},
 	actions: {
@@ -44,6 +45,8 @@ export const audioStore = defineStore("audios", {
 			this.currentIndex = this.isLoopPlay === false ? currentIndex : currentIndex + 1;
 			// 获取当前歌曲的url 连接
 			const uid = this.currentAudios.id;
+			// 图片
+			this.img = this.currentAudios.al.picUrl;
 			// 可能有的是缓存的有的不必要在重新请求过
 			if (isString(this.currentAudios.playUrl)) {
 				this.url = this.currentAudios.playUrl;
@@ -142,7 +145,6 @@ export const audioStore = defineStore("audios", {
 				// ios ->需要重载视频才能执行 canplaythrough事件
 				this.audio.load();
 				this.audio.oncanplay = () => {
-					console.log(1);
 					callback();
 					this.audio.oncanplay = null;
 				};
@@ -231,6 +233,7 @@ export const audioStore = defineStore("audios", {
 			this.setCurrentAudios();
 			this.currentTiem = 0;
 			this.duration = 0;
+			this.currentAudios = null;
 		},
 		// 上一首Previous
 		previousSongs() {
@@ -239,6 +242,7 @@ export const audioStore = defineStore("audios", {
 			this.setCurrentAudios();
 			this.currentTiem = 0;
 			this.duration = 0;
+			this.currentAudios = null;
 		},
 		// 转换 当前的比例
 		conversionTiem(nums: number) {

@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
-import { isObject } from "../utils";
+import { getAcquire, isObject } from "../utils";
 import Day from "../utils/Date";
 
 const audio = audioStore();
@@ -17,8 +17,6 @@ const router = useRouter();
 const h = window.innerHeight + "px";
 
 const onClickShow = () => p.revieseAudiosContent(false);
-
-let onInvalidates = undefined;
 
 const contentStyle = computed(() => {
 	return {
@@ -102,7 +100,7 @@ const onTouchend = (e: TouchEvent) => {
 const getCurrentX = computed(() => {
 	let width = isObject(t.value) ? t.value!.offsetWidth : 0;
 
-	let wi = (audio.currentTiem / audio.duration) * width;
+	let wi = Math.floor((audio.currentTiem / audio.duration) * width);
 
 	return wi > width ? width : wi;
 });
@@ -128,8 +126,37 @@ const onClickToLocation = (e: MouseEvent) => {
 
 const offsetX = (x: number) => {
 	const { left } = t.value!.getBoundingClientRect();
-	return (x - left) / t.value!.offsetWidth;
+	const v = (x - left) / t.value!.offsetWidth;
+	return v < 0 ? 0 : v;
 };
+
+// 关键帧动画id
+let id = 0;
+
+const record = ref<HTMLDivElement>();
+
+watchEffect(() => {
+	// 播放状态 打开状态
+	if (audio.playState && p.audiosContent) {
+		cancelAnimationFrame(id);
+		requestAnimationFrame(playRecordRoupi);
+	} else {
+		cancelAnimationFrame(id);
+	}
+});
+
+function playRecordRoupi() {
+	const tran = record.value!.style.transform;
+
+	if (tran === "") {
+		record.value!.style.transform = `rotate(0deg)`;
+	} else {
+		let nums = parseFloat(tran.replace(/[a-z\(\)]/g, ""));
+		record.value!.style.transform = `rotate(${nums + 0.3}deg)`;
+	}
+
+	return (id = requestAnimationFrame(playRecordRoupi));
+}
 </script>
 <template>
 	<Popup v-model:show="p.audiosContent" position="bottom">
@@ -144,8 +171,19 @@ const offsetX = (x: number) => {
 				<div class="audios-image">
 					<div class="audios-content-se">
 						<div class="image-ans">
-							<div class="image-background"></div>
-							<div class="img"></div>
+							<div class="recordBox" ref="record">
+								<!-- 黑色唱片部分 -->
+								<div class="recordBlack">
+									<div class="recorDIn">
+										<!-- 线条的颜色 -->
+										<div class="lines"></div>
+										<!-- 圆心 -->
+										<div class="cricle">
+											<van-image :src="getAcquire(audio.img, '300y300')" round />
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="audios-button">
@@ -253,9 +291,40 @@ const offsetX = (x: number) => {
 			justify-content: center;
 			.image-ans {
 				border-radius: 50%;
-				border: solid 1px red;
+				// border: solid 1px red;
 				width: 500px;
 				height: 500px;
+
+				.recordBlack {
+					position: relative;
+					.lines {
+						width: 450px;
+						height: 450px;
+						background: repeating-radial-gradient(black, black 10px, #1c1c1c 15px);
+						border-radius: 50%;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+					}
+					background-color: black;
+					width: 500px;
+					height: 500px;
+					border-radius: 50%;
+
+					.cricle {
+						width: 300px;
+						height: 300px;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						::v-deep(.van-image) {
+							width: 100%;
+							height: 100%;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -277,8 +346,13 @@ const offsetX = (x: number) => {
 	.audios-progressbar-content {
 		display: flex;
 		align-items: center;
+
+		.lett-text {
+			width: 50px;
+		}
+
 		.progressbar {
-			width: 100%;
+			width: 200px;
 			flex: 1;
 			margin: 0 20px;
 			position: relative;
