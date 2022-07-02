@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Popup, Toast } from "vant";
+import { Popup, Toast, Swipe, SwipeItem, SwipeInstance } from "vant";
 import { computed, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
@@ -17,6 +17,13 @@ const router = useRouter();
 const h = window.innerHeight + "px";
 
 const onClickShow = () => p.revieseAudiosContent(false);
+
+const swipe = ref<SwipeInstance>();
+
+// 歌词状态
+const isLyric = ref(false);
+
+let currentIndex = 0;
 
 const contentStyle = computed(() => {
 	return {
@@ -135,27 +142,67 @@ let id = 0;
 
 const record = ref<HTMLDivElement>();
 
-watchEffect(() => {
-	// 播放状态 打开状态
-	if (audio.playState && p.audiosContent) {
-		cancelAnimationFrame(id);
-		requestAnimationFrame(playRecordRoupi);
-	} else {
-		cancelAnimationFrame(id);
+// 点击下一首
+const onClickNext = () => {
+	swipe.value?.next();
+};
+
+// 点击上一首
+const previousNext = () => {
+	swipe.value?.prev();
+};
+
+// watchEffect(() => {
+// 	// 播放状态 打开状态
+// 	if (audio.playState && p.audiosContent) {
+// 		cancelAnimationFrame(id);
+// 		requestAnimationFrame(playRecordRoupi);
+// 	} else {
+// 		cancelAnimationFrame(id);
+// 	}
+// });
+
+// function playRecordRoupi() {
+// 	const tran = record.value!.style.transform;
+
+// 	if (tran === "") {
+// 		record.value!.style.transform = `rotate(0deg)`;
+// 	} else {
+// 		let nums = parseFloat(tran.replace(/[a-z\(\)]/g, ""));
+// 		record.value!.style.transform = `rotate(${nums + 0.3}deg)`;
+// 	}
+
+// 	return (id = requestAnimationFrame(playRecordRoupi));
+// }
+
+function onChange(index: number) {
+	// 如果当前的 index 小于  index
+	if (currentIndex + 1 == index || (currentIndex == 2 && index == 0)) {
+		audio.nextSongs();
+	} else if (currentIndex - 1 == index || (currentIndex == 0 && index == 2)) {
+		audio.previousSongs();
 	}
-});
+	currentIndex = index;
+}
 
-function playRecordRoupi() {
-	const tran = record.value!.style.transform;
+function getCurrentShowImage(index: number) {
+	index -= 1;
 
-	if (tran === "") {
-		record.value!.style.transform = `rotate(0deg)`;
-	} else {
-		let nums = parseFloat(tran.replace(/[a-z\(\)]/g, ""));
-		record.value!.style.transform = `rotate(${nums + 0.3}deg)`;
-	}
+	let y = "300y300";
 
-	return (id = requestAnimationFrame(playRecordRoupi));
+	if (currentIndex === index) return getAcquire(audio.img, y);
+
+	// 上一首 0 -> 假如当前 currentIndex == 0 那上一首 就是 currentIndex == 2;
+
+	let previous = currentIndex - 1 < 0 ? 2 : currentIndex - 1;
+
+	if (previous === index)
+		// 上一首获取当前的 audio.currentIndex 肯定是 当前播放 的下一首索引 索引我们需要 把他 -2 才能获取上一首
+		return getAcquire(audio.getPreviousAudios, y);
+
+	let next = currentIndex + 1 > 2 ? 0 : currentIndex + 1;
+
+	if (next === index) return getAcquire(audio.nextAudios, y);
 }
 </script>
 <template>
@@ -170,21 +217,25 @@ function playRecordRoupi() {
 			<div class="content">
 				<div class="audios-image">
 					<div class="audios-content-se">
-						<div class="image-ans">
-							<div class="recordBox" ref="record">
-								<!-- 黑色唱片部分 -->
-								<div class="recordBlack">
-									<div class="recorDIn">
-										<!-- 线条的颜色 -->
-										<div class="lines"></div>
-										<!-- 圆心 -->
-										<div class="cricle">
-											<van-image :src="getAcquire(audio.img, '300y300')" round />
+						<Swipe :show-indicators="false" @change="onChange" ref="swipe">
+							<SwipeItem v-for="item in 3">
+								<div class="image-ans">
+									<div class="recordBox" ref="record">
+										<!-- 黑色唱片部分 -->
+										<div class="recordBlack">
+											<div class="recorDIn">
+												<!-- 线条的颜色 -->
+												<div class="lines"></div>
+												<!-- 圆心 -->
+												<div class="cricle">
+													<van-image :src="getCurrentShowImage(item)" round />
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
+							</SwipeItem>
+						</Swipe>
 					</div>
 					<div class="audios-button">
 						<van-icon name="like-o" size="0.5rem" />
@@ -219,14 +270,9 @@ function playRecordRoupi() {
 				</div>
 				<div class="audios-button">
 					<van-icon :name="isLoog" class-prefix="dog" size="0.7rem" @click="onClickSwiperModel" />
-					<van-icon
-						name="dogshangyishou"
-						class-prefix="dog"
-						size="0.7rem"
-						@click="audio.previousSongs"
-					/>
+					<van-icon name="dogshangyishou" class-prefix="dog" size="0.7rem" @click="previousNext" />
 					<van-icon :name="playIcon" class-prefix="dog" size="1rem" @click="audio.playCut" />
-					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" @click="audio.nextSongs" />
+					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" @click="onClickNext" />
 					<van-icon name="dogliebiao" class-prefix="dog" size="0.7rem" @click="onClickShowSongs" />
 				</div>
 			</div>
@@ -289,6 +335,11 @@ function playRecordRoupi() {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			::v-deep(.van-swipe-item) {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 			.image-ans {
 				border-radius: 50%;
 				// border: solid 1px red;

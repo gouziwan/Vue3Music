@@ -48,6 +48,7 @@ export const audioStore = defineStore("audios", {
 			// 图片
 			this.img = this.currentAudios.al.picUrl;
 			// 可能有的是缓存的有的不必要在重新请求过
+
 			if (isString(this.currentAudios.playUrl)) {
 				this.url = this.currentAudios.playUrl;
 				this.onCanplay(this.switchPlay);
@@ -71,6 +72,8 @@ export const audioStore = defineStore("audios", {
 		},
 
 		setCurrentAudiosInfo(res: any) {
+			// console.log(this.currentAudios);
+
 			this.currentAudios.playUrl = res[0].url;
 			this.url = res[0].url;
 		},
@@ -230,19 +233,19 @@ export const audioStore = defineStore("audios", {
 		// 下一首歌曲
 		nextSongs() {
 			this.pause();
+			this.currentAudios = null;
 			this.setCurrentAudios();
 			this.currentTiem = 0;
 			this.duration = 0;
-			this.currentAudios = null;
 		},
 		// 上一首Previous
 		previousSongs() {
 			this.pause();
 			this.currentIndex -= 2;
+			this.currentAudios = null;
 			this.setCurrentAudios();
 			this.currentTiem = 0;
 			this.duration = 0;
-			this.currentAudios = null;
 		},
 		// 转换 当前的比例
 		conversionTiem(nums: number) {
@@ -261,6 +264,34 @@ export const audioStore = defineStore("audios", {
 
 		getAudiosTitle(state) {
 			return isObject(state.currentAudios) ? state.currentAudios.name : "";
+		},
+
+		getPreviousAudios(state) {
+			if (state.playList.length <= 0) return "";
+
+			// 上一首
+			const index =
+				state.playList.length > 2 && state.currentIndex - 2 >= 0
+					? state.currentIndex - 2
+					: state.playList.length === 2
+					? 2 - state.currentIndex
+					: state.playList.length === 0
+					? 0
+					: state.playList.length - state.currentIndex;
+			return state.playList[index].al.picUrl;
+		},
+
+		// // 下一首
+		nextAudios(state) {
+			if (state.playList.length <= 0) return "";
+			const currentIndex =
+				state.currentIndex >= state.playList.length
+					? 0
+					: state.currentIndex < 0
+					? state.playList.length - 1
+					: state.currentIndex;
+
+			return state.playList[currentIndex].al.picUrl;
 		}
 	}
 });
