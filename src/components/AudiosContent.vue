@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { Popup, Toast, Swipe, SwipeItem, SwipeInstance } from "vant";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
-import { getAcquire, isObject } from "../utils";
+import { getAcquire, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
 
 const audio = audioStore();
@@ -23,7 +23,7 @@ const swipe = ref<SwipeInstance>();
 // 歌词状态
 const isLyric = ref(false);
 
-let currentIndex = 0;
+let currentIndex = ref(0);
 
 const contentStyle = computed(() => {
 	return {
@@ -140,7 +140,7 @@ const offsetX = (x: number) => {
 // 关键帧动画id
 let id = 0;
 
-const record = ref<HTMLDivElement>();
+const record = ref<HTMLDivElement[]>();
 
 // 点击下一首
 const onClickNext = () => {
@@ -152,57 +152,63 @@ const previousNext = () => {
 	swipe.value?.prev();
 };
 
-// watchEffect(() => {
-// 	// 播放状态 打开状态
-// 	if (audio.playState && p.audiosContent) {
-// 		cancelAnimationFrame(id);
-// 		requestAnimationFrame(playRecordRoupi);
-// 	} else {
-// 		cancelAnimationFrame(id);
+// audio.audio.addEventListener("ended", function () {
+// 	if (p.audiosContent) {
+// 		// 歌曲播放万博
+// 		swipe.value?.next();
+// 		currentIndex.value = ++currentIndex.value > 2 ? 0 : currentIndex.value;
 // 	}
 // });
 
-// function playRecordRoupi() {
-// 	const tran = record.value!.style.transform;
+watchEffect(() => {
+	cancelAnimationFrame(id);
+	if (audio.playState && p.audiosContent) {
+		requestAnimationFrame(playRecordRoupi);
+	}
+});
 
-// 	if (tran === "") {
-// 		record.value!.style.transform = `rotate(0deg)`;
-// 	} else {
-// 		let nums = parseFloat(tran.replace(/[a-z\(\)]/g, ""));
-// 		record.value!.style.transform = `rotate(${nums + 0.3}deg)`;
-// 	}
-
-// 	return (id = requestAnimationFrame(playRecordRoupi));
-// }
+function playRecordRoupi() {
+	if (!isArray(record.value)) return;
+	const node = record.value![currentIndex.value];
+	const value = node.style.transform;
+	if (value === "") {
+		node.style.transform = `rotate(0deg)`;
+	} else {
+		let nums = parseFloat(value.replace(/[a-z\(\)]/g, ""));
+		node.style.transform = `rotate(${nums + 0.1}deg)`;
+	}
+	return (id = requestAnimationFrame(playRecordRoupi));
+}
 
 function onChange(index: number) {
+	if (currentIndex.value === index) return;
 	// 如果当前的 index 小于  index
-	if (currentIndex + 1 == index || (currentIndex == 2 && index == 0)) {
+	if (currentIndex.value + 1 == index || (currentIndex.value == 2 && index == 0)) {
 		audio.nextSongs();
-	} else if (currentIndex - 1 == index || (currentIndex == 0 && index == 2)) {
+	} else if (currentIndex.value - 1 == index || (currentIndex.value == 0 && index == 2)) {
 		audio.previousSongs();
 	}
-	currentIndex = index;
+	currentIndex.value = index;
+	resetNodeStyle();
 }
 
 function getCurrentShowImage(index: number) {
 	index -= 1;
-
 	let y = "300y300";
-
-	if (currentIndex === index) return getAcquire(audio.img, y);
-
-	// 上一首 0 -> 假如当前 currentIndex == 0 那上一首 就是 currentIndex == 2;
-
-	let previous = currentIndex - 1 < 0 ? 2 : currentIndex - 1;
+	if (currentIndex.value === index) return getAcquire(audio.img, y);
+	// 上一首 0 -> 假如当前 currentIndex.value == 0 那上一首 就是 currentIndex.value == 2;
+	let previous = currentIndex.value - 1 < 0 ? 2 : currentIndex.value - 1;
 
 	if (previous === index)
-		// 上一首获取当前的 audio.currentIndex 肯定是 当前播放 的下一首索引 索引我们需要 把他 -2 才能获取上一首
+		// 上一首获取当前的 audio.currentIndex.value 肯定是 当前播放 的下一首索引 索引我们需要 把他 -2 才能获取上一首
 		return getAcquire(audio.getPreviousAudios, y);
-
-	let next = currentIndex + 1 > 2 ? 0 : currentIndex + 1;
-
+	let next = currentIndex.value + 1 > 2 ? 0 : currentIndex.value + 1;
 	if (next === index) return getAcquire(audio.nextAudios, y);
+}
+
+function resetNodeStyle() {
+	if (!isArray(record.value)) return;
+	record.value?.forEach(el => (el.style.transform = "rotate(0deg)"));
 }
 </script>
 <template>

@@ -66,14 +66,25 @@ export const audioStore = defineStore("audios", {
 							// 重试次数
 							this.nums++;
 						}
+					} else {
+						this.errorPlay();
 					}
 				});
 			}
 		},
 
+		errorPlay() {
+			this.currentAudios = null;
+			this.img = "";
+			this.currentTiem = 0;
+			this.duration = 0;
+			this.pause();
+			this.url = null;
+			this.onEvent();
+		},
+
 		setCurrentAudiosInfo(res: any) {
 			// console.log(this.currentAudios);
-
 			this.currentAudios.playUrl = res[0].url;
 			this.url = res[0].url;
 		},
