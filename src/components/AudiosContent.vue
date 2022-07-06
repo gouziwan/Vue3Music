@@ -7,6 +7,7 @@ import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
 import { getAcquire, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
+import Lyric from "./Lyric.vue";
 
 const audio = audioStore();
 
@@ -21,7 +22,7 @@ const onClickShow = () => p.revieseAudiosContent(false);
 const swipe = ref<SwipeInstance>();
 
 // 歌词状态
-const isLyric = ref(false);
+const lyricModule = ref(true);
 
 let currentIndex = ref(0);
 
@@ -152,20 +153,22 @@ const previousNext = () => {
 	swipe.value?.prev();
 };
 
-// audio.audio.addEventListener("ended", function () {
-// 	if (p.audiosContent) {
-// 		// 歌曲播放万博
-// 		swipe.value?.next();
-// 		currentIndex.value = ++currentIndex.value > 2 ? 0 : currentIndex.value;
-// 	}
-// });
-
 watchEffect(() => {
 	cancelAnimationFrame(id);
 	if (audio.playState && p.audiosContent) {
 		requestAnimationFrame(playRecordRoupi);
 	}
 });
+
+audio.endedCallback(onEend);
+
+function onEend() {
+	// 他为true 循环歌单
+	if (audio.isLoopPlay && p.audiosContent && lyricModule.value) {
+		currentIndex.value = currentIndex.value + 1 > 2 ? 0 : ++currentIndex.value;
+		onClickNext();
+	}
+}
 
 function playRecordRoupi() {
 	if (!isArray(record.value)) return;
@@ -210,6 +213,10 @@ function resetNodeStyle() {
 	if (!isArray(record.value)) return;
 	record.value?.forEach(el => (el.style.transform = "rotate(0deg)"));
 }
+
+function onSwiperLyric() {
+	lyricModule.value = !lyricModule.value;
+}
 </script>
 <template>
 	<Popup v-model:show="p.audiosContent" position="bottom">
@@ -221,8 +228,8 @@ function resetNodeStyle() {
 				</template>
 			</van-nav-bar>
 			<div class="content">
-				<div class="audios-image">
-					<div class="audios-content-se">
+				<div class="audios-image" v-show="lyricModule">
+					<div class="audios-content-se" @click="onSwiperLyric">
 						<Swipe :show-indicators="false" @change="onChange" ref="swipe">
 							<SwipeItem v-for="item in 3">
 								<div class="image-ans">
@@ -254,6 +261,8 @@ function resetNodeStyle() {
 						<van-icon name="doggengduo" class-prefix="dog" size="0.5rem" />
 					</div>
 				</div>
+
+				<Lyric :show="!lyricModule" @click="onSwiperLyric" />
 			</div>
 
 			<div class="audios-default-button">
@@ -324,6 +333,7 @@ function resetNodeStyle() {
 	position: relative;
 	z-index: 11;
 	flex: 1;
+	height: 300px;
 	padding: 0 30px;
 	.audios-image {
 		height: 100%;

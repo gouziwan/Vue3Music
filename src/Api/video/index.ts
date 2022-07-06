@@ -76,3 +76,8 @@ export const giveALike = (
 	type = GiveResources[type];
 	return request(`/resource/like?t=${t}&type=${type}&id=${id}&cookie=${cookie}`, callback);
 };
+
+// 获取视频播放地址
+export const getVideoUrl = (id: any, callback: RequestCallBack) => {
+	return request(`/video/url?id=${id}`, callback);
+};

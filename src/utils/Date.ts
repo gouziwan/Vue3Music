@@ -44,6 +44,12 @@ class Day {
 		let t = parseInt(n - r * 60 + "");
 		return `${r}:${t * 1 < 10 ? "0" + t : t}`;
 	}
+
+	// 把 0:00 -> 转换为 100这种格式
+	static geleTiem(tiem: string) {
+		let [points, seconds] = tiem.split(":");
+		return parseInt(points, 10) * 60 + parseFloat(seconds);
+	}
 }
 
 export default Day;

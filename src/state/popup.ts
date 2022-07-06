@@ -9,7 +9,9 @@ export const useStore = defineStore("popup", {
 			// 歌单
 			songs: false,
 			//歌单详情页
-			audiosContent: false
+			audiosContent: false,
+			// 视频播放页面
+			videoContent: false
 		};
 	},
 	actions: {
@@ -26,6 +28,9 @@ export const useStore = defineStore("popup", {
 		},
 		revieseAudiosContent(state: boolean) {
 			this.audiosContent = state;
+		},
+		revieseVideoContent(state: boolean) {
+			this.videoContent = state;
 		}
 	}
 });

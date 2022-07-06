@@ -9,6 +9,7 @@ import { audioStore } from "./state/audios";
 import { onMounted } from "vue";
 import CurrentSongsList from "./components/CurrentSongsList.vue";
 import AudiosContent from "./components/AudiosContent.vue";
+import VideoContent from "./components/VideoContent.vue";
 
 // 用户刷新登录的
 const state = useStore();
@@ -58,6 +59,8 @@ onMounted(() => audio.setAudioNode(document.querySelector<HTMLAudioElement>("#au
 		<CurrentSongsList />
 		<!-- 歌曲详情展示页 -->
 		<AudiosContent />
+		<!-- 视频展示页 -->
+		<VideoContent />
 	</div>
 </template>
 

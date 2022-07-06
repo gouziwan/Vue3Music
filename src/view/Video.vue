@@ -10,10 +10,13 @@ import { useStore } from "../state/user";
 import { useStore as usePupop } from "../state/popup";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
+import { videoState } from "../state/video";
 
 const videoArr = ref<VideoClassifyType[]>([]);
 
 const active = ref(0);
+
+const v_state = videoState();
 
 const offsetTop = ref();
 
@@ -108,6 +111,11 @@ function toCommentsPage(value: any) {
 		}
 	});
 }
+
+function onClickToVideoPage(value: any) {
+	v_state.addVideo(value);
+	pup.revieseVideoContent(true);
+}
 </script>
 <template>
 	<div class="video">
@@ -130,7 +138,7 @@ function toCommentsPage(value: any) {
 							offset="100"
 						>
 							<div class="video-content-item" v-for="value in item.videoArr">
-								<div class="images">
+								<div class="images" @click="onClickToVideoPage(value)">
 									<van-image
 										:src="getAcquire(value.data.coverUrl, '500y500')"
 										width="100%"

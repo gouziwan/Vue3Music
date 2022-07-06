@@ -22,7 +22,8 @@ export const audioStore = defineStore("audios", {
 			nums: 0,
 			// 是否循环播放
 			isLoopPlay: true,
-			img: ""
+			img: "",
+			on: [] as Function[]
 		};
 	},
 	actions: {
@@ -40,6 +41,8 @@ export const audioStore = defineStore("audios", {
 					? this.playList.length - 1
 					: this.currentIndex;
 			// 当前的数据取出来
+
+			console.log(currentIndex);
 			this.currentAudios = this.playList[currentIndex];
 			//这里主要是做一个 如果是循环播放的话 就 等于当前的 currentIndex就好
 			this.currentIndex = this.isLoopPlay === false ? currentIndex : currentIndex + 1;
@@ -84,7 +87,6 @@ export const audioStore = defineStore("audios", {
 		},
 
 		setCurrentAudiosInfo(res: any) {
-			// console.log(this.currentAudios);
 			this.currentAudios.playUrl = res[0].url;
 			this.url = res[0].url;
 		},
@@ -150,8 +152,9 @@ export const audioStore = defineStore("audios", {
 		//视频播放结束后触发
 		onEnded() {
 			this.pause();
-			// 执行这个重新获取数据
-			this.setCurrentAudios();
+			this.on.forEach(_fn => _fn());
+			// // 执行这个重新获取数据
+			this.isLoopPlay == false ? this.loopPlay() : this.setCurrentAudios();
 		},
 
 		onCanplay(callback: Function) {
@@ -196,7 +199,7 @@ export const audioStore = defineStore("audios", {
 			if (!isObject(currentAudios)) return currentIndex;
 			for (let i = 0; i < this.playList.length; i++) {
 				const el = this.playList[i];
-				if (el.id === currentAudios.id) {
+				if (el.id == currentAudios.id) {
 					currentIndex = i;
 					break;
 				}
@@ -244,6 +247,10 @@ export const audioStore = defineStore("audios", {
 		// 下一首歌曲
 		nextSongs() {
 			this.pause();
+			let index = this.indexOf(this.currentAudios);
+			if (index == this.currentIndex) {
+				++this.currentIndex;
+			}
 			this.currentAudios = null;
 			this.setCurrentAudios();
 			this.currentTiem = 0;
@@ -252,7 +259,12 @@ export const audioStore = defineStore("audios", {
 		// 上一首Previous
 		previousSongs() {
 			this.pause();
-			this.currentIndex -= 2;
+			let index = this.indexOf(this.currentAudios);
+			if (index == this.currentIndex) {
+				--this.currentIndex;
+			} else {
+				this.currentIndex -= 2;
+			}
 			this.currentAudios = null;
 			this.setCurrentAudios();
 			this.currentTiem = 0;
@@ -262,6 +274,19 @@ export const audioStore = defineStore("audios", {
 		conversionTiem(nums: number) {
 			this.currentTiem = nums * this.duration;
 			this.audio.currentTime = this.currentTiem;
+		},
+		// 音频结束的回调
+		endedCallback(callback: Function) {
+			if (this.on.indexOf(callback) === -1) {
+				this.on.push(callback);
+			}
+		},
+		// 循环播放当前歌曲
+		loopPlay() {
+			this.pause();
+			this.currentTiem = 0;
+			this.audio.load();
+			this.play();
 		}
 	},
 	getters: {
