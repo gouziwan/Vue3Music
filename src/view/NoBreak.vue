@@ -43,14 +43,6 @@ const onClickShowCurrentSongsDetails = (item: any, e: Event) => {
 };
 
 const onClickLogin = () => popup.reviseShowLogin(true);
-
-// // 当前歌单列表
-// const onClickPlayCurrent = (songs: any) => {
-// 	audioState.addSongsSingle(songs);
-// };
-
-// 播放全部歌曲
-// const onClickAllPlay = () => audioState.addAllPlay(value.value);
 </script>
 <template>
 	<div class="no_break">

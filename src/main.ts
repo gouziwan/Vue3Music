@@ -10,13 +10,13 @@ import useComponent from "./use/index";
 import { banDoubleClick, upThemen } from "./utils";
 import { useLocalStorage } from "./utils/useLocalStorage";
 
-const storage = useLocalStorage();
-
 const app = createApp(App);
 
 const pinia = createPinia();
 
 app.use(useComponent).use(router).use(pinia);
+
+const storage = useLocalStorage();
 
 app.mount("#app");
 

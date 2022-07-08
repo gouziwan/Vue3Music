@@ -8,6 +8,9 @@ import { useStore } from "../state/popup";
 import { getAcquire, isArray, isObject } from "../utils";
 import Day from "../utils/Date";
 import Lyric from "./Lyric.vue";
+import SongListDetails from "./SongListDetails.vue";
+import { useStore as Store } from "../state/user";
+import UserSongsListVue from "./UserSongsList.vue";
 
 const audio = audioStore();
 
@@ -21,8 +24,14 @@ const onClickShow = () => p.revieseAudiosContent(false);
 
 const swipe = ref<SwipeInstance>();
 
+const userState = Store();
+
 // 歌词状态
 const lyricModule = ref(true);
+
+const songsShow = ref(false);
+
+const showe = ref(false);
 
 let currentIndex = ref(0);
 
@@ -62,6 +71,7 @@ const onClickToComments = () => {
 // 点击显示歌单列表
 const onClickShowSongs = () => {
 	p.reviseSongs(true);
+	songsShow.value = false;
 };
 
 const playIcon = computed(() => {
@@ -208,14 +218,23 @@ function getCurrentShowImage(index: number) {
 	let next = currentIndex.value + 1 > 2 ? 0 : currentIndex.value + 1;
 	if (next === index) return getAcquire(audio.nextAudios, y);
 }
-
 function resetNodeStyle() {
 	if (!isArray(record.value)) return;
 	record.value?.forEach(el => (el.style.transform = "rotate(0deg)"));
 }
-
 function onSwiperLyric() {
 	lyricModule.value = !lyricModule.value;
+}
+function onClickSongsDefault() {
+	songsShow.value = true;
+}
+// 收藏到歌单
+function onClickConllectionSongs() {
+	if (!userState.isExecLogin()) return;
+	Toast.fail(`收藏失败请重试`);
+	return;
+	// 这里接口收藏不了
+	// showe.value = true;
 }
 </script>
 <template>
@@ -251,14 +270,19 @@ function onSwiperLyric() {
 						</Swipe>
 					</div>
 					<div class="audios-button">
-						<van-icon name="like-o" size="0.5rem" />
+						<van-icon name="like-o" size="0.5rem" @click="onClickConllectionSongs" />
 						<van-icon
 							name="dogpinglun"
 							class-prefix="dog"
 							size="0.5rem"
 							@click="onClickToComments"
 						/>
-						<van-icon name="doggengduo" class-prefix="dog" size="0.5rem" />
+						<van-icon
+							name="doggengduo"
+							class-prefix="dog"
+							size="0.5rem"
+							@click="onClickSongsDefault"
+						/>
 					</div>
 				</div>
 
@@ -288,12 +312,20 @@ function onSwiperLyric() {
 					<van-icon name="dogshangyishou" class-prefix="dog" size="0.7rem" @click="previousNext" />
 					<van-icon :name="playIcon" class-prefix="dog" size="1rem" @click="audio.playCut" />
 					<van-icon name="dogxiayishou" class-prefix="dog" size="0.7rem" @click="onClickNext" />
-					<van-icon name="dogliebiao" class-prefix="dog" size="0.7rem" @click="onClickShowSongs" />
+					<van-icon
+						name="dogliebiao"
+						color="#fff"
+						class-prefix="dog"
+						size="0.7rem"
+						@click="onClickShowSongs"
+					/>
 				</div>
 			</div>
 			<div class="back"></div>
 		</div>
 	</Popup>
+	<SongListDetails v-model:show="songsShow" :item="audio.currentAudios" />
+	<UserSongsListVue v-model:show="showe" :tranckId="audio.currentAudios.id" />
 </template>
 
 <style lang="scss" scoped>
