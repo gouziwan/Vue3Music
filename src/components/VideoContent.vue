@@ -4,7 +4,6 @@ import { computed, ref, watch } from "vue";
 import { getVideoUrl } from "../Api/video";
 import { useStore } from "../state/popup";
 import { videoState } from "../state/video";
-import { isObject } from "../utils";
 import { Loading } from "vant";
 
 const p = useStore();
@@ -19,8 +18,6 @@ const videoNode = ref<HTMLVideoElement>();
 
 const urls = ref<any>({});
 
-const isLoading = ref(true);
-
 const getStyle = computed(() => {
 	return {
 		height: h + "px",
@@ -33,11 +30,27 @@ watch(
 	() => {
 		if (state.currentVideo) {
 			const { vid } = state.currentVideo.data;
+			// 先查缓存
+			const url = state.getCacheId(vid);
+			if (url) {
+				urls.value = url;
+				return;
+			}
 			getVideoUrl(vid, res => {
 				if (res.code == 200 && res.urls.length > 0) {
 					urls.value = res.urls[0];
+					state.cacheUrl(vid, urls.value);
 				}
 			});
+		}
+	}
+);
+
+watch(
+	() => p.videoContent,
+	() => {
+		if (p.videoContent == false) {
+			state.currentVideo = null;
 		}
 	}
 );
@@ -46,20 +59,6 @@ const onClickShow = () => {
 	p.revieseVideoContent(false);
 	videoNode.value!.pause();
 	urls.value = {};
-};
-
-const onLoadstart = () => (isLoading.value = true);
-
-const onWaiting = () => {
-	isLoading.value = true;
-};
-const onCanplay = () => {
-	isLoading.value = false;
-	videoNode.value?.play();
-};
-
-const onPlaying = () => {
-	isLoading.value = false;
 };
 </script>
 <template>
@@ -82,16 +81,9 @@ const onPlaying = () => {
 						x5-playsinline="true"
 						playsinline="true"
 						webkit-playsinline="true"
+						controls
 						type="video/mp4"
-						@canplay="onCanplay"
-						@loadstart="onLoadstart"
-						@waiting="onWaiting"
-						@playing="onPlaying"
 					></video>
-
-					<div class="video-icon" v-if="isLoading">
-						<Loading size="24px">加载中...</Loading>
-					</div>
 				</div>
 			</div>
 		</div>

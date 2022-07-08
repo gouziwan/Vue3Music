@@ -251,7 +251,7 @@ const playActive = computed(() => {});
 					</span>
 				</div>
 				<div class="details-right-button" @click="onClickToSharePage">
-					<van-icon name="dogpinglun" class-prefix="dog" size="0.4rem" color="#fff"></van-icon>
+					<van-icon name="dogpinglun" class-prefix="dog" size="0.4rem"></van-icon>
 					<span> 评论 </span>
 				</div>
 			</div>
@@ -353,6 +353,7 @@ const playActive = computed(() => {});
 		left: 50%;
 		transform: translateX(-50%);
 		bottom: -70px;
+		color: var(--font-main-color);
 		.details-left-button,
 		.details-right-button {
 			display: flex;
@@ -362,7 +363,6 @@ const playActive = computed(() => {});
 			border-top-left-radius: 100px;
 			border-bottom-left-radius: 100px;
 			span {
-				color: #fff;
 				font-size: 0.3rem;
 				margin-left: 10px;
 			}

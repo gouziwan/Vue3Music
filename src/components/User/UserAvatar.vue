@@ -70,9 +70,10 @@ const getClassName = computed(() => {
 			background-color: rgb(198, 255, 191);
 			position: relative;
 			overflow: hidden;
+			color: #fff;
 			.dog-dogwode-shixin_y_huaban {
 				position: absolute;
-				bottom: 0;
+				bottom: -10px;
 				left: 50%;
 				transform: translate(-50%, 10%);
 			}

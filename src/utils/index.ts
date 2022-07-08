@@ -115,3 +115,9 @@ export function getPlayCountText(count: number, suffix: string = "万"): string 
 
 	return value.toFixed(1) + suffix;
 }
+
+export function upThemen(storage: any) {
+	if (storage["themen"] == "block") {
+		document.body.className = `${storage["themen"]}-themen`;
+	}
+}

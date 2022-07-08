@@ -7,6 +7,8 @@ import Ellipsis from "../Ellipsis.vue";
 import { getPlaySongsDetails } from "../../Api/PlayListDetails";
 import { onClickPlayCurrent } from "../../minxins/audio";
 import { Toast } from "vant";
+import { useRouter } from "vue-router";
+import { keyw, songsId } from "../../config/routerFrom";
 
 interface Tabs {
 	title: string;
@@ -17,6 +19,8 @@ interface Tabs {
 const active = ref("新歌");
 
 const nums = 9;
+
+const router = useRouter();
 
 const tabs: Tabs[] = reactive([
 	{
@@ -60,14 +64,24 @@ const getImageSrc = (item: any, title: string) => {
 
 const getAvatarTxt = (item: any) => item.artists.map((item: any) => item.name).join("/");
 
-const onClick = (item: any) => {
-	getPlaySongsDetails([{ id: item.id }], res => {
-		if (res.code == 200 && res.songs.length > 0) {
-			onClickPlayCurrent(res.songs[0]);
-		} else {
-			Toast.fail(`获取歌曲连接失败`);
-		}
-	});
+const onClick = (item: any, title: string) => {
+	if (title == "专辑") {
+		router.push({
+			name: "PlayListDetails",
+			state: {
+				[keyw]: "专辑",
+				[songsId]: item.id
+			}
+		});
+	} else {
+		getPlaySongsDetails([{ id: item.id }], res => {
+			if (res.code == 200 && res.songs.length > 0) {
+				onClickPlayCurrent(res.songs[0]);
+			} else {
+				Toast.fail(`获取歌曲连接失败`);
+			}
+		});
+	}
 };
 
 watchEffect(() => {
@@ -101,7 +115,7 @@ watchEffect(() => {
 							v-for="value in subArr(item.value, index, 3)"
 							:border="false"
 							center
-							@click="onClick(value)"
+							@click="onClick(value, item.title)"
 						>
 							<template #icon>
 								<div class="Image">

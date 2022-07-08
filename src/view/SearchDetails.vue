@@ -4,12 +4,14 @@ import { getSearchResult } from "../Api/Search";
 import { keyw, serachKeyword, songsId } from "../config/routerFrom";
 import { SerachTypeKeys } from "../enum/SerachType";
 import Ellipsis from "../components/Ellipsis.vue";
-import { Loading, List } from "vant";
+import { Loading, List, Toast } from "vant";
 import { getAcquire, getPlayCountText, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { onClickAllPlay, isPlaySongs, onClickPlayCurrent } from "../minxins/audio";
+import { videoState } from "../state/video";
+import { useStore } from "../state/popup";
 
 const offsetTop = ref(0);
 
@@ -25,6 +27,10 @@ const show = ref(false);
 const keysword = ref(history.state[serachKeyword]);
 
 let isUpdate = ref(false);
+
+const state = videoState();
+
+const p = useStore();
 
 const tabsArr = ref<TabsType[]>([
 	{
@@ -60,7 +66,7 @@ const tabsArr = ref<TabsType[]>([
 		isLoading: false,
 		imgdpi: "200y200",
 		click: (item: any) => {
-			console.log(item);
+			Toast.fail(`接口不可用`);
 		},
 		offsetTop: 0
 	},
@@ -132,7 +138,6 @@ const onRendered = (index: number, title: string) => {
 				const data = res.result;
 				tabsArr.value[index].arr = data[key];
 				tabsArr.value[index].max = data[countkey];
-
 				songsDetails.value = data[key][0];
 			}
 		}

@@ -14,11 +14,12 @@ export function enter(el: HTMLDivElement, done: any) {
 	}, 100);
 }
 
-// 进入完成
-export function enterCancelled(el: HTMLDivElement) {
-	el.style.position = "";
-	el.style.bottom = "";
-	el.style.transition = "";
+export function afterEnter(el: HTMLDivElement) {
+	setTimeout(() => {
+		el.style.position = "";
+		el.style.bottom = "";
+		el.style.transition = "";
+	}, 700);
 }
 
 // 准备离开

@@ -1,4 +1,4 @@
-:root {
+.block-themen {
 	/* 激活的颜色 */
 	--tabbar-active-color: rgb(212, 0, 0);
 	/* 主要的背景颜色 */
@@ -24,35 +24,89 @@
 	--margin-size-top-mini:10px;
 	--margin-size-left-mini:10px;
 	--margin-size-medium: 20px;
-
-
 	/* 加载的颜色 */
-
 	--loading-color:#ee0a24;
 
 	/* vant nav-bar-background-color */
-	--van-nav-bar-background-color: var(--background-main-color) !important;
-	--van-search-background-color: transparent !important;
-	--van-search-content-background-color: var(--background-color-2) !important;
-	--van-field-input-text-color: var(--font-main-color-2) !important;
-	--van-nav-bar-icon-color: var(--font-main-color-2) !important;
-	--van-tabbar-background-color: var(--background-main-color) !important;
-	--van-tabbar-item-active-background-color: var(--background-main-color) !important;
-	--van-tabbar-item-text-color: var(--font-main-color-1) !important;
-	--van-tabbar-item-active-color: var(--tabbar-active-color) !important;
-	--van-button-mini-padding: 0 15px !important;
-	--van-button-default-border-color: var(--border-color-1) !important;
-	--van-cell-background-color: var(--background-color-1) !important;
-	--van-cell-horizontal-padding: 15px !important;
-	--van-cell-text-color: var(--font-main-color) !important;
-	--van-popup-background-color: var(--background-main-color) !important;
-	--van-field-label-color: var(--font-main-color) !important;
-	--van-field-input-text-color: var(--font-main-color) !important;
-	--van-field-placeholder-text-color: var(--font-main-color-3) !important;
-	--van-cell-background-color:transparent !important;
-	--van-cell-active-color:var(--background-color-2);
-	--van-tag-default-color:var(--background-color-1) !important;
-	--van-border-color:var(--border-color-3) !important;
-	--van-image-placeholder-background-color:var(--background-color-2) !important;
-	--van-nav-bar-title-text-color:var(--font-main-color) !important;
+		--van-nav-bar-background-color: var(--background-main-color) !important;
+		--van-search-background-color: transparent !important;
+		--van-search-content-background-color: var(--background-color-2) !important;
+		--van-field-input-text-color: var(--font-main-color-2) !important;
+		--van-nav-bar-icon-color: var(--font-main-color-2) !important;
+		--van-tabbar-background-color: var(--background-main-color) !important;
+		--van-tabbar-item-active-background-color: var(--background-main-color) !important;
+		--van-tabbar-item-text-color: var(--font-main-color-1) !important;
+		--van-tabbar-item-active-color: var(--tabbar-active-color) !important;
+		--van-button-mini-padding: 0 15px !important;
+		--van-button-default-border-color: var(--border-color-1) !important;
+		--van-cell-background-color: var(--background-color-1) !important;
+		--van-cell-horizontal-padding: 15px !important;
+		--van-cell-text-color: var(--font-main-color) !important;
+		--van-popup-background-color: var(--background-main-color) !important;
+		--van-field-label-color: var(--font-main-color) !important;
+		--van-field-input-text-color: var(--font-main-color) !important;
+		--van-field-placeholder-text-color: var(--font-main-color-3) !important;
+		--van-cell-background-color: transparent !important;
+		--van-cell-active-color: var(--background-color-2);
+		--van-tag-default-color: var(--background-color-1) !important;
+		--van-border-color: var(--border-color-3) !important;
+		--van-image-placeholder-background-color: var(--background-color-2) !important;
+		--van-nav-bar-title-text-color: var(--font-main-color) !important;
 }
+
+.white-themen {
+	--tabbar-active-color: rgb(212, 0, 0);
+		/* 主要的背景颜色 */
+		--background-main-color: rgb(255, 255, 255);
+		--background-color-1: rgb(243, 243, 243);
+		--background-color-2: rgb(231, 231, 231);
+		--background-color-3: rgb(238, 238, 238);
+		--background-color-light: rgb(237, 237, 237);
+		--background-color-contrast: #fff;
+	
+		/*主要的字体颜色*/
+		--font-main-color: rgb(0, 0, 0);
+		--font-main-color-1: rgb(102, 102, 102);
+		--font-main-color-2: rgb(97, 97, 97);
+		--font-main-color-3: rgb(100, 100, 100);
+		--border-color-1: rgb(209, 209, 209);
+		--border-color-2: rgb(213, 213, 213);
+		--border-color-3: rgb(207, 207, 207);
+	
+		/* 边距 */
+		--padding-size-medium: 20px;
+		--padding-size-mini: 15px;
+		--margin-size-top-mini: 10px;
+		--margin-size-left-mini: 10px;
+		--margin-size-medium: 20px;
+		/* 加载的颜色 */
+		--loading-color: #ee0a24;
+	
+		/* vant nav-bar-background-color */
+		--van-nav-bar-background-color: var(--background-main-color) !important;
+		--van-search-background-color: transparent !important;
+		--van-search-content-background-color: var(--background-color-2) !important;
+		--van-field-input-text-color: var(--font-main-color-2) !important;
+		--van-nav-bar-icon-color: var(--font-main-color-2) !important;
+		--van-tabbar-background-color: var(--background-main-color) !important;
+		--van-tabbar-item-active-background-color: var(--background-main-color) !important;
+		--van-tabbar-item-text-color: var(--font-main-color-1) !important;
+		--van-tabbar-item-active-color: var(--tabbar-active-color) !important;
+		--van-button-mini-padding: 0 15px !important;
+		--van-button-default-border-color: var(--border-color-1) !important;
+		--van-cell-background-color: var(--background-color-1) !important;
+		--van-cell-horizontal-padding: 15px !important;
+		--van-cell-text-color: var(--font-main-color) !important;
+		--van-popup-background-color: var(--background-main-color) !important;
+		--van-field-label-color: var(--font-main-color) !important;
+		--van-field-input-text-color: var(--font-main-color) !important;
+		--van-field-placeholder-text-color: var(--font-main-color-3) !important;
+		--van-cell-background-color: transparent !important;
+		--van-cell-active-color: var(--background-color-2);
+		--van-tag-default-color: var(--background-color-1) !important;
+		--van-border-color: var(--border-color-3) !important;
+		--van-image-placeholder-background-color: var(--background-color-2) !important;
+		--van-nav-bar-title-text-color: var(--font-main-color) !important;
+}
+
+

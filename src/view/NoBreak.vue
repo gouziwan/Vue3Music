@@ -165,7 +165,7 @@ const onClickLogin = () => popup.reviseShowLogin(true);
 
 		.van-button--primary {
 			border-color: var(--border-color-1);
-			color: #fff;
+			color: var(--font-main-color);
 			padding: 30px 70px;
 		}
 	}

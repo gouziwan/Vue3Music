@@ -11,7 +11,7 @@ import { onClickPlayCurrent, isPlaySongs, onClickAllPlay } from "../../minxins/a
 
 const props = defineProps(["tracks"]);
 
-const songsArr = shallowRef<any[] | null>(null);
+const songsArr = shallowRef<any[] | null>([]);
 
 const emit = defineEmits(["click"]);
 
@@ -31,10 +31,12 @@ watchEffect(() => {
 			});
 		}
 	} else {
-		songsArr.value = props.tracks.map((el: { index: any }, index: number) => {
-			el.index = index;
-			return el;
-		});
+		if (isArray(props.tracks)) {
+			songsArr.value = props.tracks.map((el: { index: any }, index: number) => {
+				el.index = index;
+				return el;
+			});
+		}
 	}
 });
 
@@ -93,47 +95,49 @@ const onClickShowDefault = (item: any, e: Event) => {
 					</van-cell>
 				</div>
 			</div>
-			<VirtualList :data="songsArr" id="paly_list-details" :height="getContentHeight">
-				<template v-slot:default="item">
-					<van-cell clickable :border="false" center @click="onClickPlayCurrent(item.value)">
-						<template #icon>
-							<div class="cell-icon">
-								<p v-if="!isPlaySongs(item.value)">{{ item.value.index + 1 }}</p>
+			<template v-if="songsArr!.length > 0">
+				<VirtualList :data="songsArr" id="paly_list-details" :height="getContentHeight">
+					<template v-slot:default="item">
+						<van-cell clickable :border="false" center @click="onClickPlayCurrent(item.value)">
+							<template #icon>
+								<div class="cell-icon">
+									<p v-if="!isPlaySongs(item.value)">{{ item.value.index + 1 }}</p>
+									<van-icon
+										v-else
+										name="dogshengyin"
+										class-prefix="dog"
+										size="0.4rem"
+										color="red"
+									></van-icon>
+								</div>
+							</template>
+							<template #title>
+								<Ellipsis
+									clamp="1"
+									epsis
+									:color="isPlaySongs(item.value) == false ? 'var(--font-main-color)' : 'red'"
+								>
+									{{ item.value.name }}
+								</Ellipsis>
+							</template>
+							<template #label>
+								<Ellipsis clamp="1" epsis color="var(--font-main-color-2)">
+									{{ getLabel(item.value) }}
+								</Ellipsis>
+							</template>
+
+							<template #right-icon>
 								<van-icon
-									v-else
-									name="dogshengyin"
+									name="doggengduo"
 									class-prefix="dog"
 									size="0.4rem"
-									color="red"
-								></van-icon>
-							</div>
-						</template>
-						<template #title>
-							<Ellipsis
-								clamp="1"
-								epsis
-								:color="isPlaySongs(item.value) == false ? 'var(--font-main-color)' : 'red'"
-							>
-								{{ item.value.name }}
-							</Ellipsis>
-						</template>
-						<template #label>
-							<Ellipsis clamp="1" epsis color="var(--font-main-color-2)">
-								{{ getLabel(item.value) }}
-							</Ellipsis>
-						</template>
-
-						<template #right-icon>
-							<van-icon
-								name="doggengduo"
-								class-prefix="dog"
-								size="0.4rem"
-								@click="onClickShowDefault(item.value, $event)"
-							/>
-						</template>
-					</van-cell>
-				</template>
-			</VirtualList>
+									@click="onClickShowDefault(item.value, $event)"
+								/>
+							</template>
+						</van-cell>
+					</template>
+				</VirtualList>
+			</template>
 		</div>
 	</div>
 </template>

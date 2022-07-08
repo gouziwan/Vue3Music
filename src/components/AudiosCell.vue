@@ -1,18 +1,10 @@
 <script lang="ts" setup>
-import { getPlaySongsDetails } from "../Api/PlayListDetails";
 import { computed, ref } from "vue";
-import { isObject } from "../utils";
 import Ellipsis from "./Ellipsis.vue";
 import { Circle } from "vant";
 import { audioStore } from "../state/audios";
 import { useStore } from "../state/popup";
-
-import {
-	beforeEnter,
-	enter,
-	enterCancelled,
-	beforeLeave
-} from "../transition/audioCellTriansition";
+import { beforeEnter, enter, beforeLeave, afterEnter } from "../transition/audioCellTriansition";
 
 const audio = audioStore();
 
@@ -41,8 +33,8 @@ const onClickSongsDefault = () => p.revieseAudiosContent(true);
 	<transition
 		@before-enter="beforeEnter"
 		@enter="enter"
-		@enter-cancelled="enterCancelled"
 		@before-leave="beforeLeave"
+		@after-enter="afterEnter"
 	>
 		<div v-if="audio.playList.length > 0" class="audios-cell">
 			<van-cell center @click="onClickSongsDefault">
@@ -54,7 +46,6 @@ const onClickSongsDefault = () => p.revieseAudiosContent(true);
 						radius="0.1rem"
 					></van-image>
 				</template>
-
 				<template #title>
 					<div class="title">
 						<Ellipsis clamp="1" epsis>
@@ -62,7 +53,6 @@ const onClickSongsDefault = () => p.revieseAudiosContent(true);
 						</Ellipsis>
 					</div>
 				</template>
-
 				<template #right-icon>
 					<van-icon
 						name="dogbofangliebiao"
@@ -71,11 +61,17 @@ const onClickSongsDefault = () => p.revieseAudiosContent(true);
 						@click="onClickShowSongsPlay"
 					></van-icon>
 				</template>
-
 				<template #value>
 					<div class="value-icon">
 						<div class="value-ciroce" @click="onClickSwiperPlay">
-							<Circle :current-rate="rateTiem" :speed="1" :rate="100" size="0.6rem">
+							<Circle
+								:current-rate="rateTiem"
+								:speed="1"
+								:rate="100"
+								layer-color="var(--font-main-color-3)"
+								color="var(--tabbar-active-color)"
+								size="0.6rem"
+							>
 								<van-icon :name="playIcon" />
 							</Circle>
 						</div>

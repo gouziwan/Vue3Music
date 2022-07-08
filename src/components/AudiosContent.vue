@@ -305,7 +305,7 @@ function onSwiperLyric() {
 }
 
 .audios-default-content {
-	color: var(--font-main-color);
+	color: #fff;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;

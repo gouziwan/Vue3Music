@@ -19,7 +19,7 @@ const getStyle = computed(() => {
 	};
 });
 
-const active = ref(false);
+const active = ref(storage["themen"] == "block" ? true : false);
 
 const isSignin = ref(false);
 
@@ -74,6 +74,13 @@ const grouping: GroupingType = {
 		]
 	}
 };
+
+const onChange = (value: Boolean) => {
+	let body = document.body;
+	let className = value ? "block" : "white";
+	body.className = `${className}-themen`;
+	storage["themen"] = className;
+};
 </script>
 <template>
 	<van-popup v-model:show="usePopup.sidebar" position="left">
@@ -109,6 +116,7 @@ const grouping: GroupingType = {
 									size="0.45rem"
 									v-model="active"
 									active-color="var(--tabbar-active-color)"
+									@change="onChange"
 								></Switch>
 							</template>
 						</van-cell>
