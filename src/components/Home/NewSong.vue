@@ -5,10 +5,11 @@ import { getAlbum, getNewCourier, getNewDisc } from "../../Api/Home";
 import { getAcquire, subArr } from "../../utils/index";
 import Ellipsis from "../Ellipsis.vue";
 import { getPlaySongsDetails } from "../../Api/PlayListDetails";
-import { onClickPlayCurrent } from "../../minxins/audio";
+// import { onClickPlayCurrent } from "../../minxins/audio";
 import { Toast } from "vant";
 import { useRouter } from "vue-router";
 import { keyw, songsId } from "../../config/routerFrom";
+import { audioStore } from "../../state/audios";
 
 interface Tabs {
 	title: string;
@@ -21,6 +22,13 @@ const active = ref("新歌");
 const nums = 9;
 
 const router = useRouter();
+
+const audioState = audioStore();
+
+// 添加单首歌曲进歌单
+function onClickPlayCurrent(songs: any) {
+	audioState.addSongsSingle(songs);
+}
 
 const tabs: Tabs[] = reactive([
 	{

@@ -2,9 +2,17 @@
 import { ref } from "vue";
 import { getBanner } from "../../Api/Home";
 import LoadingContentVue from "../LoadingContent.vue";
-import { onClickPlayCurrent } from "../../minxins/audio";
+// import { onClickPlayCurrent } from "../../minxins/audio";
+import { audioStore } from "../../state/audios";
 
 const banners = ref<any[]>([]);
+
+const audioState = audioStore();
+
+// 添加单首歌曲进歌单
+function onClickPlayCurrent(songs: any) {
+	audioState.addSongsSingle(songs);
+}
 
 getBanner(res => (banners.value = res.banners));
 

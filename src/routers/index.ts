@@ -1,11 +1,5 @@
 import { isObject } from "../utils/index";
-import {
-	createRouter,
-	createWebHashHistory,
-	createWebHistory,
-	RouteRecordRaw,
-	useRoute
-} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw, useRoute } from "vue-router";
 
 // 路由
 const routes: RouteRecordRaw[] = [
@@ -122,8 +116,6 @@ const router = createRouter({
 	routes
 });
 
-console.log(createWebHashHistory());
-
 // 这个是获取对应dom的top
 export const toRouterScroll = (dom = document.querySelector(".page-centent")!) => {
 	const route = useRoute();
@@ -131,7 +123,7 @@ export const toRouterScroll = (dom = document.querySelector(".page-centent")!) =
 	// 如果他等0也没必要设置
 	if (isObject(r.meta) && r.meta!.top != undefined) {
 		const { top } = r.meta! as any;
-		Promise.resolve().then(() => (dom.scrollTop = top));
+		// Promise.resolve().then(() => (dom.scrollTop = top));
 	}
 
 	return r;

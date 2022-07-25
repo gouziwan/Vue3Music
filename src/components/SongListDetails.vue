@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { defineProps, computed, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useStore } from "../state/user";
 import UserSongsListVue from "./UserSongsList.vue";
 import { getAcquire, isArray } from "../utils";
 import { useRouter } from "vue-router";
 import { commentsPara } from "../config/routerFrom";
 import { audioStore } from "../state/audios";
-import { isPlaySongs } from "../minxins/audio";
 
 const userState = useStore();
 
@@ -24,6 +23,11 @@ const props = defineProps({
 		default: false
 	}
 });
+
+function isPlaySongs(item: any) {
+	if (audio.currentAudios == null) return false;
+	return item.id === audio.currentAudios.id;
+}
 
 const emit = defineEmits(["update:show"]);
 

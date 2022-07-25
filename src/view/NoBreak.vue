@@ -8,13 +8,29 @@ import Ellipsis from "../components/Ellipsis.vue";
 import { getAcquire } from "../utils/index";
 import SongListDetails from "../components/SongListDetails.vue";
 import { useStore as usePopup } from "../state/popup";
-import { onClickPlayCurrent, isPlaySongs, onClickAllPlay } from "../minxins/audio";
+// import { onClickPlayCurrent, isPlaySongs, onClickAllPlay } from "../minxins/audio";
+import { audioStore } from "../state/audios";
 
 const user = useStore();
 
 const value = ref<any[]>([]);
 
 const popup = usePopup();
+
+const audioState = audioStore();
+
+// 添加单首歌曲进歌单
+function onClickPlayCurrent(songs: any) {
+	audioState.addSongsSingle(songs);
+}
+
+const isPlaySongs = (item: any) => {
+	if (audioState.currentAudios == null) return false;
+	return item.id === audioState.currentAudios.id;
+};
+
+// 点击添加所有歌曲进入所有歌单
+const onClickAllPlay = (songsArr: any) => audioState.addAllPlay(songsArr);
 
 watchEffect(() => {
 	if (user.isLogin && value.value.length <= 0) {

@@ -7,13 +7,14 @@ import VirtualList from "../VirtualList.vue";
 import Ellipsis from "../Ellipsis.vue";
 import { keyw } from "../../config/routerFrom";
 import { audioStore } from "../../state/audios";
-import { onClickPlayCurrent, isPlaySongs, onClickAllPlay } from "../../minxins/audio";
 
 const props = defineProps(["tracks"]);
 
 const songsArr = shallowRef<any[] | null>([]);
 
 const emit = defineEmits(["click"]);
+
+const audioState = audioStore();
 
 const keyword = history.state[keyw];
 
@@ -39,6 +40,18 @@ watchEffect(() => {
 		}
 	}
 });
+
+const isPlaySongs = (item: any) => {
+	if (audioState.currentAudios == null) return false;
+	return item.id === audioState.currentAudios.id;
+};
+
+function onClickPlayCurrent(songs: any) {
+	audioState.addSongsSingle(songs);
+}
+
+// 点击添加所有歌曲进入所有歌单
+const onClickAllPlay = (songsArr: any) => audioState.addAllPlay(songsArr);
 
 const getLabel = function (item: any) {
 	return item.ar.map((el: any) => el.name).join("/") + "-" + item.al.name;

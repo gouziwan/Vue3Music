@@ -138,9 +138,9 @@ const sliderStyle = computed(() => {
 
 const date = new Day();
 
-const onClickToLocation = (e: MouseEvent) => {
+function onClickToLocation(e: MouseEvent) {
 	audio.conversionTiem(offsetX(e.pageX));
-};
+}
 
 const offsetX = (x: number) => {
 	const { left } = t.value!.getBoundingClientRect();
@@ -324,8 +324,11 @@ function onClickConllectionSongs() {
 			<div class="back"></div>
 		</div>
 	</Popup>
-	<SongListDetails v-model:show="songsShow" :item="audio.currentAudios" />
-	<UserSongsListVue v-model:show="showe" :tranckId="audio.currentAudios.id" />
+	<SongListDetails
+		v-model:show="songsShow"
+		:item="audio.currentAudios == null ? {} : audio.currentAudios"
+	/>
+	<!-- <UserSongsListVue v-model:show="showe" :tranckId="audio.currentAudios" /> -->
 </template>
 
 <style lang="scss" scoped>

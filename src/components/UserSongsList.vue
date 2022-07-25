@@ -36,7 +36,7 @@ watchEffect(() => {
 // 点击添加歌曲到歌单
 const onClickAddSongs = (value: any) => {
 	Toast.loading({ duration: 0, forbidClick: true, message: `加载中` });
-	upPlayListSongs("add", value.id, props.tranckId, res => {
+	upPlayListSongs("add", value.id, props.tranckId.id, res => {
 		if (res.status === 200) {
 			Toast.success("添加成功");
 		}

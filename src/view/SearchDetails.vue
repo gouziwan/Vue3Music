@@ -9,9 +9,9 @@ import { getAcquire, getPlayCountText, isObject } from "../utils";
 import Day from "../utils/Date";
 import SongListDetails from "../components/SongListDetails.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-import { onClickAllPlay, isPlaySongs, onClickPlayCurrent } from "../minxins/audio";
 import { videoState } from "../state/video";
 import { useStore } from "../state/popup";
+import { audioStore } from "../state/audios";
 
 const offsetTop = ref(0);
 
@@ -20,6 +20,8 @@ let current = ref(0);
 let songsDetails = ref();
 
 const router = useRouter();
+
+const audio = audioStore();
 
 // 显示的 歌曲详情的
 const show = ref(false);
@@ -263,6 +265,21 @@ onActivated(() => {
 function getNodeOffsetTop() {
 	let node = document.querySelector<HTMLDivElement>(`#serach-details-${current.value + 1}`)!;
 	tabsArr.value[current.value].offsetTop = node.scrollTop;
+}
+
+// 添加单首歌曲进歌单
+function onClickPlayCurrent(songs: any) {
+	audio.addSongsSingle(songs);
+}
+
+function isPlaySongs(item: any) {
+	if (audio.currentAudios == null) return false;
+	return item.id === audio.currentAudios.id;
+}
+
+// 点击添加所有歌曲进入所有歌单
+function onClickAllPlay(songsArr: any) {
+	audio.addAllPlay(songsArr);
 }
 </script>
 <template>
