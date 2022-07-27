@@ -123,7 +123,7 @@ export const toRouterScroll = (dom = document.querySelector(".page-centent")!) =
 	// 如果他等0也没必要设置
 	if (isObject(r.meta) && r.meta!.top != undefined) {
 		const { top } = r.meta! as any;
-		// Promise.resolve().then(() => (dom.scrollTop = top));
+		Promise.resolve().then(() => (dom.scrollTop = top));
 	}
 
 	return r;
