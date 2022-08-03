@@ -116,8 +116,6 @@ const router = createRouter({
 	routes
 });
 
-console.log(`111`, router);
-
 // 这个是获取对应dom的top
 export const toRouterScroll = (dom = document.querySelector(".page-centent")!) => {
 	const route = useRoute();
