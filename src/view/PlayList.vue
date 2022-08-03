@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { getBoutiquePlaylist, getHotCatilst } from "../Api/PlayList";
 import { Loading, List } from "vant";
 import { isObject } from "../utils";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { songsId } from "../config/routerFrom";
 
 import SongsListVue from "../components/SongsList.vue";
@@ -17,6 +17,10 @@ const offset = ref(0);
 const contentPage = ref<HTMLDivElement>();
 
 const router = useRouter();
+
+console.log(useRoute());
+
+console.log(useRouter());
 
 onMounted(() => {
 	offset.value = contentPage.value!.offsetTop;

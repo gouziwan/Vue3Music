@@ -8,7 +8,11 @@ import Video from "../components/Home/Video.vue";
 import HotTopic from "../components/Home/HotTopic.vue";
 import { onActivated } from "vue";
 import { toRouterScroll, upRouterScroll } from "../routers/index";
-import { onBeforeRouteLeave, useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
+
+console.log(useRoute());
+
+console.log(useRouter());
 
 onActivated(() => {
 	toRouterScroll();
